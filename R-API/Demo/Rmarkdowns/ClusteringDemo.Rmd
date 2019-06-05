@@ -1,0 +1,104 @@
+---
+title: "ClusteringDemo"
+author: "R ML library team"
+output: html_document
+---
+# Clustering K-Means Example
+K-means clustering in SAP HANA is an unsupervised machine learning algorithm for data partitioning into a set of k clusters or groups. It classifies observation into groups such that object within the same group are similar as possible.
+
+## Iris Data set
+The data set used is from University of California, Irvine (https://archive.ics.uci.edu/ml/datasets/iris). This data set contains attributes of a plant iris. There are three species of Iris plants.
+
+* Iris Setosa
+* Iris versicolor
+* Iris Virginica 
+
+## HANA connection
+
+Create your own HANA instance, get a copy of IRIS dataset and create a DSN to access HANA instance.
+
+Parameters for the connection string (DSN,user,password):
+
+* HANA3 : Data Source Name (DSN) to target HANA instance 
+* DEVUSER: user
+* Trextrex1: password
+
+```{r Creating connection , warning= FALSE, message = FALSE}
+library(hana.ml.r)
+library(futile.logger)
+library(RODBC)
+knitr::opts_chunk$set(echo = TRUE,comment = NA)
+conn.context <- hanaml.ConnectionContext('HANA3','DEVUSER','Trextrex1')
+```
+
+## Defining datasets
+There will be two datasets for the study. The first one full.set contains all the rows from the table IRIS.
+The second data set without the variable SPECIES.
+
+The variable SPECIES already shows up the clusters, there are 3 speciesin the full data set. To have another data set without this variable helps to check how the algorithm will cluster the data and to see the impact of SPECIES variable on the study.
+
+```{r dataframe creation}
+full.set <- conn.context$table("IRIS")
+full_WithoutSpecies.set <- conn.context$sql("SELECT ID, SEPALLENGTHCM, SEPALWIDTHCM, PETALLENGTHCM, PETALWIDTHCM FROM IRIS")
+```
+
+## Let's look at the columns
+
+```{r dataframe columns}
+as.character(full.set$columns)
+```
+## Let's look at the data types
+```{r dataframe dtypes}
+sapply(full.set$dtypes(), paste, collapse = ",")
+```
+
+## Simple Exploration
+Let us look at the number of rows in the data set
+
+```{r dataframe rows}
+sprintf('Number of rows in Iris dataset: %s', full.set$nrows)
+```
+
+## KmeansClustering Model creation
+The goal is to find the optimal number of cluster for the given data set
+
+# K-means with 5 clusters
+```{r Model creation with 5 clusters, warning= FALSE, message = FALSE}
+library(sets)
+library(cluster)
+library(dplyr)
+km <- hanaml.Kmeans(conn.context,full.set,n.clusters = 5)
+kplot<- clusplot(full.set$Collect(), km$labels$Collect()$CLUSTER_ID, color=TRUE, shade=TRUE, 
+  	labels=2, lines=0)
+Cluster_number<- select(km$labels$Collect(),2) %>% distinct()
+print(Cluster_number)
+
+```
+
+There are 5 clusters displaying by datasets.There are 2 cluster superspositions. 
+The superposition assumes that there can be merged. The number of cluster will be set to 3 based on the number of SPECIES
+
+# K-means with 3 clusters
+```{r Model creation with 3 clusters}
+km2 <- hanaml.Kmeans(conn.context ,full.set,n.clusters = 3)
+kplot2<- clusplot(full.set$Collect(), km2$labels$Collect()$CLUSTER_ID, color=TRUE, shade=TRUE, 
+  	labels=2, lines=0)
+Cluster_number2<- select(km2$labels$Collect(),2) %>% distinct()
+print(Cluster_number2)
+
+```
+There are no cluster superposition. The number of clusters fits perfeclty with the number of SPECIES.
+In the model 3, the data set full_WithoutSpecies will be used. This will show up the impact of the variable SPECIES on the model and consequently on the clusters plot.
+
+# K-means with 3 clusters without SPECIES variable
+```{r Model creation with 3 clusters without SPECIES variable}
+km3 <- hanaml.Kmeans(conn.context ,full_WithoutSpecies.set, n.clusters = 3)
+kplot3<- clusplot(full_WithoutSpecies.set$Collect(), km3$labels$Collect()$CLUSTER_ID, color=TRUE, shade=TRUE, 
+  	labels=2, lines=0)
+Cluster_number3<- select(km3$labels$Collect(),2) %>% distinct()
+print(Cluster_number3)
+
+```
+The plot shows that there is a superposition of cluster. From the data set without SPECIES, the case can not clearcly been usefull. This example shows that the variable SPECIES has a big incidence on the composition.
+
+

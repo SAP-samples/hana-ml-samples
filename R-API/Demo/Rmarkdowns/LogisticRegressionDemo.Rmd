@@ -1,0 +1,155 @@
+---
+title: "LogisticRegressionDemo"
+author: "R ML library team"
+output: html_document
+fig_width: 10
+fig_height: 8
+---
+# Logistic Regression Example
+## Bank dataset to determine if a customer would buy a Certificate of Deposit
+The data is related with direct marketing campaigns of a Portuguese banking institution. The marketing campaigns were based on phone calls. A number of features such as age,  job, marital status, education level, credit default, existence of housing loan, etc. were considered. The classification goal is to predict if the client will subscribe (yes/no) a term deposit.
+
+More information regarding the data set is at https://archive.ics.uci.edu/ml/datasets/bank+marketing#.
+
+The objective is to demonstrate the use of logistic regression and to tune hyperparameters enet.lamba and enet.alpha.
+
+
+```{r setup, include=FALSE}
+rm(list=ls())
+# Please install the hana.ml.r library before you load it if not done already.
+# Change the location of the package below for you to install it. 
+# set your .libpath to where you want the package installed and make sure ALL of the pre required R packages (please refer to our getting started documentaiton) are already installed and loaded. 
+install.packages("C:/HANA_work/ML/SP04/hana.ml.r-1.0.3.tar.gz", type = "source", repos=NULL)
+library(hana.ml.r)
+library(plot3D)
+knitr::opts_chunk$set(echo = TRUE)
+```
+## HANA connection
+```{r Creating connection}
+# Provide connection information based on your HANA instance.
+# in the example below, HANA3 is the name of HANA in ODBC,
+# DEVUSER is the name of the user
+# Trextrex1 is the password.
+conn <- hanaml.ConnectionContext('HANA3','DEVUSER','Trextrex1')
+
+```
+#Load data
+**The data is loaded into 3 tables, one for the test set, another for the training set, and finally the validation set:**
+
+
+
+## Defining datasets
+```{r Defining datasets}
+full.tbl = 'DBM2_RFULL_TBL'
+train.tbl = 'DBM2_RTRAINING_TBL'
+valid.tbl = 'DBM2_RVALIDATION_TBL'
+test.tbl = 'DBM2_RTEST_TBL' 
+
+full.set <- conn$table(full.tbl)
+test.set <- conn$table(test.tbl)
+train.set <- conn$table(train.tbl)
+valid.set <- conn$table(valid.tbl)
+
+
+```
+
+## Exploring the data
+```{r Exploring the data}
+sprintf("Number of rows in the full set: %s", full.set$nrows)
+sprintf("Number of rows in the test set: %s", test.set$nrows)
+sprintf("Number of rows in the train set: %s", train.set$nrows)
+sprintf("Number of rows in the validation set: %s", valid.set$nrows)
+```
+#### Listing all the columns from the data set  
+```{r Listing all the columns from the data set }
+print(toString(full.set$columns))
+```
+## printing datatypes for these columns. 
+```{r Listing datatypesfor the columns, warning=FALSE, message = FALSE}
+cat(toString(full.set$dtypes())) 
+```
+
+##Let us look at some rows 
+```{r Looking at somerows , warning=FALSE, message = FALSE}
+all.train.rows <- test.set$Collect()
+print(head(all.train.rows,5))
+```
+##filtering based on label set to yes
+```{r Filtering based on label set to yes }
+col.all2 <- train.set$Filter("\"LABEL\"='yes'")
+col.filter<-col.all2$Collect()   
+print(head(col.filter),5)
+```
+## Predictions on test set using alpha and lamda
+```{r  Predictions on test set using alpha and lamda, warning=FALSE, message = FALSE}
+enet.lambda = 0.01
+enet.alpha = 0.769
+
+lr2 = hanaml.LogisticRegression(conn, solver='cyclical', tol=0.000001, max.iter=10000,stat.inf=1, multi.class = FALSE,
+                            pmml.export=2,lamb = enet.lambda, alpha = enet.alpha, class.map0 = "no",class.map1 = "yes", df =train.set)
+```
+
+# Looking at the coefficients. Looking at the top 5 values
+```{r Looking at the coefficients. Looking at the top 5 values, warning=FALSE, message = FALSE}
+head(lr2$coef$Sort(list("COEFFICIENT"),desc= TRUE)$Collect(),5)
+```
+# Look at predictions
+```{r Look at predictions ,warning=FALSE, message = FALSE}
+
+result.df <- lr2$predict(lr2,input.df=test.set, key = "ID")
+```
+
+# Checking on accuracy
+```{r  Checking on accuracy score ,warning=FALSE, message = FALSE }
+feature.list = list('AGE','JOB','MARITAL','EDUCATION','DBM_DEFAULT', 'HOUSING','LOAN','CONTACT','DBM_MONTH','DAY_OF_WEEK','DURATION','CAMPAIGN','PDAYS','PREVIOUS','POUTCOME','EMP_VAR_RATE','CONS_PRICE_IDX','CONS_CONF_IDX','EURIBOR3M','NREMPLOYED')
+
+accuracy.val <-  lr2$score(test.set,key = "ID")
+
+sprintf("Accuracy score is : %s", accuracy.val)
+
+```
+
+## Plotting a 3D graph
+```{r Plotting a 3D,, echo=FALSE,warning=FALSE, message = FALSE }
+# Using all of the values below takes approximately 2 minutes to plot the 3d graph
+#enet.lambdas = c(0.01,   0.0125, 0.015,  0.0175, 0.02 ,  0.02,   0.02 ,  0.02,   0.02)
+#enet.alphas = c(0.8,0.3,0.9,1.0,0.75)
+enet.lambdas = c(0.01,   0.0125, 0.015,  0.0175,  0.02)
+enet.alphas = c(0.8,0.3,0.9,1.0)
+
+lamb_val = list()
+alpha_val = list()
+acc_val = list()
+for (val in enet.lambdas){
+  for (val2 in enet.alphas){
+    lr2 = hanaml.LogisticRegression(conn, solver='cyclical', tol=0.000001, max.iter=10000,stat.inf=1, 
+                                 pmml.export=2,lamb = val, alpha = val2, class.map0 = "no",class.map1 = "yes" ,df = train.set, formula=LABEL~AGE+JOB+MARITAL+EDUCATION+DBM_DEFAULT+HOUSING+LOAN+CONTACT+DBM_MONTH+DAY_OF_WEEK+DURATION+CAMPAIGN+PDAYS+PREVIOUS+POUTCOME+EMP_VAR_RATE+CONS_PRICE_IDX)  ## REVISIT add all columns
+    
+    feature.list = list('AGE','JOB','MARITAL','EDUCATION','DBM_DEFAULT', 'HOUSING','LOAN','CONTACT','DBM_MONTH','DAY_OF_WEEK','DURATION','CAMPAIGN','PDAYS','PREVIOUS','POUTCOME','EMP_VAR_RATE','CONS_PRICE_IDX','CONS_CONF_IDX','EURIBOR3M','NREMPLOYED')
+    
+    accuracy.val <-  lr2$score(test.set, key = "ID",features = feature.list, label = "LABEL")
+    lamb_val <- append(lamb_val, val)
+    alpha_val <- append(alpha_val, val2)
+    acc_val <- append(acc_val, accuracy.val)
+  }}
+
+
+min.val = which.min(acc_val)
+max.val = which.max(acc_val)
+
+x<- unlist(lamb_val)
+y<- unlist(alpha_val)
+z<- unlist(acc_val)
+#scatter3D(x,y,z,pch=25,col="green", main = "Plot for LR model", xlab= "Enet_lamdas", ylab= "Enet_alphas", zlab="Accuracy", clab=c("Accuracy)"))
+
+scatter3D(x,y,z,phi = 0, bty = "g", pch = 25, cex = 2, ticktype = "detailed", main = "Plot for LR model", xlab= "Enet_lamdas", ylab= "Enet_alphas", zlab="Accuracy", clab=c("Accuracy"), col = ramp.col(c("red", "yellow", "green")) )
+scatter3D(x=x[[min.val]], y = y[[min.val]], z = z[[min.val]], add = TRUE, colkey = FALSE, pch = 18, cex = 3, col = "Red")
+scatter3D(x=x[[max.val]], y = y[[max.val]], z = z[[max.val]], add = TRUE, colkey = FALSE, pch = 18, cex = 3, col = "green")
+```
+
+# getting the max values
+```{r  Getting the max values,  warning=FALSE, message = FALSE}
+sprintf("Highest accuracy obtained: %s", z[[max.val]])
+sprintf("Value of enet_lambda for higest accuracy: %s", x[[max.val]])
+sprintf("Value of enet_alpha for highest accuracy: %s", y[[max.val]])
+```
