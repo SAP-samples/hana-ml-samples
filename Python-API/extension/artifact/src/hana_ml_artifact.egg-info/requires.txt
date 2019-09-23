@@ -1,2 +1,0 @@
-pandas
-hana_ml

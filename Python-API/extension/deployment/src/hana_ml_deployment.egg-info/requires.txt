@@ -1,2 +1,0 @@
-cloudfoundry_client
-ruamel.yaml
