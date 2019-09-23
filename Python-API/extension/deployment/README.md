@@ -9,6 +9,7 @@ Prerequisites:
 * Cloud Foundry CLI
 * Cloud Foundry CLI MTA plugin (version 2.0.7)
 
+Installation:
 1. Clone the repo
 2. Run python setup.py install
 
