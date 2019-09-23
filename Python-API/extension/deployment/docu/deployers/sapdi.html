@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>hana_ml_deployment.deployers.sapdi API documentation</title>
+<meta name="description" content="This module provides SAP DI related functionality." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>hana_ml_deployment.deployers.sapdi</code></h1>
+</header>
+<section id="section-intro">
+<p>This module provides SAP DI related functionality.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This module provides SAP DI related functionality.
+&#34;&#34;&#34;
+import logging
+import os
+import sys
+import json
+import urllib3
+import requests
+
+logging.getLogger(&#34;urllib3&#34;).setLevel(logging.WARNING)
+
+logging.getLogger(&#39;vflow_swagger_client.rest&#39;).setLevel(logging.WARNING)
+
+from importlib import reload
+reload(logging)
+logging.basicConfig(stream=sys.stdout, format=&#39;&#39;, level=logging.INFO, datefmt=None)
+
+logger = logging.getLogger(__name__) #pylint: disable=invalid-name
+
+urllib3.disable_warnings()
+
+class SDIDeployer(object):
+   &#34;&#34;&#34;
+   This class provides SAP DI deployer related functionality. 
+
+   It allows for deploying SAP DI functionliaty through the ML API
+   &#34;&#34;&#34;
+   def __init__(self, scenario_id):
+      &#34;&#34;&#34;
+      Initialize the SAP DI Dployer.
+
+      Parameters
+      ----------
+      scenario_id : str
+         The scenario id generated by ML API
+      &#34;&#34;&#34;
+      self.scenario_id = scenario_id
+      self.vsystem_internal_url = &#39;http://vsystem-internal:8796&#39;
+      self.auth_url = &#39;{}/token/v2&#39;.format(self.vsystem_internal_url)
+      self.mlapi_url = &#39;{}/app/ml-api/api/v0alpha1&#39;.format(self.vsystem_internal_url)
+      self.auth_token = self._get_auth_token()
+     
+   def generate_graphs(self):
+      &#34;&#34;&#34;
+      Generate the graphs
+      &#34;&#34;&#34;
+      train_pl_id, apply_pl_id = self.create_pipelines()
+      self.store_in_repo(train_pl_id)
+      self.store_in_repo(apply_pl_id)
+   
+   def create_pipelines(self):
+      &#34;&#34;&#34;
+      Create the pipelines according to ML API spec
+
+      Returns
+      -------
+      train_response_id : str
+         The train pipeline id
+      apply response_id : str
+         The apply pipeline id
+      &#34;&#34;&#34;
+      url = self.mlapi_url + &#39;/scenarios/{}/pipelines&#39;.format(self.scenario_id)
+      payload_train = &#34;{\n  \&#34;name\&#34;: \&#34;Train\&#34;,\n  \&#34;description\&#34;: \&#34;HANAML Train Pipeline\&#34;,\n  \&#34;rating\&#34;: 0,\n \&#34;function\&#34;: \&#34;training\&#34;,\n  \&#34;fromTemplate\&#34;: \&#34;com.sap.ml.hana.templateTrain\&#34;\n}&#34;
+      payload_apply = &#34;{\n  \&#34;name\&#34;: \&#34;Apply\&#34;,\n  \&#34;description\&#34;: \&#34;HANAML Apply Pipeline\&#34;,\n  \&#34;rating\&#34;: 0,\n \&#34;function\&#34;: \&#34;inference\&#34;,\n  \&#34;fromTemplate\&#34;: \&#34;com.sap.ml.hana.templateApply\&#34;\n}&#34;
+      
+      headers = {
+         &#39;Content-Type&#39;: &#34;application/json&#34;,
+         &#39;cache-control&#39;: &#34;no-cache&#34;,
+         &#39;Authorization&#39;: self.auth_token
+      }
+      # Create train pipeline
+      response = requests.request(&#34;POST&#34;, url, data=payload_train, headers=headers)
+      train_response = response.json()
+
+      # Create apply pipeline
+      response = requests.request(&#34;POST&#34;, url, data=payload_apply, headers=headers)
+      apply_response = response.json()
+      return train_response[&#39;id&#39;], apply_response[&#39;id&#39;]
+   
+   def store_in_repo(self, pipeline_id):
+      &#34;&#34;&#34;
+      To assure proper storage the data needs to be stored in DataHub repo
+
+      Parameters
+      ----------
+      pipeline_id : str
+         The pipeline id
+      &#34;&#34;&#34;
+      url = &#39;{}/repository/v2/files/user/files/vflow/graphs/com/sap/dsp/{}/metadata.json?op=write&#39;.format(self.vsystem_internal_url, pipeline_id)
+      payload = {
+         &#34;path&#34;: &#39;/repository/v2/files/tenant/files/mlsm/com/sap/dsp/{}&#39;.format(pipeline_id),
+         &#34;scenarioId&#34;: self.scenario_id
+      }
+      headers = {
+         &#39;Content-Type&#39;: &#34;application/json&#34;,
+         &#39;cache-control&#39;: &#34;no-cache&#34;,
+         &#39;Authorization&#39;: self.auth_token
+      }
+      response = requests.request(&#34;POST&#34;, url, json=payload, headers=headers)
+   
+   def _get_auth_token(self):
+      &#34;&#34;&#34;
+      Get the auth token 
+
+      Returns
+      -------
+      access_token : str
+         The auth token
+      &#34;&#34;&#34;
+      # Get Auth Token
+      vsystem_app_id = os.environ[&#34;VSYSTEM_APP_ID&#34;]
+      vsystem_secret = os.environ[&#34;VSYSTEM_SECRET&#34;]
+      response = requests.get(self.auth_url, auth=(vsystem_app_id, vsystem_secret))
+      if response.status_code == 200:
+         r = response.json()
+         return r[&#39;access_token&#39;]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="hana_ml_deployment.deployers.sapdi.SDIDeployer"><code class="flex name class">
+<span>class <span class="ident">SDIDeployer</span></span>
+<span>(</span><span>scenario_id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class provides SAP DI deployer related functionality. </p>
+<p>It allows for deploying SAP DI functionliaty through the ML API</p>
+<p>Initialize the SAP DI Dployer.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>scenario_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>The scenario id generated by ML API</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SDIDeployer(object):
+   &#34;&#34;&#34;
+   This class provides SAP DI deployer related functionality. 
+
+   It allows for deploying SAP DI functionliaty through the ML API
+   &#34;&#34;&#34;
+   def __init__(self, scenario_id):
+      &#34;&#34;&#34;
+      Initialize the SAP DI Dployer.
+
+      Parameters
+      ----------
+      scenario_id : str
+         The scenario id generated by ML API
+      &#34;&#34;&#34;
+      self.scenario_id = scenario_id
+      self.vsystem_internal_url = &#39;http://vsystem-internal:8796&#39;
+      self.auth_url = &#39;{}/token/v2&#39;.format(self.vsystem_internal_url)
+      self.mlapi_url = &#39;{}/app/ml-api/api/v0alpha1&#39;.format(self.vsystem_internal_url)
+      self.auth_token = self._get_auth_token()
+     
+   def generate_graphs(self):
+      &#34;&#34;&#34;
+      Generate the graphs
+      &#34;&#34;&#34;
+      train_pl_id, apply_pl_id = self.create_pipelines()
+      self.store_in_repo(train_pl_id)
+      self.store_in_repo(apply_pl_id)
+   
+   def create_pipelines(self):
+      &#34;&#34;&#34;
+      Create the pipelines according to ML API spec
+
+      Returns
+      -------
+      train_response_id : str
+         The train pipeline id
+      apply response_id : str
+         The apply pipeline id
+      &#34;&#34;&#34;
+      url = self.mlapi_url + &#39;/scenarios/{}/pipelines&#39;.format(self.scenario_id)
+      payload_train = &#34;{\n  \&#34;name\&#34;: \&#34;Train\&#34;,\n  \&#34;description\&#34;: \&#34;HANAML Train Pipeline\&#34;,\n  \&#34;rating\&#34;: 0,\n \&#34;function\&#34;: \&#34;training\&#34;,\n  \&#34;fromTemplate\&#34;: \&#34;com.sap.ml.hana.templateTrain\&#34;\n}&#34;
+      payload_apply = &#34;{\n  \&#34;name\&#34;: \&#34;Apply\&#34;,\n  \&#34;description\&#34;: \&#34;HANAML Apply Pipeline\&#34;,\n  \&#34;rating\&#34;: 0,\n \&#34;function\&#34;: \&#34;inference\&#34;,\n  \&#34;fromTemplate\&#34;: \&#34;com.sap.ml.hana.templateApply\&#34;\n}&#34;
+      
+      headers = {
+         &#39;Content-Type&#39;: &#34;application/json&#34;,
+         &#39;cache-control&#39;: &#34;no-cache&#34;,
+         &#39;Authorization&#39;: self.auth_token
+      }
+      # Create train pipeline
+      response = requests.request(&#34;POST&#34;, url, data=payload_train, headers=headers)
+      train_response = response.json()
+
+      # Create apply pipeline
+      response = requests.request(&#34;POST&#34;, url, data=payload_apply, headers=headers)
+      apply_response = response.json()
+      return train_response[&#39;id&#39;], apply_response[&#39;id&#39;]
+   
+   def store_in_repo(self, pipeline_id):
+      &#34;&#34;&#34;
+      To assure proper storage the data needs to be stored in DataHub repo
+
+      Parameters
+      ----------
+      pipeline_id : str
+         The pipeline id
+      &#34;&#34;&#34;
+      url = &#39;{}/repository/v2/files/user/files/vflow/graphs/com/sap/dsp/{}/metadata.json?op=write&#39;.format(self.vsystem_internal_url, pipeline_id)
+      payload = {
+         &#34;path&#34;: &#39;/repository/v2/files/tenant/files/mlsm/com/sap/dsp/{}&#39;.format(pipeline_id),
+         &#34;scenarioId&#34;: self.scenario_id
+      }
+      headers = {
+         &#39;Content-Type&#39;: &#34;application/json&#34;,
+         &#39;cache-control&#39;: &#34;no-cache&#34;,
+         &#39;Authorization&#39;: self.auth_token
+      }
+      response = requests.request(&#34;POST&#34;, url, json=payload, headers=headers)
+   
+   def _get_auth_token(self):
+      &#34;&#34;&#34;
+      Get the auth token 
+
+      Returns
+      -------
+      access_token : str
+         The auth token
+      &#34;&#34;&#34;
+      # Get Auth Token
+      vsystem_app_id = os.environ[&#34;VSYSTEM_APP_ID&#34;]
+      vsystem_secret = os.environ[&#34;VSYSTEM_SECRET&#34;]
+      response = requests.get(self.auth_url, auth=(vsystem_app_id, vsystem_secret))
+      if response.status_code == 200:
+         r = response.json()
+         return r[&#39;access_token&#39;]</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_deployment.deployers.sapdi.SDIDeployer.create_pipelines"><code class="name flex">
+<span>def <span class="ident">create_pipelines</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create the pipelines according to ML API spec</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>train_response_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>&nbsp;</dd>
+<dt>The train pipeline id</dt>
+<dt><code>apply</code> <code>response_id</code> : <code>str</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>The apply pipeline id</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_pipelines(self):
+   &#34;&#34;&#34;
+   Create the pipelines according to ML API spec
+
+   Returns
+   -------
+   train_response_id : str
+      The train pipeline id
+   apply response_id : str
+      The apply pipeline id
+   &#34;&#34;&#34;
+   url = self.mlapi_url + &#39;/scenarios/{}/pipelines&#39;.format(self.scenario_id)
+   payload_train = &#34;{\n  \&#34;name\&#34;: \&#34;Train\&#34;,\n  \&#34;description\&#34;: \&#34;HANAML Train Pipeline\&#34;,\n  \&#34;rating\&#34;: 0,\n \&#34;function\&#34;: \&#34;training\&#34;,\n  \&#34;fromTemplate\&#34;: \&#34;com.sap.ml.hana.templateTrain\&#34;\n}&#34;
+   payload_apply = &#34;{\n  \&#34;name\&#34;: \&#34;Apply\&#34;,\n  \&#34;description\&#34;: \&#34;HANAML Apply Pipeline\&#34;,\n  \&#34;rating\&#34;: 0,\n \&#34;function\&#34;: \&#34;inference\&#34;,\n  \&#34;fromTemplate\&#34;: \&#34;com.sap.ml.hana.templateApply\&#34;\n}&#34;
+   
+   headers = {
+      &#39;Content-Type&#39;: &#34;application/json&#34;,
+      &#39;cache-control&#39;: &#34;no-cache&#34;,
+      &#39;Authorization&#39;: self.auth_token
+   }
+   # Create train pipeline
+   response = requests.request(&#34;POST&#34;, url, data=payload_train, headers=headers)
+   train_response = response.json()
+
+   # Create apply pipeline
+   response = requests.request(&#34;POST&#34;, url, data=payload_apply, headers=headers)
+   apply_response = response.json()
+   return train_response[&#39;id&#39;], apply_response[&#39;id&#39;]</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.sapdi.SDIDeployer.generate_graphs"><code class="name flex">
+<span>def <span class="ident">generate_graphs</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate the graphs</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_graphs(self):
+   &#34;&#34;&#34;
+   Generate the graphs
+   &#34;&#34;&#34;
+   train_pl_id, apply_pl_id = self.create_pipelines()
+   self.store_in_repo(train_pl_id)
+   self.store_in_repo(apply_pl_id)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.sapdi.SDIDeployer.store_in_repo"><code class="name flex">
+<span>def <span class="ident">store_in_repo</span></span>(<span>self, pipeline_id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>To assure proper storage the data needs to be stored in DataHub repo</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>pipeline_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>The pipeline id</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def store_in_repo(self, pipeline_id):
+   &#34;&#34;&#34;
+   To assure proper storage the data needs to be stored in DataHub repo
+
+   Parameters
+   ----------
+   pipeline_id : str
+      The pipeline id
+   &#34;&#34;&#34;
+   url = &#39;{}/repository/v2/files/user/files/vflow/graphs/com/sap/dsp/{}/metadata.json?op=write&#39;.format(self.vsystem_internal_url, pipeline_id)
+   payload = {
+      &#34;path&#34;: &#39;/repository/v2/files/tenant/files/mlsm/com/sap/dsp/{}&#39;.format(pipeline_id),
+      &#34;scenarioId&#34;: self.scenario_id
+   }
+   headers = {
+      &#39;Content-Type&#39;: &#34;application/json&#34;,
+      &#39;cache-control&#39;: &#34;no-cache&#34;,
+      &#39;Authorization&#39;: self.auth_token
+   }
+   response = requests.request(&#34;POST&#34;, url, json=payload, headers=headers)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="hana_ml_deployment.deployers" href="index.html">hana_ml_deployment.deployers</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="hana_ml_deployment.deployers.sapdi.SDIDeployer" href="#hana_ml_deployment.deployers.sapdi.SDIDeployer">SDIDeployer</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_deployment.deployers.sapdi.SDIDeployer.create_pipelines" href="#hana_ml_deployment.deployers.sapdi.SDIDeployer.create_pipelines">create_pipelines</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.sapdi.SDIDeployer.generate_graphs" href="#hana_ml_deployment.deployers.sapdi.SDIDeployer.generate_graphs">generate_graphs</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.sapdi.SDIDeployer.store_in_repo" href="#hana_ml_deployment.deployers.sapdi.SDIDeployer.store_in_repo">store_in_repo</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

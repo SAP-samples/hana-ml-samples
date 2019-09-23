@@ -1,0 +1,8 @@
+{
+  "REF_NAME": {
+    "target": {
+      "object": "REF_TARGET_OBJECT",
+      "schema": "REF_TARGET_SCHEMA"
+    }
+  }
+}

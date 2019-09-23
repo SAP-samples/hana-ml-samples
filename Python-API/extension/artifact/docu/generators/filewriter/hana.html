@@ -1,0 +1,1770 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>hana_ml_artifact.generators.filewriter.hana API documentation</title>
+<meta name="description" content="This module handles the generation of the files that represent the
+artifacts." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>hana_ml_artifact.generators.filewriter.hana</code></h1>
+</header>
+<section id="section-intro">
+<p>This module handles the generation of the files that represent the
+artifacts.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This module handles the generation of the files that represent the
+artifacts.
+&#34;&#34;&#34;
+import os
+import json
+
+from .filewriter_base import FileWriterBase
+
+from ...sql_processor import SqlProcessor
+from ...hana_ml_utils import StringUtils
+from ...config import ConfigConstants
+
+
+class MTAYamlWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a yaml file
+    &#34;&#34;&#34;
+
+    def generate(self, path, app_id, module_name, version, schema, grant_service):
+        &#34;&#34;&#34;
+        Generate the yaml based on a template
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        app_id: str
+            The application id of the HDI container
+        module_name : str
+            The module name of the HDI container
+        version : str
+            The version of the HDI container
+        schema : str
+            The schema to be used by the HDI container
+        grant_service : str
+            The grant service to be used by the HDI container
+        &#34;&#34;&#34;
+        self.write_file(path, app_id, module_name, version, schema, grant_service)
+
+    def write_file(self, path, app_id, module_name, version, schema, grant_service):
+        &#34;&#34;&#34;
+        Retrieve the template yaml file and generate the replacements for the template
+        before writing the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        app_id: str
+            The application id of the HDI container
+        module_name : str
+            The module name of the HDI container
+        version : str
+            The version of the HDI container
+        schema : str
+            The schema to be used by the HDI container
+        grant_service : str
+            The grant service to be used by the HDI container
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.YAML_TEMPLATE_FILE)
+        replacements = {
+            ConfigConstants.YAML_TEMPLATE_APPID_PLACEHOLDER: app_id,
+            ConfigConstants.YAML_TEMPLATE_NAME_PLACEHOLDER: module_name,
+            ConfigConstants.YAML_TEMPLATE_VERSION_PLACEHOLDER: version,
+            ConfigConstants.YAML_TEMPLATE_SCHEMA_PLACEHOLDER: schema,
+            ConfigConstants.YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER: grant_service
+        }
+        self.write_template(path, ConfigConstants.YAML_FILE_NAME, template_file_path, replacements)
+
+
+class HDBGrantWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a grant file
+    &#34;&#34;&#34;
+
+    def generate(self, path, remote_access=False, remote_source=&#39;&#39;):
+        &#34;&#34;&#34;
+        Generate the yaml based on a template
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        remote_access: boolean
+            In case we are dealing with the SDA scenario
+        remote_source : str
+            The remote source to be used in a SDA scenario
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.GRANT_TMP_FILE_NAME)
+        replacements = {}
+
+        if remote_access:
+            template_file_path = os.path.join(
+                os.path.dirname(__file__),
+                ConfigConstants.TEMPLATE_DIR, ConfigConstants.GRANT_TMP_SDA_FILE_NAME)
+            replacements[ConfigConstants.GRANT_TEMPLATE_SDA_REMOTE_SOURCE] = remote_source
+
+        sql_processed = self.get_config_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED)[
+            SqlProcessor.TRACE_KEY_BASE_LAYER]
+
+        # AFL execute grant is part of the template as this is always required. However dataset is dynamic. So we use the
+        # synonyms to generate the dataset privileges. Only SELECT is provided. The grants are also added to the SDA container
+        schema_privileges = []
+        schema_privileges_with = []
+        for algo in sql_processed:
+            # Exclude relations context from processing
+            if not algo is SqlProcessor.TRACE_KEY_RELATION_CONTEXT:
+                if not isinstance(sql_processed[algo], dict):
+                    continue  # ignore TODO: proper doc
+                for function in sql_processed[algo]:
+                    if SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED in sql_processed[algo][function]:
+                        for synonym in sql_processed[algo][function][
+                                SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED]:
+                            if SqlProcessor.SYNONYM_STRUCT_KEY_TYPE in synonym and synonym[SqlProcessor.SYNONYM_STRUCT_KEY_TYPE] == SqlProcessor.TRACE_KEY_DATASET:
+                                schema_privilege_with = {
+                                    &#39;reference&#39;: synonym[&#39;schema&#39;],
+                                    &#39;privileges_with_grant_option&#39;: [&#39;SELECT&#39;]
+                                }
+                                schema_privileges_with.append(schema_privilege_with)
+                                schema_privilege = {
+                                    &#39;reference&#39;: synonym[&#39;schema&#39;],
+                                    &#39;privileges&#39;: [&#39;SELECT&#39;]
+                                }
+                                schema_privileges.append(schema_privilege)
+
+        schema_privileges_str = json.dumps(schema_privileges)
+        schema_privileges_with_str = json.dumps(schema_privileges_with)
+
+        replacements[ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES] = schema_privileges_str
+        replacements[ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH] = schema_privileges_with_str
+
+        self.write_file(path, template_file_path, replacements)
+
+    def write_file(self, path, template_file_path, replacements):
+        &#34;&#34;&#34;
+        Write the file based on a template
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        template_file : str
+            Location of the template file
+        replacements : dict
+            Replacements for the template placeholders
+        &#34;&#34;&#34;
+        file_name = ConfigConstants.GRANT_FILE_NAME + ConfigConstants.GRANT_FILE_EXTENSION
+        self.write_template(path, file_name, template_file_path, replacements)
+
+
+class HDBProcedureWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a procedure file
+    &#34;&#34;&#34;
+
+    def generate(self, path, procedure_name, sql_str, signature_str):
+        &#34;&#34;&#34;
+        Generate the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        procedure_name : str
+            Procedure name
+        sql_str : str
+            SQL content of the procedure
+        signature_str : str
+            Signatre of the procedure
+        &#34;&#34;&#34;
+        self.write_file(path, procedure_name, sql_str, signature_str)
+
+    def write_file(self, path, procedure_name, sql_str, signature_str):
+        &#34;&#34;&#34;
+        Retrieve the template procedure file and generate the replacements for the template
+        before writing the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        procedure_name : str
+            Procedure name
+        sql_str : str
+            SQL content of the procedure
+        signature_str : str
+            Signatre of the procedure
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.PROCEDURE_TEMPLATE_FILE)
+        replacements = {
+            ConfigConstants.PROCEDURE_TEMPLATE_SQL_PLACEHOLDER: sql_str,
+            ConfigConstants.PROCEDURE_TEMPLATE_PROC_NAME: procedure_name,
+            ConfigConstants.PROCEDURE_TEMPLATE_PROC_INTERFACE: signature_str,
+        }
+        file_name = procedure_name+ConfigConstants.PROCEDURE_FILE_EXTENSION
+
+        self.write_template(path, file_name, template_file_path, replacements)
+
+
+class HDBSynonymWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a synonym file
+    &#34;&#34;&#34;
+
+    def generate(self, path):
+        &#34;&#34;&#34;
+        Generating the content before writing the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        &#34;&#34;&#34;
+        sql_processed = self.get_config_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED)[
+            SqlProcessor.TRACE_KEY_BASE_LAYER]
+        target_ojects = []
+        # For now all synonyms are merged into one synonym file
+        for algo in sql_processed:
+            # Exclude relations context from processing
+            if not algo is SqlProcessor.TRACE_KEY_RELATION_CONTEXT:
+                if not isinstance(sql_processed[algo], dict):
+                    continue  # ignore TODO: proper doc
+                for function in sql_processed[algo]:
+                    if SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED in sql_processed[algo][function]:
+                        target_ojects.extend(
+                            sql_processed[algo][function]
+                            [SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED])
+
+        self.write_file(path, target_ojects)
+
+    def write_file(self, path, target_objects):
+        &#34;&#34;&#34;
+        Map the target objects to the content of the file before writing the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        target_objects : list
+            Procedure name
+        &#34;&#34;&#34;
+        gen_content = {}
+        target_mapping = {}
+        for target_object in target_objects:
+            if target_object[&#34;schema&#34;] and target_object[&#34;object&#34;]:
+                gen_content[target_object[&#39;synonym&#39;]] = {
+                    &#34;target&#34;: {
+                        &#34;object&#34;: target_object[&#34;object&#34;],
+                        &#34;schema&#34;: target_object[&#34;schema&#34;]
+                    }
+                }
+                target_mapping[target_object[&#34;schema&#34;] + &#39;.&#34;&#39; +
+                               target_object[&#34;object&#34;] + &#39;&#34;&#39;] = &#39;&#34;&#39; + target_object[&#39;synonym&#39;] + &#39;&#34;&#39;
+
+        file_name = ConfigConstants.SYNONYM_FILE_NAME + ConfigConstants.SYNONYM_FILE_EXTENSION
+        self.write_content(path, file_name, json.dumps(gen_content))
+
+
+class HDBRoleWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a role file
+    &#34;&#34;&#34;
+
+    def generate(self, path, name=None):
+        &#34;&#34;&#34;
+        Generating the role file
+
+        Parameters
+        ----------
+        path : str
+            Physical location where to write the file
+        name : str
+            In case an alternative name for the role is required
+        &#34;&#34;&#34;
+        if not name:
+            name = self.get_config_entry(&#39;project_name&#39;)
+        self.write_file(path, name)
+
+    def write_file(self, path, name):
+        &#34;&#34;&#34;
+        Retrieve the template role file and generate the replacements for the template
+        before writing the file. We create a role file for standard access and with grant 
+        rights.
+
+        Parameters
+        ----------
+        path : str
+            Physical location where to write the file
+        name : str
+            In case an alternative name for the role is required
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.ROLE_TEMPLATE_FILENAME)
+        template_file_with_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.ROLE_TEMPLATE_FILENAME_WITH)
+        role_name = &#39;hanaml::&#39; + name.replace(&#39;_&#39;, &#39;&#39;)
+        file_name = &#39;role&#39; + ConfigConstants.ROLE_FILE_EXTENSION
+        file_with_name = &#39;role_with&#39; + ConfigConstants.ROLE_FILE_EXTENSION
+        replacements = {
+            ConfigConstants.ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER: role_name
+        }
+        self.write_template(path, file_name, template_file_path, replacements)
+        self.write_template(path, file_with_name, template_file_with_path, replacements)
+
+
+class HDBVirtualTableWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a virtual table file
+    &#34;&#34;&#34;
+
+    def generate(self, path, remote_source, source_schema, source_table, virtual_table):
+        &#34;&#34;&#34;
+        Generating the virtual table file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        remote_source : str
+            The remote source to be used in a SDA scenario
+        source_schema : str
+            The source schema the virtual table is targeting
+        source_table : str
+            The source table the virtual table is targeting
+        virtual_table : str
+            The virtual table name to be used
+        &#34;&#34;&#34;
+        self.write_file(path, remote_source, source_schema, source_table, virtual_table)
+
+    def write_file(self, path, remote_source, source_schema, source_table, virtual_table):
+        &#34;&#34;&#34;
+        Retrieve the template virtual table file and generate the replacements for the template
+        before writing the file. 
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        remote_source : str
+            The remote source to be used in a SDA scenario
+        source_schema : str
+            The source schema the virtual table is targeting
+        source_table : str
+            The source table the virtual table is targeting
+        virtual_table : str
+            The virtual table name to be used
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.VIRTUAL_TABLE_TEMPLATE_FILENAME)
+        extended_virtual_table = &#39;::&#39;+virtual_table
+        source_schema_table = source_schema + &#39;.&#39; + source_table
+        file_name = virtual_table + ConfigConstants.VIRTUAL_TABLE_FILE_EXTENSION
+        replacements = {
+            ConfigConstants.VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER: remote_source,
+            ConfigConstants.VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER: source_schema_table,
+            ConfigConstants.VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER: extended_virtual_table
+        }
+        self.write_template(path, file_name, template_file_path, replacements)
+
+
+class HDBCDSWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a cds file
+    &#34;&#34;&#34;
+
+    def generate(self, path, context_name, context_content):
+        &#34;&#34;&#34;
+        Generating the cds file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        context_name : str
+            The cds context name
+        context_content : str
+            The cds context content
+        &#34;&#34;&#34;
+        self.write_file(path, context_name, context_content)
+
+    def write_file(self, path, context_name, context_content):
+        &#34;&#34;&#34;
+        Retrieve the template cds file and generate the replacements for the template
+        before writing the file. 
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        context_name : str
+            The cds context name
+        context_content : str
+            The cds context content
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.CDS_TEMPLATE_FILENAME)
+        file_name = context_name + ConfigConstants.CDS_FILE_EXTENSION
+        replacements = {
+            ConfigConstants.CDS_TEMPLATE_CONTEXT_NAME: context_name,
+            ConfigConstants.CDS_TEMPLATE_CONTEXT_CONTENT: context_content
+        }
+        self.write_template(path, file_name, template_file_path, replacements)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBCDSWriter"><code class="flex name class">
+<span>class <span class="ident">HDBCDSWriter</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class generates a cds file</p>
+<p>This is main entry point.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Central config object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class HDBCDSWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a cds file
+    &#34;&#34;&#34;
+
+    def generate(self, path, context_name, context_content):
+        &#34;&#34;&#34;
+        Generating the cds file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        context_name : str
+            The cds context name
+        context_content : str
+            The cds context content
+        &#34;&#34;&#34;
+        self.write_file(path, context_name, context_content)
+
+    def write_file(self, path, context_name, context_content):
+        &#34;&#34;&#34;
+        Retrieve the template cds file and generate the replacements for the template
+        before writing the file. 
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        context_name : str
+            The cds context name
+        context_content : str
+            The cds context content
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.CDS_TEMPLATE_FILENAME)
+        file_name = context_name + ConfigConstants.CDS_FILE_EXTENSION
+        replacements = {
+            ConfigConstants.CDS_TEMPLATE_CONTEXT_NAME: context_name,
+            ConfigConstants.CDS_TEMPLATE_CONTEXT_CONTENT: context_content
+        }
+        self.write_template(path, file_name, template_file_path, replacements)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBCDSWriter.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self, path, context_name, context_content)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generating the cds file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>context_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The cds context name</dd>
+<dt><strong><code>context_content</code></strong> :&ensp;<code>str</code></dt>
+<dd>The cds context content</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate(self, path, context_name, context_content):
+    &#34;&#34;&#34;
+    Generating the cds file
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    context_name : str
+        The cds context name
+    context_content : str
+        The cds context content
+    &#34;&#34;&#34;
+    self.write_file(path, context_name, context_content)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBCDSWriter.write_file"><code class="name flex">
+<span>def <span class="ident">write_file</span></span>(<span>self, path, context_name, context_content)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Retrieve the template cds file and generate the replacements for the template
+before writing the file. </p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>context_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The cds context name</dd>
+<dt><strong><code>context_content</code></strong> :&ensp;<code>str</code></dt>
+<dd>The cds context content</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def write_file(self, path, context_name, context_content):
+    &#34;&#34;&#34;
+    Retrieve the template cds file and generate the replacements for the template
+    before writing the file. 
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    context_name : str
+        The cds context name
+    context_content : str
+        The cds context content
+    &#34;&#34;&#34;
+    template_file_path = os.path.join(
+        os.path.dirname(__file__),
+        ConfigConstants.TEMPLATE_DIR, ConfigConstants.CDS_TEMPLATE_FILENAME)
+    file_name = context_name + ConfigConstants.CDS_FILE_EXTENSION
+    replacements = {
+        ConfigConstants.CDS_TEMPLATE_CONTEXT_NAME: context_name,
+        ConfigConstants.CDS_TEMPLATE_CONTEXT_CONTENT: context_content
+    }
+    self.write_template(path, file_name, template_file_path, replacements)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry">add_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry">get_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content">write_content</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template">write_template</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBGrantWriter"><code class="flex name class">
+<span>class <span class="ident">HDBGrantWriter</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class generates a grant file</p>
+<p>This is main entry point.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Central config object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class HDBGrantWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a grant file
+    &#34;&#34;&#34;
+
+    def generate(self, path, remote_access=False, remote_source=&#39;&#39;):
+        &#34;&#34;&#34;
+        Generate the yaml based on a template
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        remote_access: boolean
+            In case we are dealing with the SDA scenario
+        remote_source : str
+            The remote source to be used in a SDA scenario
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.GRANT_TMP_FILE_NAME)
+        replacements = {}
+
+        if remote_access:
+            template_file_path = os.path.join(
+                os.path.dirname(__file__),
+                ConfigConstants.TEMPLATE_DIR, ConfigConstants.GRANT_TMP_SDA_FILE_NAME)
+            replacements[ConfigConstants.GRANT_TEMPLATE_SDA_REMOTE_SOURCE] = remote_source
+
+        sql_processed = self.get_config_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED)[
+            SqlProcessor.TRACE_KEY_BASE_LAYER]
+
+        # AFL execute grant is part of the template as this is always required. However dataset is dynamic. So we use the
+        # synonyms to generate the dataset privileges. Only SELECT is provided. The grants are also added to the SDA container
+        schema_privileges = []
+        schema_privileges_with = []
+        for algo in sql_processed:
+            # Exclude relations context from processing
+            if not algo is SqlProcessor.TRACE_KEY_RELATION_CONTEXT:
+                if not isinstance(sql_processed[algo], dict):
+                    continue  # ignore TODO: proper doc
+                for function in sql_processed[algo]:
+                    if SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED in sql_processed[algo][function]:
+                        for synonym in sql_processed[algo][function][
+                                SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED]:
+                            if SqlProcessor.SYNONYM_STRUCT_KEY_TYPE in synonym and synonym[SqlProcessor.SYNONYM_STRUCT_KEY_TYPE] == SqlProcessor.TRACE_KEY_DATASET:
+                                schema_privilege_with = {
+                                    &#39;reference&#39;: synonym[&#39;schema&#39;],
+                                    &#39;privileges_with_grant_option&#39;: [&#39;SELECT&#39;]
+                                }
+                                schema_privileges_with.append(schema_privilege_with)
+                                schema_privilege = {
+                                    &#39;reference&#39;: synonym[&#39;schema&#39;],
+                                    &#39;privileges&#39;: [&#39;SELECT&#39;]
+                                }
+                                schema_privileges.append(schema_privilege)
+
+        schema_privileges_str = json.dumps(schema_privileges)
+        schema_privileges_with_str = json.dumps(schema_privileges_with)
+
+        replacements[ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES] = schema_privileges_str
+        replacements[ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH] = schema_privileges_with_str
+
+        self.write_file(path, template_file_path, replacements)
+
+    def write_file(self, path, template_file_path, replacements):
+        &#34;&#34;&#34;
+        Write the file based on a template
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        template_file : str
+            Location of the template file
+        replacements : dict
+            Replacements for the template placeholders
+        &#34;&#34;&#34;
+        file_name = ConfigConstants.GRANT_FILE_NAME + ConfigConstants.GRANT_FILE_EXTENSION
+        self.write_template(path, file_name, template_file_path, replacements)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBGrantWriter.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self, path, remote_access=False, remote_source='')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate the yaml based on a template</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>remote_access</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>In case we are dealing with the SDA scenario</dd>
+<dt><strong><code>remote_source</code></strong> :&ensp;<code>str</code></dt>
+<dd>The remote source to be used in a SDA scenario</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate(self, path, remote_access=False, remote_source=&#39;&#39;):
+    &#34;&#34;&#34;
+    Generate the yaml based on a template
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    remote_access: boolean
+        In case we are dealing with the SDA scenario
+    remote_source : str
+        The remote source to be used in a SDA scenario
+    &#34;&#34;&#34;
+    template_file_path = os.path.join(
+        os.path.dirname(__file__),
+        ConfigConstants.TEMPLATE_DIR, ConfigConstants.GRANT_TMP_FILE_NAME)
+    replacements = {}
+
+    if remote_access:
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.GRANT_TMP_SDA_FILE_NAME)
+        replacements[ConfigConstants.GRANT_TEMPLATE_SDA_REMOTE_SOURCE] = remote_source
+
+    sql_processed = self.get_config_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED)[
+        SqlProcessor.TRACE_KEY_BASE_LAYER]
+
+    # AFL execute grant is part of the template as this is always required. However dataset is dynamic. So we use the
+    # synonyms to generate the dataset privileges. Only SELECT is provided. The grants are also added to the SDA container
+    schema_privileges = []
+    schema_privileges_with = []
+    for algo in sql_processed:
+        # Exclude relations context from processing
+        if not algo is SqlProcessor.TRACE_KEY_RELATION_CONTEXT:
+            if not isinstance(sql_processed[algo], dict):
+                continue  # ignore TODO: proper doc
+            for function in sql_processed[algo]:
+                if SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED in sql_processed[algo][function]:
+                    for synonym in sql_processed[algo][function][
+                            SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED]:
+                        if SqlProcessor.SYNONYM_STRUCT_KEY_TYPE in synonym and synonym[SqlProcessor.SYNONYM_STRUCT_KEY_TYPE] == SqlProcessor.TRACE_KEY_DATASET:
+                            schema_privilege_with = {
+                                &#39;reference&#39;: synonym[&#39;schema&#39;],
+                                &#39;privileges_with_grant_option&#39;: [&#39;SELECT&#39;]
+                            }
+                            schema_privileges_with.append(schema_privilege_with)
+                            schema_privilege = {
+                                &#39;reference&#39;: synonym[&#39;schema&#39;],
+                                &#39;privileges&#39;: [&#39;SELECT&#39;]
+                            }
+                            schema_privileges.append(schema_privilege)
+
+    schema_privileges_str = json.dumps(schema_privileges)
+    schema_privileges_with_str = json.dumps(schema_privileges_with)
+
+    replacements[ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES] = schema_privileges_str
+    replacements[ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH] = schema_privileges_with_str
+
+    self.write_file(path, template_file_path, replacements)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBGrantWriter.write_file"><code class="name flex">
+<span>def <span class="ident">write_file</span></span>(<span>self, path, template_file_path, replacements)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Write the file based on a template</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>template_file</code></strong> :&ensp;<code>str</code></dt>
+<dd>Location of the template file</dd>
+<dt><strong><code>replacements</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Replacements for the template placeholders</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def write_file(self, path, template_file_path, replacements):
+    &#34;&#34;&#34;
+    Write the file based on a template
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    template_file : str
+        Location of the template file
+    replacements : dict
+        Replacements for the template placeholders
+    &#34;&#34;&#34;
+    file_name = ConfigConstants.GRANT_FILE_NAME + ConfigConstants.GRANT_FILE_EXTENSION
+    self.write_template(path, file_name, template_file_path, replacements)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry">add_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry">get_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content">write_content</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template">write_template</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBProcedureWriter"><code class="flex name class">
+<span>class <span class="ident">HDBProcedureWriter</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class generates a procedure file</p>
+<p>This is main entry point.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Central config object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class HDBProcedureWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a procedure file
+    &#34;&#34;&#34;
+
+    def generate(self, path, procedure_name, sql_str, signature_str):
+        &#34;&#34;&#34;
+        Generate the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        procedure_name : str
+            Procedure name
+        sql_str : str
+            SQL content of the procedure
+        signature_str : str
+            Signatre of the procedure
+        &#34;&#34;&#34;
+        self.write_file(path, procedure_name, sql_str, signature_str)
+
+    def write_file(self, path, procedure_name, sql_str, signature_str):
+        &#34;&#34;&#34;
+        Retrieve the template procedure file and generate the replacements for the template
+        before writing the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        procedure_name : str
+            Procedure name
+        sql_str : str
+            SQL content of the procedure
+        signature_str : str
+            Signatre of the procedure
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.PROCEDURE_TEMPLATE_FILE)
+        replacements = {
+            ConfigConstants.PROCEDURE_TEMPLATE_SQL_PLACEHOLDER: sql_str,
+            ConfigConstants.PROCEDURE_TEMPLATE_PROC_NAME: procedure_name,
+            ConfigConstants.PROCEDURE_TEMPLATE_PROC_INTERFACE: signature_str,
+        }
+        file_name = procedure_name+ConfigConstants.PROCEDURE_FILE_EXTENSION
+
+        self.write_template(path, file_name, template_file_path, replacements)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBProcedureWriter.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self, path, procedure_name, sql_str, signature_str)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate the file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>procedure_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Procedure name</dd>
+<dt><strong><code>sql_str</code></strong> :&ensp;<code>str</code></dt>
+<dd>SQL content of the procedure</dd>
+<dt><strong><code>signature_str</code></strong> :&ensp;<code>str</code></dt>
+<dd>Signatre of the procedure</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate(self, path, procedure_name, sql_str, signature_str):
+    &#34;&#34;&#34;
+    Generate the file
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    procedure_name : str
+        Procedure name
+    sql_str : str
+        SQL content of the procedure
+    signature_str : str
+        Signatre of the procedure
+    &#34;&#34;&#34;
+    self.write_file(path, procedure_name, sql_str, signature_str)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBProcedureWriter.write_file"><code class="name flex">
+<span>def <span class="ident">write_file</span></span>(<span>self, path, procedure_name, sql_str, signature_str)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Retrieve the template procedure file and generate the replacements for the template
+before writing the file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>procedure_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Procedure name</dd>
+<dt><strong><code>sql_str</code></strong> :&ensp;<code>str</code></dt>
+<dd>SQL content of the procedure</dd>
+<dt><strong><code>signature_str</code></strong> :&ensp;<code>str</code></dt>
+<dd>Signatre of the procedure</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def write_file(self, path, procedure_name, sql_str, signature_str):
+    &#34;&#34;&#34;
+    Retrieve the template procedure file and generate the replacements for the template
+    before writing the file
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    procedure_name : str
+        Procedure name
+    sql_str : str
+        SQL content of the procedure
+    signature_str : str
+        Signatre of the procedure
+    &#34;&#34;&#34;
+    template_file_path = os.path.join(
+        os.path.dirname(__file__),
+        ConfigConstants.TEMPLATE_DIR, ConfigConstants.PROCEDURE_TEMPLATE_FILE)
+    replacements = {
+        ConfigConstants.PROCEDURE_TEMPLATE_SQL_PLACEHOLDER: sql_str,
+        ConfigConstants.PROCEDURE_TEMPLATE_PROC_NAME: procedure_name,
+        ConfigConstants.PROCEDURE_TEMPLATE_PROC_INTERFACE: signature_str,
+    }
+    file_name = procedure_name+ConfigConstants.PROCEDURE_FILE_EXTENSION
+
+    self.write_template(path, file_name, template_file_path, replacements)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry">add_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry">get_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content">write_content</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template">write_template</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBRoleWriter"><code class="flex name class">
+<span>class <span class="ident">HDBRoleWriter</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class generates a role file</p>
+<p>This is main entry point.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Central config object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class HDBRoleWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a role file
+    &#34;&#34;&#34;
+
+    def generate(self, path, name=None):
+        &#34;&#34;&#34;
+        Generating the role file
+
+        Parameters
+        ----------
+        path : str
+            Physical location where to write the file
+        name : str
+            In case an alternative name for the role is required
+        &#34;&#34;&#34;
+        if not name:
+            name = self.get_config_entry(&#39;project_name&#39;)
+        self.write_file(path, name)
+
+    def write_file(self, path, name):
+        &#34;&#34;&#34;
+        Retrieve the template role file and generate the replacements for the template
+        before writing the file. We create a role file for standard access and with grant 
+        rights.
+
+        Parameters
+        ----------
+        path : str
+            Physical location where to write the file
+        name : str
+            In case an alternative name for the role is required
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.ROLE_TEMPLATE_FILENAME)
+        template_file_with_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.ROLE_TEMPLATE_FILENAME_WITH)
+        role_name = &#39;hanaml::&#39; + name.replace(&#39;_&#39;, &#39;&#39;)
+        file_name = &#39;role&#39; + ConfigConstants.ROLE_FILE_EXTENSION
+        file_with_name = &#39;role_with&#39; + ConfigConstants.ROLE_FILE_EXTENSION
+        replacements = {
+            ConfigConstants.ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER: role_name
+        }
+        self.write_template(path, file_name, template_file_path, replacements)
+        self.write_template(path, file_with_name, template_file_with_path, replacements)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBRoleWriter.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self, path, name=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generating the role file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>In case an alternative name for the role is required</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate(self, path, name=None):
+    &#34;&#34;&#34;
+    Generating the role file
+
+    Parameters
+    ----------
+    path : str
+        Physical location where to write the file
+    name : str
+        In case an alternative name for the role is required
+    &#34;&#34;&#34;
+    if not name:
+        name = self.get_config_entry(&#39;project_name&#39;)
+    self.write_file(path, name)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBRoleWriter.write_file"><code class="name flex">
+<span>def <span class="ident">write_file</span></span>(<span>self, path, name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Retrieve the template role file and generate the replacements for the template
+before writing the file. We create a role file for standard access and with grant
+rights.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>In case an alternative name for the role is required</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def write_file(self, path, name):
+    &#34;&#34;&#34;
+    Retrieve the template role file and generate the replacements for the template
+    before writing the file. We create a role file for standard access and with grant 
+    rights.
+
+    Parameters
+    ----------
+    path : str
+        Physical location where to write the file
+    name : str
+        In case an alternative name for the role is required
+    &#34;&#34;&#34;
+    template_file_path = os.path.join(
+        os.path.dirname(__file__),
+        ConfigConstants.TEMPLATE_DIR, ConfigConstants.ROLE_TEMPLATE_FILENAME)
+    template_file_with_path = os.path.join(
+        os.path.dirname(__file__),
+        ConfigConstants.TEMPLATE_DIR, ConfigConstants.ROLE_TEMPLATE_FILENAME_WITH)
+    role_name = &#39;hanaml::&#39; + name.replace(&#39;_&#39;, &#39;&#39;)
+    file_name = &#39;role&#39; + ConfigConstants.ROLE_FILE_EXTENSION
+    file_with_name = &#39;role_with&#39; + ConfigConstants.ROLE_FILE_EXTENSION
+    replacements = {
+        ConfigConstants.ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER: role_name
+    }
+    self.write_template(path, file_name, template_file_path, replacements)
+    self.write_template(path, file_with_name, template_file_with_path, replacements)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry">add_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry">get_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content">write_content</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template">write_template</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBSynonymWriter"><code class="flex name class">
+<span>class <span class="ident">HDBSynonymWriter</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class generates a synonym file</p>
+<p>This is main entry point.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Central config object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class HDBSynonymWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a synonym file
+    &#34;&#34;&#34;
+
+    def generate(self, path):
+        &#34;&#34;&#34;
+        Generating the content before writing the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        &#34;&#34;&#34;
+        sql_processed = self.get_config_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED)[
+            SqlProcessor.TRACE_KEY_BASE_LAYER]
+        target_ojects = []
+        # For now all synonyms are merged into one synonym file
+        for algo in sql_processed:
+            # Exclude relations context from processing
+            if not algo is SqlProcessor.TRACE_KEY_RELATION_CONTEXT:
+                if not isinstance(sql_processed[algo], dict):
+                    continue  # ignore TODO: proper doc
+                for function in sql_processed[algo]:
+                    if SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED in sql_processed[algo][function]:
+                        target_ojects.extend(
+                            sql_processed[algo][function]
+                            [SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED])
+
+        self.write_file(path, target_ojects)
+
+    def write_file(self, path, target_objects):
+        &#34;&#34;&#34;
+        Map the target objects to the content of the file before writing the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        target_objects : list
+            Procedure name
+        &#34;&#34;&#34;
+        gen_content = {}
+        target_mapping = {}
+        for target_object in target_objects:
+            if target_object[&#34;schema&#34;] and target_object[&#34;object&#34;]:
+                gen_content[target_object[&#39;synonym&#39;]] = {
+                    &#34;target&#34;: {
+                        &#34;object&#34;: target_object[&#34;object&#34;],
+                        &#34;schema&#34;: target_object[&#34;schema&#34;]
+                    }
+                }
+                target_mapping[target_object[&#34;schema&#34;] + &#39;.&#34;&#39; +
+                               target_object[&#34;object&#34;] + &#39;&#34;&#39;] = &#39;&#34;&#39; + target_object[&#39;synonym&#39;] + &#39;&#34;&#39;
+
+        file_name = ConfigConstants.SYNONYM_FILE_NAME + ConfigConstants.SYNONYM_FILE_EXTENSION
+        self.write_content(path, file_name, json.dumps(gen_content))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBSynonymWriter.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self, path)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generating the content before writing the file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate(self, path):
+    &#34;&#34;&#34;
+    Generating the content before writing the file
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    &#34;&#34;&#34;
+    sql_processed = self.get_config_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED)[
+        SqlProcessor.TRACE_KEY_BASE_LAYER]
+    target_ojects = []
+    # For now all synonyms are merged into one synonym file
+    for algo in sql_processed:
+        # Exclude relations context from processing
+        if not algo is SqlProcessor.TRACE_KEY_RELATION_CONTEXT:
+            if not isinstance(sql_processed[algo], dict):
+                continue  # ignore TODO: proper doc
+            for function in sql_processed[algo]:
+                if SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED in sql_processed[algo][function]:
+                    target_ojects.extend(
+                        sql_processed[algo][function]
+                        [SqlProcessor.TRACE_KEY_SYNONYMS_PROCESSED])
+
+    self.write_file(path, target_ojects)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBSynonymWriter.write_file"><code class="name flex">
+<span>def <span class="ident">write_file</span></span>(<span>self, path, target_objects)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Map the target objects to the content of the file before writing the file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>target_objects</code></strong> :&ensp;<code>list</code></dt>
+<dd>Procedure name</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def write_file(self, path, target_objects):
+    &#34;&#34;&#34;
+    Map the target objects to the content of the file before writing the file
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    target_objects : list
+        Procedure name
+    &#34;&#34;&#34;
+    gen_content = {}
+    target_mapping = {}
+    for target_object in target_objects:
+        if target_object[&#34;schema&#34;] and target_object[&#34;object&#34;]:
+            gen_content[target_object[&#39;synonym&#39;]] = {
+                &#34;target&#34;: {
+                    &#34;object&#34;: target_object[&#34;object&#34;],
+                    &#34;schema&#34;: target_object[&#34;schema&#34;]
+                }
+            }
+            target_mapping[target_object[&#34;schema&#34;] + &#39;.&#34;&#39; +
+                           target_object[&#34;object&#34;] + &#39;&#34;&#39;] = &#39;&#34;&#39; + target_object[&#39;synonym&#39;] + &#39;&#34;&#39;
+
+    file_name = ConfigConstants.SYNONYM_FILE_NAME + ConfigConstants.SYNONYM_FILE_EXTENSION
+    self.write_content(path, file_name, json.dumps(gen_content))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry">add_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry">get_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content">write_content</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template">write_template</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBVirtualTableWriter"><code class="flex name class">
+<span>class <span class="ident">HDBVirtualTableWriter</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class generates a virtual table file</p>
+<p>This is main entry point.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Central config object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class HDBVirtualTableWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a virtual table file
+    &#34;&#34;&#34;
+
+    def generate(self, path, remote_source, source_schema, source_table, virtual_table):
+        &#34;&#34;&#34;
+        Generating the virtual table file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        remote_source : str
+            The remote source to be used in a SDA scenario
+        source_schema : str
+            The source schema the virtual table is targeting
+        source_table : str
+            The source table the virtual table is targeting
+        virtual_table : str
+            The virtual table name to be used
+        &#34;&#34;&#34;
+        self.write_file(path, remote_source, source_schema, source_table, virtual_table)
+
+    def write_file(self, path, remote_source, source_schema, source_table, virtual_table):
+        &#34;&#34;&#34;
+        Retrieve the template virtual table file and generate the replacements for the template
+        before writing the file. 
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        remote_source : str
+            The remote source to be used in a SDA scenario
+        source_schema : str
+            The source schema the virtual table is targeting
+        source_table : str
+            The source table the virtual table is targeting
+        virtual_table : str
+            The virtual table name to be used
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.VIRTUAL_TABLE_TEMPLATE_FILENAME)
+        extended_virtual_table = &#39;::&#39;+virtual_table
+        source_schema_table = source_schema + &#39;.&#39; + source_table
+        file_name = virtual_table + ConfigConstants.VIRTUAL_TABLE_FILE_EXTENSION
+        replacements = {
+            ConfigConstants.VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER: remote_source,
+            ConfigConstants.VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER: source_schema_table,
+            ConfigConstants.VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER: extended_virtual_table
+        }
+        self.write_template(path, file_name, template_file_path, replacements)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBVirtualTableWriter.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self, path, remote_source, source_schema, source_table, virtual_table)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generating the virtual table file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>remote_source</code></strong> :&ensp;<code>str</code></dt>
+<dd>The remote source to be used in a SDA scenario</dd>
+<dt><strong><code>source_schema</code></strong> :&ensp;<code>str</code></dt>
+<dd>The source schema the virtual table is targeting</dd>
+<dt><strong><code>source_table</code></strong> :&ensp;<code>str</code></dt>
+<dd>The source table the virtual table is targeting</dd>
+<dt><strong><code>virtual_table</code></strong> :&ensp;<code>str</code></dt>
+<dd>The virtual table name to be used</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate(self, path, remote_source, source_schema, source_table, virtual_table):
+    &#34;&#34;&#34;
+    Generating the virtual table file
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    remote_source : str
+        The remote source to be used in a SDA scenario
+    source_schema : str
+        The source schema the virtual table is targeting
+    source_table : str
+        The source table the virtual table is targeting
+    virtual_table : str
+        The virtual table name to be used
+    &#34;&#34;&#34;
+    self.write_file(path, remote_source, source_schema, source_table, virtual_table)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.HDBVirtualTableWriter.write_file"><code class="name flex">
+<span>def <span class="ident">write_file</span></span>(<span>self, path, remote_source, source_schema, source_table, virtual_table)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Retrieve the template virtual table file and generate the replacements for the template
+before writing the file. </p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>remote_source</code></strong> :&ensp;<code>str</code></dt>
+<dd>The remote source to be used in a SDA scenario</dd>
+<dt><strong><code>source_schema</code></strong> :&ensp;<code>str</code></dt>
+<dd>The source schema the virtual table is targeting</dd>
+<dt><strong><code>source_table</code></strong> :&ensp;<code>str</code></dt>
+<dd>The source table the virtual table is targeting</dd>
+<dt><strong><code>virtual_table</code></strong> :&ensp;<code>str</code></dt>
+<dd>The virtual table name to be used</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def write_file(self, path, remote_source, source_schema, source_table, virtual_table):
+    &#34;&#34;&#34;
+    Retrieve the template virtual table file and generate the replacements for the template
+    before writing the file. 
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    remote_source : str
+        The remote source to be used in a SDA scenario
+    source_schema : str
+        The source schema the virtual table is targeting
+    source_table : str
+        The source table the virtual table is targeting
+    virtual_table : str
+        The virtual table name to be used
+    &#34;&#34;&#34;
+    template_file_path = os.path.join(
+        os.path.dirname(__file__),
+        ConfigConstants.TEMPLATE_DIR, ConfigConstants.VIRTUAL_TABLE_TEMPLATE_FILENAME)
+    extended_virtual_table = &#39;::&#39;+virtual_table
+    source_schema_table = source_schema + &#39;.&#39; + source_table
+    file_name = virtual_table + ConfigConstants.VIRTUAL_TABLE_FILE_EXTENSION
+    replacements = {
+        ConfigConstants.VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER: remote_source,
+        ConfigConstants.VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER: source_schema_table,
+        ConfigConstants.VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER: extended_virtual_table
+    }
+    self.write_template(path, file_name, template_file_path, replacements)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry">add_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry">get_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content">write_content</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template">write_template</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.MTAYamlWriter"><code class="flex name class">
+<span>class <span class="ident">MTAYamlWriter</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class generates a yaml file</p>
+<p>This is main entry point.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Central config object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MTAYamlWriter(FileWriterBase):
+    &#34;&#34;&#34;
+    This class generates a yaml file
+    &#34;&#34;&#34;
+
+    def generate(self, path, app_id, module_name, version, schema, grant_service):
+        &#34;&#34;&#34;
+        Generate the yaml based on a template
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        app_id: str
+            The application id of the HDI container
+        module_name : str
+            The module name of the HDI container
+        version : str
+            The version of the HDI container
+        schema : str
+            The schema to be used by the HDI container
+        grant_service : str
+            The grant service to be used by the HDI container
+        &#34;&#34;&#34;
+        self.write_file(path, app_id, module_name, version, schema, grant_service)
+
+    def write_file(self, path, app_id, module_name, version, schema, grant_service):
+        &#34;&#34;&#34;
+        Retrieve the template yaml file and generate the replacements for the template
+        before writing the file
+
+        Parameters
+        ----------
+        path: str
+            Physical location where to write the file
+        app_id: str
+            The application id of the HDI container
+        module_name : str
+            The module name of the HDI container
+        version : str
+            The version of the HDI container
+        schema : str
+            The schema to be used by the HDI container
+        grant_service : str
+            The grant service to be used by the HDI container
+        &#34;&#34;&#34;
+        template_file_path = os.path.join(
+            os.path.dirname(__file__),
+            ConfigConstants.TEMPLATE_DIR, ConfigConstants.YAML_TEMPLATE_FILE)
+        replacements = {
+            ConfigConstants.YAML_TEMPLATE_APPID_PLACEHOLDER: app_id,
+            ConfigConstants.YAML_TEMPLATE_NAME_PLACEHOLDER: module_name,
+            ConfigConstants.YAML_TEMPLATE_VERSION_PLACEHOLDER: version,
+            ConfigConstants.YAML_TEMPLATE_SCHEMA_PLACEHOLDER: schema,
+            ConfigConstants.YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER: grant_service
+        }
+        self.write_template(path, ConfigConstants.YAML_FILE_NAME, template_file_path, replacements)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generators.filewriter.hana.MTAYamlWriter.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self, path, app_id, module_name, version, schema, grant_service)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate the yaml based on a template</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>app_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The application id of the HDI container</dd>
+<dt><strong><code>module_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The module name of the HDI container</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>The version of the HDI container</dd>
+<dt><strong><code>schema</code></strong> :&ensp;<code>str</code></dt>
+<dd>The schema to be used by the HDI container</dd>
+<dt><strong><code>grant_service</code></strong> :&ensp;<code>str</code></dt>
+<dd>The grant service to be used by the HDI container</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate(self, path, app_id, module_name, version, schema, grant_service):
+    &#34;&#34;&#34;
+    Generate the yaml based on a template
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    app_id: str
+        The application id of the HDI container
+    module_name : str
+        The module name of the HDI container
+    version : str
+        The version of the HDI container
+    schema : str
+        The schema to be used by the HDI container
+    grant_service : str
+        The grant service to be used by the HDI container
+    &#34;&#34;&#34;
+    self.write_file(path, app_id, module_name, version, schema, grant_service)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generators.filewriter.hana.MTAYamlWriter.write_file"><code class="name flex">
+<span>def <span class="ident">write_file</span></span>(<span>self, path, app_id, module_name, version, schema, grant_service)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Retrieve the template yaml file and generate the replacements for the template
+before writing the file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Physical location where to write the file</dd>
+<dt><strong><code>app_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The application id of the HDI container</dd>
+<dt><strong><code>module_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The module name of the HDI container</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>The version of the HDI container</dd>
+<dt><strong><code>schema</code></strong> :&ensp;<code>str</code></dt>
+<dd>The schema to be used by the HDI container</dd>
+<dt><strong><code>grant_service</code></strong> :&ensp;<code>str</code></dt>
+<dd>The grant service to be used by the HDI container</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def write_file(self, path, app_id, module_name, version, schema, grant_service):
+    &#34;&#34;&#34;
+    Retrieve the template yaml file and generate the replacements for the template
+    before writing the file
+
+    Parameters
+    ----------
+    path: str
+        Physical location where to write the file
+    app_id: str
+        The application id of the HDI container
+    module_name : str
+        The module name of the HDI container
+    version : str
+        The version of the HDI container
+    schema : str
+        The schema to be used by the HDI container
+    grant_service : str
+        The grant service to be used by the HDI container
+    &#34;&#34;&#34;
+    template_file_path = os.path.join(
+        os.path.dirname(__file__),
+        ConfigConstants.TEMPLATE_DIR, ConfigConstants.YAML_TEMPLATE_FILE)
+    replacements = {
+        ConfigConstants.YAML_TEMPLATE_APPID_PLACEHOLDER: app_id,
+        ConfigConstants.YAML_TEMPLATE_NAME_PLACEHOLDER: module_name,
+        ConfigConstants.YAML_TEMPLATE_VERSION_PLACEHOLDER: version,
+        ConfigConstants.YAML_TEMPLATE_SCHEMA_PLACEHOLDER: schema,
+        ConfigConstants.YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER: grant_service
+    }
+    self.write_template(path, ConfigConstants.YAML_FILE_NAME, template_file_path, replacements)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase">FileWriterBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.add_config_entry">add_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.get_config_entry">get_config_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_content">write_content</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template" href="filewriter_base.html#hana_ml_artifact.generators.filewriter.filewriter_base.FileWriterBase.write_template">write_template</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="hana_ml_artifact.generators.filewriter" href="index.html">hana_ml_artifact.generators.filewriter</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBCDSWriter" href="#hana_ml_artifact.generators.filewriter.hana.HDBCDSWriter">HDBCDSWriter</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBCDSWriter.generate" href="#hana_ml_artifact.generators.filewriter.hana.HDBCDSWriter.generate">generate</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBCDSWriter.write_file" href="#hana_ml_artifact.generators.filewriter.hana.HDBCDSWriter.write_file">write_file</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBGrantWriter" href="#hana_ml_artifact.generators.filewriter.hana.HDBGrantWriter">HDBGrantWriter</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBGrantWriter.generate" href="#hana_ml_artifact.generators.filewriter.hana.HDBGrantWriter.generate">generate</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBGrantWriter.write_file" href="#hana_ml_artifact.generators.filewriter.hana.HDBGrantWriter.write_file">write_file</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBProcedureWriter" href="#hana_ml_artifact.generators.filewriter.hana.HDBProcedureWriter">HDBProcedureWriter</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBProcedureWriter.generate" href="#hana_ml_artifact.generators.filewriter.hana.HDBProcedureWriter.generate">generate</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBProcedureWriter.write_file" href="#hana_ml_artifact.generators.filewriter.hana.HDBProcedureWriter.write_file">write_file</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBRoleWriter" href="#hana_ml_artifact.generators.filewriter.hana.HDBRoleWriter">HDBRoleWriter</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBRoleWriter.generate" href="#hana_ml_artifact.generators.filewriter.hana.HDBRoleWriter.generate">generate</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBRoleWriter.write_file" href="#hana_ml_artifact.generators.filewriter.hana.HDBRoleWriter.write_file">write_file</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBSynonymWriter" href="#hana_ml_artifact.generators.filewriter.hana.HDBSynonymWriter">HDBSynonymWriter</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBSynonymWriter.generate" href="#hana_ml_artifact.generators.filewriter.hana.HDBSynonymWriter.generate">generate</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBSynonymWriter.write_file" href="#hana_ml_artifact.generators.filewriter.hana.HDBSynonymWriter.write_file">write_file</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBVirtualTableWriter" href="#hana_ml_artifact.generators.filewriter.hana.HDBVirtualTableWriter">HDBVirtualTableWriter</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBVirtualTableWriter.generate" href="#hana_ml_artifact.generators.filewriter.hana.HDBVirtualTableWriter.generate">generate</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.HDBVirtualTableWriter.write_file" href="#hana_ml_artifact.generators.filewriter.hana.HDBVirtualTableWriter.write_file">write_file</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_artifact.generators.filewriter.hana.MTAYamlWriter" href="#hana_ml_artifact.generators.filewriter.hana.MTAYamlWriter">MTAYamlWriter</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.MTAYamlWriter.generate" href="#hana_ml_artifact.generators.filewriter.hana.MTAYamlWriter.generate">generate</a></code></li>
+<li><code><a title="hana_ml_artifact.generators.filewriter.hana.MTAYamlWriter.write_file" href="#hana_ml_artifact.generators.filewriter.hana.MTAYamlWriter.write_file">write_file</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

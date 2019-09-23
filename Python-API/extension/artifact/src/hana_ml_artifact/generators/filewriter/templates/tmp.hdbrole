@@ -1,0 +1,10 @@
+{
+    "role":{
+        "name": "<<ROLE_NAME>>",
+        "schema_privileges":[
+                {
+                    "privileges": ["SELECT", "CREATE ANY", "EXECUTE", "INSERT", "DELETE"]
+                }
+        ]
+    }
+}

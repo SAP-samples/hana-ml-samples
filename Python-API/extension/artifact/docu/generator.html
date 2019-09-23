@@ -1,0 +1,1357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>hana_ml_artifact.generator API documentation</title>
+<meta name="description" content="This module is the entrypoint for artifact generation." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>hana_ml_artifact.generator</code></h1>
+</header>
+<section id="section-intro">
+<p>This module is the entrypoint for artifact generation.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This module is the entrypoint for artifact generation.
+&#34;&#34;&#34;
+# TODO: Exception handling and message generation check
+# TODO: Improve temp tale generation with more human readable names
+import logging
+import os
+import pandas as pd
+
+from .generators import HanaGenerator
+from .generators import HanaSDAGenerator
+from .generators import DataHubGenerator
+from .generators import CloudFoundryGenerator
+from .generators import AMDPGenerator
+from .config import ConfigHandler
+from .config import ConfigConstants
+from .sql_processor import SqlProcessor
+from .hana_ml_utils import DirectoryHandler
+from .hana_ml_utils import StringUtils
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__) #pylint: disable=invalid-name
+
+class Generator(object):
+    &#34;&#34;&#34;
+    This class contains the entrypoint for artifact generation.
+    It provides the toplevel methods to generate the following target artifacts:
+
+    * HANA HDI Container artifacts
+    * DataHub / SAP Data Intelligence Graphs
+    * Abap AMDP. This is experimental.
+    * Cloud Foundry Python Application. This is on the backlog and not yet implemented
+
+    The class provides support for several concepts:
+
+    Layered Generation (base and consumption layer)
+    -----------------------------------------------
+    The artifact package generation has the concept of a 2 layered approach:
+    1. The low level layer, aka base layer, which is the wrapper around the PAL function
+    and holds the defined parameters that go with the fucntion call. Input (data/model)
+    and output is part of the interface of the base layer procedures. The artifacts
+    of this layer is always HANA procedures.
+    2. The top level layer, aka consumption layer, which consumes the base layer procedures
+    and provides the correct input and uses the output. The consumption layer can be different
+    artifacts. For example a DataHub graph can act as consumption layer by using a python
+    operator to call the base layer procedures in HANA. The consumption layer can also be a
+    seperate HANA procudure consuming the base layer procedures.
+
+    In essence the base layer procedures and related HDI container artifacts are always
+    genreated and depending on the users use case the respective consumption layer will
+    be generated. Currently 3 consumption layer targets are supported:
+
+    * HANA
+    * DataHub
+    * AMDP (ABAP) Experimental
+
+    Data source mapping
+    -------------------
+    Another concept which this class provides is the notion of data source mapping. This allows
+    for remapping the data source. This can be helpfull in case you want to generate based on
+    1 experimentation with HANA ML multiple hdi containers for different target HANA systems where
+    the source data is stored in different tables. Please keep in mind that this functionality
+    is assuming the same datatype structure in the different systems.
+    &#34;&#34;&#34;
+
+    def __init__(self, project_name, version, grant_service, connection_context, outputdir, #pylint: disable=too-many-arguments
+                 generation_merge_type=ConfigConstants.GENERATION_MERGE_NONE,
+                 generation_group_type=ConfigConstants.GENERATION_GROUP_FUNCTIONAL,
+                 sda_grant_service=None, remote_source=&#39;&#39;):
+        &#34;&#34;&#34;
+        Entry class for artifact generation.
+
+        Parameters
+        ----------
+        project_name : str
+            The project name which will be used across the artifact generation such as folder that
+            is created where the generated artifacts are placed.
+        version : str
+            The version to add to distinguish between multiple runs of the same project.
+        grant_service: str
+            The Cloud Foundry grant service that is used to grant the HDI container tech user the
+            proper access during the deployment
+        connection_context: object
+            The HANA ML connection context object used. This holds the sql trace object required
+            to generate the artifacts
+        outputdir: str
+            The location where the artifacts need to placed after generation.
+        generation_merge_type: int
+            Merge type is which operations should be merged together. There are at this stage
+            only 2 options
+            1: GENERATION_MERGE_NONE: All operations are generated seperately (ie. individual
+            procedures in HANA)
+            2: GENERATION_MERGE_PARTITION: A partition operation is merged into the respective
+            related operation
+            and generated as 1 (ie prodedure in HANA).
+        generation_group_type: int
+            11: GENERATION_GROUP_NONE # No grouping is applied. This means that solution specific
+            implementation will define how to deal with this
+            12: GENERATION_GROUP_FUNCTIONAL # Grouping is based on functional grouping. Meaning
+            that logical related elements such as partiion / fit / and related score will be
+            put together
+        sda_grant_service: str
+            When generating sda artifacts which grant service can be used to access the right
+            grants.
+        remote_source: str
+            When generating sda artifacts what is the name of the remote source to be used.
+        &#34;&#34;&#34;
+        self.directory_handler = DirectoryHandler()
+        self.config = ConfigHandler()
+        self._init_config(project_name,
+                          version,
+                          grant_service,
+                          outputdir,
+                          generation_merge_type,
+                          generation_group_type,
+                          sda_grant_service,
+                          remote_source)
+        sql_processor = SqlProcessor(self.config)
+        sql_processor.parse_sql_trace(connection_context)
+
+    def generate_amdp(self):
+        &#34;&#34;&#34;
+        (Experimental) Generate ABAP ADMP classses.
+        &#34;&#34;&#34;
+        amdp_generator = AMDPGenerator(self.config)
+        amdp_generator.generate()
+
+    def generate_hana(self, base_layer=True,
+                      consumption_layer=True,
+                      sda_data_source_mapping_only=True):
+        &#34;&#34;&#34;
+        Generate HANA hdi artifacts.
+
+        Parameters
+        ----------
+        base_layer : boolean
+            The base layer is the low level procedures that will be generated.
+        consumption_layer : boolean
+            The consumption layer is the layer that will consume the base layer artifacts
+        sda_data_source_mapping_only: boolean
+            In case data source mapping is provided you can forrce to only do this for the
+            sda hdi container
+        &#34;&#34;&#34;
+        hana_generator = HanaGenerator(self.config)
+        hana_generator.generate_artifacts(base_layer,
+                                                 consumption_layer,
+                                                 sda_data_source_mapping_only)
+
+    def generate_hana_sda(self, model_only=True, sda_data_source_mapping_only=False):
+        &#34;&#34;&#34;
+        Generate HANA hdi artifacts for the SDA scenario. Be aware that 2 containers 
+        with there respective artifacts are created. The first is the same which
+        includes both base and consumption layer artifacts. The second is the SDA
+        container which loads and uses data out of the first container.
+
+        Parameters
+        ----------
+        model_only: boolean
+            In the sda case we are only interested in transferring the model using SDA.
+            This forces the HANA artifact generation to cater only for this scenario.
+        sda_data_source_mapping_only: boolean
+            In case data source mapping is provided you can forrce to only do this for the
+            sda hdi container
+        &#34;&#34;&#34;
+        hana_sda_generator = HanaSDAGenerator(self.config)
+        # Create hana objects. We will re-use consumption layer when doing the remote calls
+        self.generate_hana(base_layer=True,
+                           consumption_layer=True,
+                           sda_data_source_mapping_only=sda_data_source_mapping_only)
+        hana_sda_generator.generate_artifacts(model_only)
+
+    def generate_sapdi(self, generate_hana_artifacts=True, include_rest_endpoint=False):
+        &#34;&#34;&#34;
+        Generate SAP Data Intelligence Artifacts. This consists of both HANA as DataHub
+        artifacts
+
+        Parameters
+        ----------
+        generate_hana_artifacts: boolean
+            Whether to generate the HANA artifacts or if only the graph should be generated
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        &#34;&#34;&#34;
+        self._generate_datahub(generate_hana_artifacts=generate_hana_artifacts,
+                               include_rest_endpoint=include_rest_endpoint,
+                               include_ml_operators=True)
+
+    def generate_datahub(self, generate_hana_artifacts=True, include_rest_endpoint=False):
+        &#34;&#34;&#34;
+        Generate DataHub Artifacts. This consists of both HANA as DataHub
+        artifacts
+
+        Parameters
+        ----------
+        generate_hana_artifacts: boolean
+            Whether to generate the HANA artifacts or if only the graph should be generated
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        &#34;&#34;&#34;
+        self._generate_datahub(generate_hana_artifacts=generate_hana_artifacts,
+                               include_rest_endpoint=include_rest_endpoint,
+                               include_ml_operators=False)
+
+    def generate_cf(self):
+        &#34;&#34;&#34;
+        Not Implemented - Generate Cloud Foundry Artifacts.
+        &#34;&#34;&#34;
+        cloudfoundry_generator = CloudFoundryGenerator(self.config)
+        # Create base hana objects. No need for a hana consumption layer as
+        # python program will act as the consumption layer
+        self.generate_hana(base_layer=True, consumption_layer=False)
+        cloudfoundry_generator.generate_artifacts()
+
+    # ---------------------------------------------------------------------------------------------
+    #  Convenience Methods
+    # ---------------------------------------------------------------------------------------------
+    def clean_outputdir(self):
+        &#34;&#34;&#34;
+        Clean the output dir where artifacts will be generated.
+        &#34;&#34;&#34;
+        path = self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_DIR)
+        if os.path.exists(path):
+            self.directory_handler.delete_directory_content(path)
+            os.rmdir(path)
+
+    def get_output_path_hana(self):
+        &#34;&#34;&#34;
+        Get the output path of the hana artifacts
+
+        Returns
+        -------
+        hana_output_path: str
+            Returns the physical location where the hana artifacts are stored.
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_HANA)
+
+    def get_output_path_hana_sda(self):
+        &#34;&#34;&#34;
+        Get the output path of the sda related hana artifacts
+
+        Returns
+        -------
+        hana_sda_output_path: str
+            Returns the physical location where the hana artifacts are stored.
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_HANA)
+
+    def get_output_path_sapdi(self):
+        &#34;&#34;&#34;
+        Get the output path of the datahub related artifacts
+
+        Returns
+        -------
+        sapdi_output_path: str
+            Returns the physical location where the sapdi artifacts are stored.
+        &#34;&#34;&#34;
+        return self.get_output_path_datahub()
+
+    def get_output_path_datahub(self):
+        &#34;&#34;&#34;
+        Get the output path of the datahub related artifacts
+
+        Returns
+        -------
+        datahub_output_path: str
+            Returns the physical location where the datahub artifacts are stored.
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB)
+
+    def get_output_path_cf(self):
+        &#34;&#34;&#34;
+        Get the output path of the cloud foundry python app related artifacts
+
+        Returns
+        -------
+        cf_output_path: str
+            Returns the physical location where the cf artifacts are stored.
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_CF)
+
+    def show_hana_data_source_mapping(self):
+        &#34;&#34;&#34;
+        Prints out the data source mapping currently configured.
+
+        Returns
+        -------
+        data_source_mapping: dataframe
+            Returns the datasource mapping as a pandas dataframe for formatted display
+            Mainly usefull in jupyter notebook scenario.
+        &#34;&#34;&#34;
+        data = self.get_hana_data_source_mapping()
+        return pd.DataFrame.from_dict(data, orient=&#39;index&#39;, columns=[&#34;Data Source Map To:&#34;])
+
+    def get_hana_data_source_mapping(self):
+        &#34;&#34;&#34;
+        Get the the current data source mapping. Which can be used to adjust mapping.
+
+        Returns
+        -------
+        data_source_mapping: dict
+            Returns the datasource mapping as a dictionary
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING)
+
+    def set_hana_data_source_mapping(self, data_source_mapping):
+        &#34;&#34;&#34;
+        Set the data data source mapping.
+
+        Parameters
+        ----------
+        data_source_mapping: dict
+            dictionary with data source mapping.
+        &#34;&#34;&#34;
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING,
+                              data_source_mapping)
+
+    def _generate_datahub(self,
+                          generate_hana_artifacts=True,
+                          include_rest_endpoint=False,
+                          include_ml_operators=False):
+        &#34;&#34;&#34;
+        Method to start the generation of the graph json for DataHub.
+
+        Parameters
+        ----------
+        generate_hana_artifacts: boolean
+            Whether to generate the HANA artifacts or if only the graph should be generated
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        include_ml_operators: boolean
+            Include ML operators for the SAP DI scenario
+        &#34;&#34;&#34;
+        datahub_generator = DataHubGenerator(self.config)
+        # Create base hana objects. No need for a hana consumption layer as sapdi will act
+        # as the consumption layer
+        if generate_hana_artifacts:
+            self.generate_hana(base_layer=True, consumption_layer=False)
+        datahub_generator.generate_artifacts(include_rest_endpoint, include_ml_operators)
+
+    def _init_config(self, #pylint: disable=too-many-arguments
+                     project_name,
+                     version,
+                     grant_service,
+                     outputdir,
+                     generation_merge_type,
+                     generation_group_type,
+                     sda_grant_service,
+                     remote_source):
+        &#34;&#34;&#34;
+        Method to initiate the configuration.
+
+        Parameters
+        ----------
+        project_name : str
+            The project name which will be used across the artifact generation such as folder that
+            is created where the generated artifacts are placed.
+        version : str
+            The version to add to distinguish between multiple runs of the same project.
+        grant_service : str
+            The Cloud Foundry grant service that is used to grant the HDI container tech user the
+            proper access during the deployment
+        outputdir : str
+            The location where the artifacts need to placed after generation.
+        generation_merge_type : int
+            Merge type is which operations should be merged together. There are at this stage
+            only 2 options
+            1: GENERATION_MERGE_NONE: All operations are generated seperately (ie. individual
+            procedures in HANA)
+            2: GENERATION_MERGE_PARTITION: A partition operation is merged into the respective
+            related operation
+            and generated as 1 (ie prodedure in HANA).
+        generation_group_type : int
+            11: GENERATION_GROUP_NONE # No grouping is applied. This means that solution specific
+            implementation will define how to deal with this
+            12: GENERATION_GROUP_FUNCTIONAL # Grouping is based on functional grouping. Meaning
+            that logical related elements such as partiion / fit / and related score will be
+            put together
+        sda_grant_service:  str
+            When generating sda artifacts which grant service can be used to access the right
+            grants.
+        remote_source : str
+            When generating sda artifacts what is the name of the remote source to be used.
+        &#34;&#34;&#34;
+        # Remove improper characters
+        project_name = StringUtils.remove_special_characters(project_name)
+        module_name = project_name
+        app_id = module_name
+        schema = &#39;&#34;&#39;+(module_name + &#39;_SCHEMA&#39;).upper()+&#39;&#34;&#39;
+        # This is the root folder in the outputdir where the artifacts will be generated.
+        output_path = os.path.join(outputdir, project_name)
+
+         # Populate config
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH, output_path)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_PROJECT_NAME, project_name)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_VERSION, version)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_GRANT_SERVICE, grant_service)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_SDA_GRANT_SERVICE, sda_grant_service)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_SDA_REMOTE_SOURCE, remote_source)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_MERGE_STRATEGY, generation_merge_type)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_GROUP_STRATEGY, generation_group_type)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_OUTPUT_DIR, outputdir)
+
+
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_MODULE_NAME, module_name)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_CDS_CONTEXT, &#39;output&#39;)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_APPID, app_id)
+
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_SCHEMA, schema)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED, {})
+
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING, {})</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="hana_ml_artifact.generator.Generator"><code class="flex name class">
+<span>class <span class="ident">Generator</span></span>
+<span>(</span><span>project_name, version, grant_service, connection_context, outputdir, generation_merge_type=1, generation_group_type=12, sda_grant_service=None, remote_source='')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class contains the entrypoint for artifact generation.
+It provides the toplevel methods to generate the following target artifacts:</p>
+<ul>
+<li>HANA HDI Container artifacts</li>
+<li>DataHub / SAP Data Intelligence Graphs</li>
+<li>Abap AMDP. This is experimental.</li>
+<li>Cloud Foundry Python Application. This is on the backlog and not yet implemented</li>
+</ul>
+<p>The class provides support for several concepts:</p>
+<h2 id="layered-generation-base-and-consumption-layer">Layered Generation (base and consumption layer)</h2>
+<p>The artifact package generation has the concept of a 2 layered approach:
+1. The low level layer, aka base layer, which is the wrapper around the PAL function
+and holds the defined parameters that go with the fucntion call. Input (data/model)
+and output is part of the interface of the base layer procedures. The artifacts
+of this layer is always HANA procedures.
+2. The top level layer, aka consumption layer, which consumes the base layer procedures
+and provides the correct input and uses the output. The consumption layer can be different
+artifacts. For example a DataHub graph can act as consumption layer by using a python
+operator to call the base layer procedures in HANA. The consumption layer can also be a
+seperate HANA procudure consuming the base layer procedures.</p>
+<p>In essence the base layer procedures and related HDI container artifacts are always
+genreated and depending on the users use case the respective consumption layer will
+be generated. Currently 3 consumption layer targets are supported:</p>
+<ul>
+<li>HANA</li>
+<li>DataHub</li>
+<li>AMDP (ABAP) Experimental</li>
+</ul>
+<h2 id="data-source-mapping">Data source mapping</h2>
+<p>Another concept which this class provides is the notion of data source mapping. This allows
+for remapping the data source. This can be helpfull in case you want to generate based on
+1 experimentation with HANA ML multiple hdi containers for different target HANA systems where
+the source data is stored in different tables. Please keep in mind that this functionality
+is assuming the same datatype structure in the different systems.</p>
+<p>Entry class for artifact generation.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>project_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The project name which will be used across the artifact generation such as folder that
+is created where the generated artifacts are placed.</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>The version to add to distinguish between multiple runs of the same project.</dd>
+<dt><strong><code>grant_service</code></strong> :&ensp;<code>str</code></dt>
+<dd>The Cloud Foundry grant service that is used to grant the HDI container tech user the
+proper access during the deployment</dd>
+<dt><strong><code>connection_context</code></strong> :&ensp;<code>object</code></dt>
+<dd>The HANA ML connection context object used. This holds the sql trace object required
+to generate the artifacts</dd>
+<dt><strong><code>outputdir</code></strong> :&ensp;<code>str</code></dt>
+<dd>The location where the artifacts need to placed after generation.</dd>
+<dt><strong><code>generation_merge_type</code></strong> :&ensp;<code>int</code></dt>
+<dd>Merge type is which operations should be merged together. There are at this stage
+only 2 options
+1: GENERATION_MERGE_NONE: All operations are generated seperately (ie. individual
+procedures in HANA)
+2: GENERATION_MERGE_PARTITION: A partition operation is merged into the respective
+related operation
+and generated as 1 (ie prodedure in HANA).</dd>
+<dt><strong><code>generation_group_type</code></strong> :&ensp;<code>int</code></dt>
+<dd>11: GENERATION_GROUP_NONE # No grouping is applied. This means that solution specific
+implementation will define how to deal with this
+12: GENERATION_GROUP_FUNCTIONAL # Grouping is based on functional grouping. Meaning
+that logical related elements such as partiion / fit / and related score will be
+put together</dd>
+<dt><strong><code>sda_grant_service</code></strong> :&ensp;<code>str</code></dt>
+<dd>When generating sda artifacts which grant service can be used to access the right
+grants.</dd>
+<dt><strong><code>remote_source</code></strong> :&ensp;<code>str</code></dt>
+<dd>When generating sda artifacts what is the name of the remote source to be used.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Generator(object):
+    &#34;&#34;&#34;
+    This class contains the entrypoint for artifact generation.
+    It provides the toplevel methods to generate the following target artifacts:
+
+    * HANA HDI Container artifacts
+    * DataHub / SAP Data Intelligence Graphs
+    * Abap AMDP. This is experimental.
+    * Cloud Foundry Python Application. This is on the backlog and not yet implemented
+
+    The class provides support for several concepts:
+
+    Layered Generation (base and consumption layer)
+    -----------------------------------------------
+    The artifact package generation has the concept of a 2 layered approach:
+    1. The low level layer, aka base layer, which is the wrapper around the PAL function
+    and holds the defined parameters that go with the fucntion call. Input (data/model)
+    and output is part of the interface of the base layer procedures. The artifacts
+    of this layer is always HANA procedures.
+    2. The top level layer, aka consumption layer, which consumes the base layer procedures
+    and provides the correct input and uses the output. The consumption layer can be different
+    artifacts. For example a DataHub graph can act as consumption layer by using a python
+    operator to call the base layer procedures in HANA. The consumption layer can also be a
+    seperate HANA procudure consuming the base layer procedures.
+
+    In essence the base layer procedures and related HDI container artifacts are always
+    genreated and depending on the users use case the respective consumption layer will
+    be generated. Currently 3 consumption layer targets are supported:
+
+    * HANA
+    * DataHub
+    * AMDP (ABAP) Experimental
+
+    Data source mapping
+    -------------------
+    Another concept which this class provides is the notion of data source mapping. This allows
+    for remapping the data source. This can be helpfull in case you want to generate based on
+    1 experimentation with HANA ML multiple hdi containers for different target HANA systems where
+    the source data is stored in different tables. Please keep in mind that this functionality
+    is assuming the same datatype structure in the different systems.
+    &#34;&#34;&#34;
+
+    def __init__(self, project_name, version, grant_service, connection_context, outputdir, #pylint: disable=too-many-arguments
+                 generation_merge_type=ConfigConstants.GENERATION_MERGE_NONE,
+                 generation_group_type=ConfigConstants.GENERATION_GROUP_FUNCTIONAL,
+                 sda_grant_service=None, remote_source=&#39;&#39;):
+        &#34;&#34;&#34;
+        Entry class for artifact generation.
+
+        Parameters
+        ----------
+        project_name : str
+            The project name which will be used across the artifact generation such as folder that
+            is created where the generated artifacts are placed.
+        version : str
+            The version to add to distinguish between multiple runs of the same project.
+        grant_service: str
+            The Cloud Foundry grant service that is used to grant the HDI container tech user the
+            proper access during the deployment
+        connection_context: object
+            The HANA ML connection context object used. This holds the sql trace object required
+            to generate the artifacts
+        outputdir: str
+            The location where the artifacts need to placed after generation.
+        generation_merge_type: int
+            Merge type is which operations should be merged together. There are at this stage
+            only 2 options
+            1: GENERATION_MERGE_NONE: All operations are generated seperately (ie. individual
+            procedures in HANA)
+            2: GENERATION_MERGE_PARTITION: A partition operation is merged into the respective
+            related operation
+            and generated as 1 (ie prodedure in HANA).
+        generation_group_type: int
+            11: GENERATION_GROUP_NONE # No grouping is applied. This means that solution specific
+            implementation will define how to deal with this
+            12: GENERATION_GROUP_FUNCTIONAL # Grouping is based on functional grouping. Meaning
+            that logical related elements such as partiion / fit / and related score will be
+            put together
+        sda_grant_service: str
+            When generating sda artifacts which grant service can be used to access the right
+            grants.
+        remote_source: str
+            When generating sda artifacts what is the name of the remote source to be used.
+        &#34;&#34;&#34;
+        self.directory_handler = DirectoryHandler()
+        self.config = ConfigHandler()
+        self._init_config(project_name,
+                          version,
+                          grant_service,
+                          outputdir,
+                          generation_merge_type,
+                          generation_group_type,
+                          sda_grant_service,
+                          remote_source)
+        sql_processor = SqlProcessor(self.config)
+        sql_processor.parse_sql_trace(connection_context)
+
+    def generate_amdp(self):
+        &#34;&#34;&#34;
+        (Experimental) Generate ABAP ADMP classses.
+        &#34;&#34;&#34;
+        amdp_generator = AMDPGenerator(self.config)
+        amdp_generator.generate()
+
+    def generate_hana(self, base_layer=True,
+                      consumption_layer=True,
+                      sda_data_source_mapping_only=True):
+        &#34;&#34;&#34;
+        Generate HANA hdi artifacts.
+
+        Parameters
+        ----------
+        base_layer : boolean
+            The base layer is the low level procedures that will be generated.
+        consumption_layer : boolean
+            The consumption layer is the layer that will consume the base layer artifacts
+        sda_data_source_mapping_only: boolean
+            In case data source mapping is provided you can forrce to only do this for the
+            sda hdi container
+        &#34;&#34;&#34;
+        hana_generator = HanaGenerator(self.config)
+        hana_generator.generate_artifacts(base_layer,
+                                                 consumption_layer,
+                                                 sda_data_source_mapping_only)
+
+    def generate_hana_sda(self, model_only=True, sda_data_source_mapping_only=False):
+        &#34;&#34;&#34;
+        Generate HANA hdi artifacts for the SDA scenario. Be aware that 2 containers 
+        with there respective artifacts are created. The first is the same which
+        includes both base and consumption layer artifacts. The second is the SDA
+        container which loads and uses data out of the first container.
+
+        Parameters
+        ----------
+        model_only: boolean
+            In the sda case we are only interested in transferring the model using SDA.
+            This forces the HANA artifact generation to cater only for this scenario.
+        sda_data_source_mapping_only: boolean
+            In case data source mapping is provided you can forrce to only do this for the
+            sda hdi container
+        &#34;&#34;&#34;
+        hana_sda_generator = HanaSDAGenerator(self.config)
+        # Create hana objects. We will re-use consumption layer when doing the remote calls
+        self.generate_hana(base_layer=True,
+                           consumption_layer=True,
+                           sda_data_source_mapping_only=sda_data_source_mapping_only)
+        hana_sda_generator.generate_artifacts(model_only)
+
+    def generate_sapdi(self, generate_hana_artifacts=True, include_rest_endpoint=False):
+        &#34;&#34;&#34;
+        Generate SAP Data Intelligence Artifacts. This consists of both HANA as DataHub
+        artifacts
+
+        Parameters
+        ----------
+        generate_hana_artifacts: boolean
+            Whether to generate the HANA artifacts or if only the graph should be generated
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        &#34;&#34;&#34;
+        self._generate_datahub(generate_hana_artifacts=generate_hana_artifacts,
+                               include_rest_endpoint=include_rest_endpoint,
+                               include_ml_operators=True)
+
+    def generate_datahub(self, generate_hana_artifacts=True, include_rest_endpoint=False):
+        &#34;&#34;&#34;
+        Generate DataHub Artifacts. This consists of both HANA as DataHub
+        artifacts
+
+        Parameters
+        ----------
+        generate_hana_artifacts: boolean
+            Whether to generate the HANA artifacts or if only the graph should be generated
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        &#34;&#34;&#34;
+        self._generate_datahub(generate_hana_artifacts=generate_hana_artifacts,
+                               include_rest_endpoint=include_rest_endpoint,
+                               include_ml_operators=False)
+
+    def generate_cf(self):
+        &#34;&#34;&#34;
+        Not Implemented - Generate Cloud Foundry Artifacts.
+        &#34;&#34;&#34;
+        cloudfoundry_generator = CloudFoundryGenerator(self.config)
+        # Create base hana objects. No need for a hana consumption layer as
+        # python program will act as the consumption layer
+        self.generate_hana(base_layer=True, consumption_layer=False)
+        cloudfoundry_generator.generate_artifacts()
+
+    # ---------------------------------------------------------------------------------------------
+    #  Convenience Methods
+    # ---------------------------------------------------------------------------------------------
+    def clean_outputdir(self):
+        &#34;&#34;&#34;
+        Clean the output dir where artifacts will be generated.
+        &#34;&#34;&#34;
+        path = self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_DIR)
+        if os.path.exists(path):
+            self.directory_handler.delete_directory_content(path)
+            os.rmdir(path)
+
+    def get_output_path_hana(self):
+        &#34;&#34;&#34;
+        Get the output path of the hana artifacts
+
+        Returns
+        -------
+        hana_output_path: str
+            Returns the physical location where the hana artifacts are stored.
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_HANA)
+
+    def get_output_path_hana_sda(self):
+        &#34;&#34;&#34;
+        Get the output path of the sda related hana artifacts
+
+        Returns
+        -------
+        hana_sda_output_path: str
+            Returns the physical location where the hana artifacts are stored.
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_HANA)
+
+    def get_output_path_sapdi(self):
+        &#34;&#34;&#34;
+        Get the output path of the datahub related artifacts
+
+        Returns
+        -------
+        sapdi_output_path: str
+            Returns the physical location where the sapdi artifacts are stored.
+        &#34;&#34;&#34;
+        return self.get_output_path_datahub()
+
+    def get_output_path_datahub(self):
+        &#34;&#34;&#34;
+        Get the output path of the datahub related artifacts
+
+        Returns
+        -------
+        datahub_output_path: str
+            Returns the physical location where the datahub artifacts are stored.
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB)
+
+    def get_output_path_cf(self):
+        &#34;&#34;&#34;
+        Get the output path of the cloud foundry python app related artifacts
+
+        Returns
+        -------
+        cf_output_path: str
+            Returns the physical location where the cf artifacts are stored.
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_CF)
+
+    def show_hana_data_source_mapping(self):
+        &#34;&#34;&#34;
+        Prints out the data source mapping currently configured.
+
+        Returns
+        -------
+        data_source_mapping: dataframe
+            Returns the datasource mapping as a pandas dataframe for formatted display
+            Mainly usefull in jupyter notebook scenario.
+        &#34;&#34;&#34;
+        data = self.get_hana_data_source_mapping()
+        return pd.DataFrame.from_dict(data, orient=&#39;index&#39;, columns=[&#34;Data Source Map To:&#34;])
+
+    def get_hana_data_source_mapping(self):
+        &#34;&#34;&#34;
+        Get the the current data source mapping. Which can be used to adjust mapping.
+
+        Returns
+        -------
+        data_source_mapping: dict
+            Returns the datasource mapping as a dictionary
+        &#34;&#34;&#34;
+        return self.config.get_entry(ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING)
+
+    def set_hana_data_source_mapping(self, data_source_mapping):
+        &#34;&#34;&#34;
+        Set the data data source mapping.
+
+        Parameters
+        ----------
+        data_source_mapping: dict
+            dictionary with data source mapping.
+        &#34;&#34;&#34;
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING,
+                              data_source_mapping)
+
+    def _generate_datahub(self,
+                          generate_hana_artifacts=True,
+                          include_rest_endpoint=False,
+                          include_ml_operators=False):
+        &#34;&#34;&#34;
+        Method to start the generation of the graph json for DataHub.
+
+        Parameters
+        ----------
+        generate_hana_artifacts: boolean
+            Whether to generate the HANA artifacts or if only the graph should be generated
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        include_ml_operators: boolean
+            Include ML operators for the SAP DI scenario
+        &#34;&#34;&#34;
+        datahub_generator = DataHubGenerator(self.config)
+        # Create base hana objects. No need for a hana consumption layer as sapdi will act
+        # as the consumption layer
+        if generate_hana_artifacts:
+            self.generate_hana(base_layer=True, consumption_layer=False)
+        datahub_generator.generate_artifacts(include_rest_endpoint, include_ml_operators)
+
+    def _init_config(self, #pylint: disable=too-many-arguments
+                     project_name,
+                     version,
+                     grant_service,
+                     outputdir,
+                     generation_merge_type,
+                     generation_group_type,
+                     sda_grant_service,
+                     remote_source):
+        &#34;&#34;&#34;
+        Method to initiate the configuration.
+
+        Parameters
+        ----------
+        project_name : str
+            The project name which will be used across the artifact generation such as folder that
+            is created where the generated artifacts are placed.
+        version : str
+            The version to add to distinguish between multiple runs of the same project.
+        grant_service : str
+            The Cloud Foundry grant service that is used to grant the HDI container tech user the
+            proper access during the deployment
+        outputdir : str
+            The location where the artifacts need to placed after generation.
+        generation_merge_type : int
+            Merge type is which operations should be merged together. There are at this stage
+            only 2 options
+            1: GENERATION_MERGE_NONE: All operations are generated seperately (ie. individual
+            procedures in HANA)
+            2: GENERATION_MERGE_PARTITION: A partition operation is merged into the respective
+            related operation
+            and generated as 1 (ie prodedure in HANA).
+        generation_group_type : int
+            11: GENERATION_GROUP_NONE # No grouping is applied. This means that solution specific
+            implementation will define how to deal with this
+            12: GENERATION_GROUP_FUNCTIONAL # Grouping is based on functional grouping. Meaning
+            that logical related elements such as partiion / fit / and related score will be
+            put together
+        sda_grant_service:  str
+            When generating sda artifacts which grant service can be used to access the right
+            grants.
+        remote_source : str
+            When generating sda artifacts what is the name of the remote source to be used.
+        &#34;&#34;&#34;
+        # Remove improper characters
+        project_name = StringUtils.remove_special_characters(project_name)
+        module_name = project_name
+        app_id = module_name
+        schema = &#39;&#34;&#39;+(module_name + &#39;_SCHEMA&#39;).upper()+&#39;&#34;&#39;
+        # This is the root folder in the outputdir where the artifacts will be generated.
+        output_path = os.path.join(outputdir, project_name)
+
+         # Populate config
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH, output_path)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_PROJECT_NAME, project_name)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_VERSION, version)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_GRANT_SERVICE, grant_service)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_SDA_GRANT_SERVICE, sda_grant_service)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_SDA_REMOTE_SOURCE, remote_source)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_MERGE_STRATEGY, generation_merge_type)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_GROUP_STRATEGY, generation_group_type)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_OUTPUT_DIR, outputdir)
+
+
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_MODULE_NAME, module_name)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_CDS_CONTEXT, &#39;output&#39;)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_APPID, app_id)
+
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_SCHEMA, schema)
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED, {})
+
+        self.config.add_entry(ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING, {})</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generator.Generator.clean_outputdir"><code class="name flex">
+<span>def <span class="ident">clean_outputdir</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Clean the output dir where artifacts will be generated.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def clean_outputdir(self):
+    &#34;&#34;&#34;
+    Clean the output dir where artifacts will be generated.
+    &#34;&#34;&#34;
+    path = self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_DIR)
+    if os.path.exists(path):
+        self.directory_handler.delete_directory_content(path)
+        os.rmdir(path)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.generate_amdp"><code class="name flex">
+<span>def <span class="ident">generate_amdp</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>(Experimental) Generate ABAP ADMP classses.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_amdp(self):
+    &#34;&#34;&#34;
+    (Experimental) Generate ABAP ADMP classses.
+    &#34;&#34;&#34;
+    amdp_generator = AMDPGenerator(self.config)
+    amdp_generator.generate()</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.generate_cf"><code class="name flex">
+<span>def <span class="ident">generate_cf</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Not Implemented - Generate Cloud Foundry Artifacts.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_cf(self):
+    &#34;&#34;&#34;
+    Not Implemented - Generate Cloud Foundry Artifacts.
+    &#34;&#34;&#34;
+    cloudfoundry_generator = CloudFoundryGenerator(self.config)
+    # Create base hana objects. No need for a hana consumption layer as
+    # python program will act as the consumption layer
+    self.generate_hana(base_layer=True, consumption_layer=False)
+    cloudfoundry_generator.generate_artifacts()</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.generate_datahub"><code class="name flex">
+<span>def <span class="ident">generate_datahub</span></span>(<span>self, generate_hana_artifacts=True, include_rest_endpoint=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate DataHub Artifacts. This consists of both HANA as DataHub
+artifacts</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>generate_hana_artifacts</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Whether to generate the HANA artifacts or if only the graph should be generated</dd>
+<dt><strong><code>include_rest_endpoint</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_datahub(self, generate_hana_artifacts=True, include_rest_endpoint=False):
+    &#34;&#34;&#34;
+    Generate DataHub Artifacts. This consists of both HANA as DataHub
+    artifacts
+
+    Parameters
+    ----------
+    generate_hana_artifacts: boolean
+        Whether to generate the HANA artifacts or if only the graph should be generated
+    include_rest_endpoint: boolean
+        Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+    &#34;&#34;&#34;
+    self._generate_datahub(generate_hana_artifacts=generate_hana_artifacts,
+                           include_rest_endpoint=include_rest_endpoint,
+                           include_ml_operators=False)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.generate_hana"><code class="name flex">
+<span>def <span class="ident">generate_hana</span></span>(<span>self, base_layer=True, consumption_layer=True, sda_data_source_mapping_only=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate HANA hdi artifacts.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>base_layer</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>The base layer is the low level procedures that will be generated.</dd>
+<dt><strong><code>consumption_layer</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>The consumption layer is the layer that will consume the base layer artifacts</dd>
+<dt><strong><code>sda_data_source_mapping_only</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>In case data source mapping is provided you can forrce to only do this for the
+sda hdi container</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_hana(self, base_layer=True,
+                  consumption_layer=True,
+                  sda_data_source_mapping_only=True):
+    &#34;&#34;&#34;
+    Generate HANA hdi artifacts.
+
+    Parameters
+    ----------
+    base_layer : boolean
+        The base layer is the low level procedures that will be generated.
+    consumption_layer : boolean
+        The consumption layer is the layer that will consume the base layer artifacts
+    sda_data_source_mapping_only: boolean
+        In case data source mapping is provided you can forrce to only do this for the
+        sda hdi container
+    &#34;&#34;&#34;
+    hana_generator = HanaGenerator(self.config)
+    hana_generator.generate_artifacts(base_layer,
+                                             consumption_layer,
+                                             sda_data_source_mapping_only)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.generate_hana_sda"><code class="name flex">
+<span>def <span class="ident">generate_hana_sda</span></span>(<span>self, model_only=True, sda_data_source_mapping_only=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate HANA hdi artifacts for the SDA scenario. Be aware that 2 containers
+with there respective artifacts are created. The first is the same which
+includes both base and consumption layer artifacts. The second is the SDA
+container which loads and uses data out of the first container.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>model_only</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>In the sda case we are only interested in transferring the model using SDA.
+This forces the HANA artifact generation to cater only for this scenario.</dd>
+<dt><strong><code>sda_data_source_mapping_only</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>In case data source mapping is provided you can forrce to only do this for the
+sda hdi container</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_hana_sda(self, model_only=True, sda_data_source_mapping_only=False):
+    &#34;&#34;&#34;
+    Generate HANA hdi artifacts for the SDA scenario. Be aware that 2 containers 
+    with there respective artifacts are created. The first is the same which
+    includes both base and consumption layer artifacts. The second is the SDA
+    container which loads and uses data out of the first container.
+
+    Parameters
+    ----------
+    model_only: boolean
+        In the sda case we are only interested in transferring the model using SDA.
+        This forces the HANA artifact generation to cater only for this scenario.
+    sda_data_source_mapping_only: boolean
+        In case data source mapping is provided you can forrce to only do this for the
+        sda hdi container
+    &#34;&#34;&#34;
+    hana_sda_generator = HanaSDAGenerator(self.config)
+    # Create hana objects. We will re-use consumption layer when doing the remote calls
+    self.generate_hana(base_layer=True,
+                       consumption_layer=True,
+                       sda_data_source_mapping_only=sda_data_source_mapping_only)
+    hana_sda_generator.generate_artifacts(model_only)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.generate_sapdi"><code class="name flex">
+<span>def <span class="ident">generate_sapdi</span></span>(<span>self, generate_hana_artifacts=True, include_rest_endpoint=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate SAP Data Intelligence Artifacts. This consists of both HANA as DataHub
+artifacts</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>generate_hana_artifacts</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Whether to generate the HANA artifacts or if only the graph should be generated</dd>
+<dt><strong><code>include_rest_endpoint</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_sapdi(self, generate_hana_artifacts=True, include_rest_endpoint=False):
+    &#34;&#34;&#34;
+    Generate SAP Data Intelligence Artifacts. This consists of both HANA as DataHub
+    artifacts
+
+    Parameters
+    ----------
+    generate_hana_artifacts: boolean
+        Whether to generate the HANA artifacts or if only the graph should be generated
+    include_rest_endpoint: boolean
+        Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+    &#34;&#34;&#34;
+    self._generate_datahub(generate_hana_artifacts=generate_hana_artifacts,
+                           include_rest_endpoint=include_rest_endpoint,
+                           include_ml_operators=True)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.get_hana_data_source_mapping"><code class="name flex">
+<span>def <span class="ident">get_hana_data_source_mapping</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the the current data source mapping. Which can be used to adjust mapping.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>data_source_mapping</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Returns the datasource mapping as a dictionary</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_hana_data_source_mapping(self):
+    &#34;&#34;&#34;
+    Get the the current data source mapping. Which can be used to adjust mapping.
+
+    Returns
+    -------
+    data_source_mapping: dict
+        Returns the datasource mapping as a dictionary
+    &#34;&#34;&#34;
+    return self.config.get_entry(ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.get_output_path_cf"><code class="name flex">
+<span>def <span class="ident">get_output_path_cf</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the output path of the cloud foundry python app related artifacts</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>cf_output_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Returns the physical location where the cf artifacts are stored.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_output_path_cf(self):
+    &#34;&#34;&#34;
+    Get the output path of the cloud foundry python app related artifacts
+
+    Returns
+    -------
+    cf_output_path: str
+        Returns the physical location where the cf artifacts are stored.
+    &#34;&#34;&#34;
+    return self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_CF)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.get_output_path_datahub"><code class="name flex">
+<span>def <span class="ident">get_output_path_datahub</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the output path of the datahub related artifacts</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>datahub_output_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Returns the physical location where the datahub artifacts are stored.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_output_path_datahub(self):
+    &#34;&#34;&#34;
+    Get the output path of the datahub related artifacts
+
+    Returns
+    -------
+    datahub_output_path: str
+        Returns the physical location where the datahub artifacts are stored.
+    &#34;&#34;&#34;
+    return self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.get_output_path_hana"><code class="name flex">
+<span>def <span class="ident">get_output_path_hana</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the output path of the hana artifacts</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>hana_output_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Returns the physical location where the hana artifacts are stored.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_output_path_hana(self):
+    &#34;&#34;&#34;
+    Get the output path of the hana artifacts
+
+    Returns
+    -------
+    hana_output_path: str
+        Returns the physical location where the hana artifacts are stored.
+    &#34;&#34;&#34;
+    return self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_HANA)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.get_output_path_hana_sda"><code class="name flex">
+<span>def <span class="ident">get_output_path_hana_sda</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the output path of the sda related hana artifacts</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>hana_sda_output_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Returns the physical location where the hana artifacts are stored.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_output_path_hana_sda(self):
+    &#34;&#34;&#34;
+    Get the output path of the sda related hana artifacts
+
+    Returns
+    -------
+    hana_sda_output_path: str
+        Returns the physical location where the hana artifacts are stored.
+    &#34;&#34;&#34;
+    return self.config.get_entry(ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_HANA)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.get_output_path_sapdi"><code class="name flex">
+<span>def <span class="ident">get_output_path_sapdi</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the output path of the datahub related artifacts</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>sapdi_output_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Returns the physical location where the sapdi artifacts are stored.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_output_path_sapdi(self):
+    &#34;&#34;&#34;
+    Get the output path of the datahub related artifacts
+
+    Returns
+    -------
+    sapdi_output_path: str
+        Returns the physical location where the sapdi artifacts are stored.
+    &#34;&#34;&#34;
+    return self.get_output_path_datahub()</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.set_hana_data_source_mapping"><code class="name flex">
+<span>def <span class="ident">set_hana_data_source_mapping</span></span>(<span>self, data_source_mapping)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the data data source mapping.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>data_source_mapping</code></strong> :&ensp;<code>dict</code></dt>
+<dd>dictionary with data source mapping.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_hana_data_source_mapping(self, data_source_mapping):
+    &#34;&#34;&#34;
+    Set the data data source mapping.
+
+    Parameters
+    ----------
+    data_source_mapping: dict
+        dictionary with data source mapping.
+    &#34;&#34;&#34;
+    self.config.add_entry(ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING,
+                          data_source_mapping)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.generator.Generator.show_hana_data_source_mapping"><code class="name flex">
+<span>def <span class="ident">show_hana_data_source_mapping</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Prints out the data source mapping currently configured.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>data_source_mapping</code></strong> :&ensp;<code>dataframe</code></dt>
+<dd>Returns the datasource mapping as a pandas dataframe for formatted display
+Mainly usefull in jupyter notebook scenario.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def show_hana_data_source_mapping(self):
+    &#34;&#34;&#34;
+    Prints out the data source mapping currently configured.
+
+    Returns
+    -------
+    data_source_mapping: dataframe
+        Returns the datasource mapping as a pandas dataframe for formatted display
+        Mainly usefull in jupyter notebook scenario.
+    &#34;&#34;&#34;
+    data = self.get_hana_data_source_mapping()
+    return pd.DataFrame.from_dict(data, orient=&#39;index&#39;, columns=[&#34;Data Source Map To:&#34;])</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="hana_ml_artifact" href="index.html">hana_ml_artifact</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="hana_ml_artifact.generator.Generator" href="#hana_ml_artifact.generator.Generator">Generator</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generator.Generator.clean_outputdir" href="#hana_ml_artifact.generator.Generator.clean_outputdir">clean_outputdir</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.generate_amdp" href="#hana_ml_artifact.generator.Generator.generate_amdp">generate_amdp</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.generate_cf" href="#hana_ml_artifact.generator.Generator.generate_cf">generate_cf</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.generate_datahub" href="#hana_ml_artifact.generator.Generator.generate_datahub">generate_datahub</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.generate_hana" href="#hana_ml_artifact.generator.Generator.generate_hana">generate_hana</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.generate_hana_sda" href="#hana_ml_artifact.generator.Generator.generate_hana_sda">generate_hana_sda</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.generate_sapdi" href="#hana_ml_artifact.generator.Generator.generate_sapdi">generate_sapdi</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.get_hana_data_source_mapping" href="#hana_ml_artifact.generator.Generator.get_hana_data_source_mapping">get_hana_data_source_mapping</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.get_output_path_cf" href="#hana_ml_artifact.generator.Generator.get_output_path_cf">get_output_path_cf</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.get_output_path_datahub" href="#hana_ml_artifact.generator.Generator.get_output_path_datahub">get_output_path_datahub</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.get_output_path_hana" href="#hana_ml_artifact.generator.Generator.get_output_path_hana">get_output_path_hana</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.get_output_path_hana_sda" href="#hana_ml_artifact.generator.Generator.get_output_path_hana_sda">get_output_path_hana_sda</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.get_output_path_sapdi" href="#hana_ml_artifact.generator.Generator.get_output_path_sapdi">get_output_path_sapdi</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.set_hana_data_source_mapping" href="#hana_ml_artifact.generator.Generator.set_hana_data_source_mapping">set_hana_data_source_mapping</a></code></li>
+<li><code><a title="hana_ml_artifact.generator.Generator.show_hana_data_source_mapping" href="#hana_ml_artifact.generator.Generator.show_hana_data_source_mapping">show_hana_data_source_mapping</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

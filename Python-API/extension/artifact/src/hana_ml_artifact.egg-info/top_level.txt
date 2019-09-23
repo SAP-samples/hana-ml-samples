@@ -1,0 +1,1 @@
+hana_ml_artifact

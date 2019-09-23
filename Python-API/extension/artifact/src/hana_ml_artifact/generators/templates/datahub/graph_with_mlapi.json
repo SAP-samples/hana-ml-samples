@@ -1,0 +1,175 @@
+{
+	"description": "Testing the Model Producers and Consumer",
+	"processes": {
+		"modelproducer1": {
+			"component": "com.sap.ml.model.producer",
+			"metadata": {
+				"label": "Model Producer",
+				"x": 383,
+				"y": 13,
+				"height": 100,
+				"width": 120,
+				"config": {
+					"blobName": "com.sap.ml.hana.model.gentest",
+					"blobVersion": "1",
+					"versionControl": "conf"
+				}
+			}
+		},
+		"toblobconverter1": {
+			"component": "com.sap.util.toBlobConverter",
+			"metadata": {
+				"label": "ToBlob Converter",
+				"x": 224,
+				"y": 144,
+				"height": 50,
+				"width": 50,
+				"config": {}
+			}
+		},
+		"python3operator1": {
+			"component": "com.sap.system.python3Operator",
+			"metadata": {
+				"label": "Python3 Operator",
+				"x": 16,
+				"y": 10,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {
+					"script": "api.send(\"outmeta\", \"{'somemeta':'additionalinfo'}\")\napi.send(\"output\", \"{'table':'someschema.sometable'}\")\n\n# For more information about the Python3Operator, drag it to the graph canvas, right click on it, and\n# click on \"Open Documentation\".\n\n# To uncomment the snippets below you can highlight the relevant lines and press Ctrl+/\n# on Windows and Linux or Cmd+/ on Mac.\n\n# # Basic Example 1: Count inputs so far and send on output port (port type string)\n# # When using the snippet below make sure you create an output port of type string\n# counter = 0\n#\n# def on_input(data):\n#     global counter\n#     counter += 1\n#     api.send(\"output\", str(counter))\n#\n# api.set_port_callback(\"input\", on_input)\n\n\n# # Basic Example 2: Count inputs so far and send on output port (port type int64)\n# # When using the snippet below make sure you create an output port of type int64\n# counter = 0\n#\n# def on_input(data):\n#     global counter\n#     counter += 1\n#     api.send(\"output\", counter)\n#\n# api.set_port_callback(\"input\", on_input)\n\n\n# # Basic Example 3: Identity operator.\n# # When using the snippet below make sure you create input and output ports of the same type.\n# def on_input(data):\n#     api.send(\"output\", data)\n#\n# api.set_port_callback(\"input\", on_input)\n\n\n# # Basic Example 4: Sum both inputs and output result.\n# # When using the snippet below make sure you create input and output ports of the same type and\n# # that the corresponding python types can be added with the `+` operator. Example of valid\n# # port types for this snippet are: string, int64, and float64.\n# def on_input(data1, data2):\n#     api.send(\"output\", data1 + data2)\n#\n# api.set_port_callback([\"input1\", \"input2\"], on_input)\n\n\n# # Generators\n# # When using the snippet below make sure you create an output port of type int64\n# counter = 0\n#\n# def gen():\n#     global counter\n#     for i in range(0, 3):\n#         api.send(\"output\", counter)\n#         counter += 1\n#\n# api.add_generator(gen)\n# api.add_generator(gen)  # Adding the generator twice will make the function be executed twice.\n\n\n# # Timer\n# # When using the snippet below make sure you create an output port of type int64\n# counter = 0\n#\n# def t1():\n#     global counter\n#     api.send(\"output\", counter)\n#     counter += 1\n#\n# api.add_timer(\"1s\", t1)\n\n# # Timer\n# # When using the snippet below make sure you create an output port of type string\n# counter = 0\n#\n# def t2():\n#     global counter\n#     api.send(\"output\", str(counter))\n#     counter += 1\n#\n# api.add_timer(\"1s\", t2)\n\n\n# # Shutdown\n# counter = 0\n#\n# def on_input(data):\n#     global counter\n#     counter += 1\n#\n# api.set_port_callback(\"input\", on_input)\n#\n# def shutdown1():\n#     print(\"shutdown1: %d\" % counter)\n#\n# def shutdown2():\n#     print(\"shutdown2: %d\" % counter)\n#\n# api.add_shutdown_handler(shutdown1)\n# api.add_shutdown_handler(shutdown2)\n"
+				},
+				"additionaloutports": [
+					{
+						"name": "output",
+						"type": "string"
+					},
+					{
+						"name": "outmeta",
+						"type": "string"
+					}
+				]
+			}
+		},
+		"terminal1": {
+			"component": "com.sap.util.terminal",
+			"metadata": {
+				"label": "Terminal",
+				"x": 611,
+				"y": 28,
+				"height": 80,
+				"width": 120,
+				"ui": "dynpath",
+				"config": {}
+			}
+		},
+		"modelconsumer1": {
+			"component": "com.sap.ml.model.consumer",
+			"metadata": {
+				"label": "Model Consumer",
+				"x": 323,
+				"y": 312,
+				"height": 80,
+				"width": 120,
+				"config": {
+					"blobName": "com.sap.ml.hana.model.gentest",
+					"blobVersion": "1"
+				}
+			}
+		},
+		"tostringconverter1": {
+			"component": "com.sap.util.toStringConverter",
+			"metadata": {
+				"label": "ToString Converter",
+				"x": 517.5,
+				"y": 325,
+				"height": 50,
+				"width": 50,
+				"config": {}
+			}
+		},
+		"terminal2": {
+			"component": "com.sap.util.terminal",
+			"metadata": {
+				"label": "Terminal",
+				"x": 620,
+				"y": 307,
+				"height": 80,
+				"width": 120,
+				"ui": "dynpath",
+				"config": {}
+			}
+		}
+	},
+	"groups": [],
+	"connections": [
+		{
+			"metadata": {
+				"points": "278,169 328,169 328,99 378,99"
+			},
+			"src": {
+				"port": "outbytearray",
+				"process": "toblobconverter1"
+			},
+			"tgt": {
+				"port": "inBlobBinary",
+				"process": "modelproducer1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "140,41 179.5,41 179.5,169 219,169"
+			},
+			"src": {
+				"port": "output",
+				"process": "python3operator1"
+			},
+			"tgt": {
+				"port": "ininterface",
+				"process": "toblobconverter1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "507,63 556.5,63 556.5,68 606,68"
+			},
+			"src": {
+				"port": "success",
+				"process": "modelproducer1"
+			},
+			"tgt": {
+				"port": "in1",
+				"process": "terminal1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "447,352 479.75,352 479.75,341 512.5,341"
+			},
+			"src": {
+				"port": "outBlob",
+				"process": "modelconsumer1"
+			},
+			"tgt": {
+				"port": "ininterface",
+				"process": "tostringconverter1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "571.5,350 593.25,350 593.25,347 615,347"
+			},
+			"src": {
+				"port": "outstring",
+				"process": "tostringconverter1"
+			},
+			"tgt": {
+				"port": "in1",
+				"process": "terminal2"
+			}
+		}
+	],
+	"inports": {},
+	"outports": {},
+	"properties": {}
+}

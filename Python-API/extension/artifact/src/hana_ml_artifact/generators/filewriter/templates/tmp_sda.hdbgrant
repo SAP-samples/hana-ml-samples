@@ -1,0 +1,30 @@
+{
+  "LOGICAL_GRANTACCESS_SERVICE":{
+    "object_owner":{
+      "global_object_privileges": [
+        {
+            "name": "<<REMOTE_SOURCE>>",
+            "type": "REMOTE SOURCE",
+            "privileges": [
+            "CREATE VIRTUAL TABLE"
+          ],
+          "privileges_with_grant_option": []
+        }
+      ],
+      "global_roles" : [
+        {
+          "roles" : [ "AFL__SYS_AFL_AFLPAL_EXECUTE"]
+        }
+      ],
+      "schema_privileges": <<SCHEMA_PRIVILEGES_WITH>>
+    },
+    "application_user":{
+      "global_roles" : [
+        {
+          "roles" : [ "AFL__SYS_AFL_AFLPAL_EXECUTE"]
+        }
+      ],
+      "schema_privileges": <<SCHEMA_PRIVILEGES>>
+    }
+  }
+}

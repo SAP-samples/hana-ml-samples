@@ -1,0 +1,5 @@
+{
+    "category_identfier_model": ["MODEL"],
+    "category_identfier_metric": ["METRIC"],
+    "category_identfier_fitted": ["FITTED", "RESULT"]
+}

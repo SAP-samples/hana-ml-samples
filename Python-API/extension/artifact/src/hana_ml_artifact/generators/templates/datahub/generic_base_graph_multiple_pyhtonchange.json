@@ -1,0 +1,105 @@
+{
+	"properties": {},
+	"description": "hanaml",
+	"processes": {
+		"terminal1": {
+			"component": "com.sap.util.terminal",
+			"metadata": {
+				"label": "Terminal",
+				"x": 196.99999904632568,
+				"y": 12,
+				"height": 80,
+				"width": 120,
+				"ui": "dynpath",
+				"config": {}
+			}
+		},
+		"terminal2": {
+			"component": "com.sap.util.terminal",
+			"metadata": {
+				"label": "Terminal",
+				"x": 196.99999904632568,
+				"y": 132,
+				"height": 80,
+				"width": 120,
+				"ui": "dynpath",
+				"config": {}
+			}
+		},
+		"pythonapihanaml1": {
+			"component": "hanaml.hanaml",
+			"metadata": {
+				"label": "Python-API HANA-ML",
+				"x": -34,
+				"y": 67,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {
+					"hanaConnection": {
+						"connectionProperties": {},
+						"connectionType": "Configuration Manager",
+						"connectionId": "HXE_D064246"
+					}
+				}
+			}
+		},
+		"pythonapihanaml2": {
+			"component": "hanaml.hanaml",
+			"metadata": {
+				"label": "test",
+				"x": -557,
+				"y": 107,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {
+					"script": "try:\r\n    # Import required packages\r\n    api.send('output','Starting imports')\r\n    import hana_ml\r\n    from hana_ml import dataframe\r\n    from hana_ml.algorithms.pal import linear_model\r\n    from hdbcli import dbapi\r\n\r\n    print('Imports done')\r\n    \r\n    # Get connection details from connection manager\r\n    api.send('output','Setting connection variables')    \r\n    api.logger.debug('HANAML: Define connection context')\r\n\r\n    url = api.config.hanaConnection[\"connectionProperties\"][\"host\"]\r\n    port =  api.config.hanaConnection[\"connectionProperties\"][\"port\"]\r\n    pwd =  api.config.hanaConnection[\"connectionProperties\"][\"password\"]\r\n    user =  api.config.hanaConnection[\"connectionProperties\"][\"user\"]\r\n    useTLS =  api.config.hanaConnection[\"connectionProperties\"][\"useTLS\"]\r\n\r\n    # Generate sample data in user schema\r\n    # Generating sample data is only done for testing purposes. It is not required in productive use.\r\n    api.send('output','Generating sample data')\r\n        \r\n    hana_connection = dbapi.connect(address=url, port=port, user=user, password=pwd, encrypt='{}'.format(useTLS), sslValidateCertificate=\"false\")\r\n    cursor = hana_connection.cursor()\r\n    cursor.execute('SET SCHEMA ' + user)\r\n    \r\n    # Generate train data table\r\n    cursor.execute('SELECT COUNT(*) FROM objects WHERE schema_name = \\''+user+'\\' AND object_name = \\'PAL_LOGISTICR_DATA_TBL\\' ')\r\n    if cursor.fetchone()[0] > 0:\r\n        cursor.execute('DROP TABLE '+user+'.PAL_LOGISTICR_DATA_TBL')\r\n        cursor.execute('CREATE ROW TABLE \"PAL_LOGISTICR_DATA_TBL\"(\"V1\" VARCHAR (50),\"V2\" DOUBLE,\"V3\" INTEGER,\"CATEGORY\" INTEGER)')\r\n    else:\r\n        cursor.execute('CREATE ROW TABLE \"PAL_LOGISTICR_DATA_TBL\"(\"V1\" VARCHAR (50),\"V2\" DOUBLE,\"V3\" INTEGER,\"CATEGORY\" INTEGER)')\r\n    \r\n    # Generate train data\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.62,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.875,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',2.32,1,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.215,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.44,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.46,0,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.57,1,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.19,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.15,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.44,0,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.44,1,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',4.07,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.73,1,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.78,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',5.25,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',5.424,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',5.345,0,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.2,1,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',1.615,2,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',1.835,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.465,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.52,1,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.435,0,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.84,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.845,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',1.935,1,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.14,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',1.513,1,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.17,3,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.77,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.57,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',2.78,3,1)\")\r\n    \r\n    # Generate test data table\r\n    cursor.execute('SELECT COUNT(*) FROM objects WHERE schema_name = \\''+user+'\\' AND object_name = \\'PAL_FLOGISTICR_PREDICTDATA_TBL\\' ')\r\n    if cursor.fetchone()[0] > 0:\r\n        cursor.execute('DROP TABLE '+user+'.PAL_FLOGISTICR_PREDICTDATA_TBL')\r\n        cursor.execute('CREATE ROW TABLE \"PAL_FLOGISTICR_PREDICTDATA_TBL\"(\"ID\" INTEGER, \"V1\" VARCHAR(5000),\"V2\" DOUBLE, \"V3\" INTEGER)')\r\n    else:\r\n        cursor.execute('CREATE ROW TABLE \"PAL_FLOGISTICR_PREDICTDATA_TBL\"(\"ID\" INTEGER, \"V1\" VARCHAR(5000),\"V2\" DOUBLE, \"V3\" INTEGER)')\r\n\r\n    # Generate test data\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (0,'B',2.62,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (1,'B',2.875,0)\") \r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (2,'A',2.32,1)\") \r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (3,'A',3.215,2)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (4,'B',3.44,3)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (5,'B',3.46,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (6,'A',3.57,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (7,'B',3.19,2)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (8,'A',3.15,3)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (9,'B',3.44,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (10,'B',3.44,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (11,'A',4.07,3)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (12,'A',3.73,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (13,'B',3.78,2)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (14,'B',5.25,2)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (15,'A',5.424,3)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (16,'A',5.345,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (17,'B',2.2,1)\")  \r\n\r\n    # Work with generated data\r\n    api.send('output','Define connection context')\r\n    conn = dataframe.ConnectionContext('{}'.format(url),int('{}'.format(port)), '{}'.format(user), '{}'.format(pwd), encrypt='{}'.format(useTLS), sslValidateCertificate='false')\r\n    \r\n    # Dataframes\r\n    api.send('output', 'Initiate Dataframes')\r\n\r\n    df_pal_train = dataframe.DataFrame(conn, 'select * from PAL_LOGISTICR_DATA_TBL')\r\n    df_pal_test = dataframe.DataFrame(conn, 'select * from PAL_FLOGISTICR_PREDICTDATA_TBL')\r\n\r\n    # PAL parameter\r\n    api.send('output', 'Setting PAL Parameters')\r\n\r\n    solver = 'cyclical'\r\n    tol=0.000001\r\n    max_iter=10000\r\n    stat_inf=True\r\n    pmml_export='multi-row'\r\n    lamb=0.015\r\n    alpha=1\r\n    class_map0='2'\r\n    class_map1='4' \r\n\r\n    # Instantiate and train model \r\n    api.send('output', 'Defining Model')\r\n    lr = linear_model.LogisticRegression(conn, solver=solver, tol=tol, max_iter=max_iter, stat_inf=stat_inf,pmml_export=pmml_export, lamb=lamb, alpha=alpha, class_map0=class_map0, class_map1=class_map1)\r\n    features = df_pal_train.columns\r\n    features.remove('CATEGORY')\r\n    label = 'CATEGORY'\r\n    api.send('output', 'Calling fit')\r\n    lr.fit(df_pal_train, features=features, label=label)  # has_id = True -> input frame has id column\r\n    \r\n    # Apply the trained model\r\n    api.send('output', 'Calling score')\r\n    accuracy = lr.score(df_pal_test, key='ID')\r\n\r\n    api.send('output', str(accuracy))\r\n    \r\n    #Drop sample data\r\n    api.send('output', 'Drop sample data')\r\n    cursor.execute(\"DROP TABLE PAL_FLOGISTICR_PREDICTDATA_TBL\")\r\n    cursor.execute(\"DROP TABLE PAL_LOGISTICR_DATA_TBL\")\r\n\r\nexcept Exception as inst:\r\n    api.send('debug', str(inst) )  \r\n    \r\ntry:\r\n    # Import required packages\r\n    api.send('output','Starting imports')\r\n    import hana_ml\r\n    from hana_ml import dataframe\r\n    from hana_ml.algorithms.pal import linear_model\r\n    from hdbcli import dbapi\r\n\r\n    print('Imports done')\r\n    \r\n    # Get connection details from connection manager\r\n    api.send('output','Setting connection variables')    \r\n    api.logger.debug('HANAML: Define connection context')\r\n\r\n    url = api.config.hanaConnection[\"connectionProperties\"][\"host\"]\r\n    port =  api.config.hanaConnection[\"connectionProperties\"][\"port\"]\r\n    pwd =  api.config.hanaConnection[\"connectionProperties\"][\"password\"]\r\n    user =  api.config.hanaConnection[\"connectionProperties\"][\"user\"]\r\n    useTLS =  api.config.hanaConnection[\"connectionProperties\"][\"useTLS\"]\r\n\r\n    # Generate sample data in user schema\r\n    # Generating sample data is only done for testing purposes. It is not required in productive use.\r\n    api.send('output','Generating sample data')\r\n        \r\n    hana_connection = dbapi.connect(address=url, port=port, user=user, password=pwd, encrypt='{}'.format(useTLS), sslValidateCertificate=\"false\")\r\n    cursor = hana_connection.cursor()\r\n    cursor.execute('SET SCHEMA ' + user)\r\n    \r\n    # Generate train data table\r\n    cursor.execute('SELECT COUNT(*) FROM objects WHERE schema_name = \\''+user+'\\' AND object_name = \\'PAL_LOGISTICR_DATA_TBL\\' ')\r\n    if cursor.fetchone()[0] > 0:\r\n        cursor.execute('DROP TABLE '+user+'.PAL_LOGISTICR_DATA_TBL')\r\n        cursor.execute('CREATE ROW TABLE \"PAL_LOGISTICR_DATA_TBL\"(\"V1\" VARCHAR (50),\"V2\" DOUBLE,\"V3\" INTEGER,\"CATEGORY\" INTEGER)')\r\n    else:\r\n        cursor.execute('CREATE ROW TABLE \"PAL_LOGISTICR_DATA_TBL\"(\"V1\" VARCHAR (50),\"V2\" DOUBLE,\"V3\" INTEGER,\"CATEGORY\" INTEGER)')\r\n    \r\n    # Generate train data\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.62,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.875,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',2.32,1,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.215,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.44,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.46,0,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.57,1,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.19,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.15,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.44,0,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.44,1,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',4.07,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.73,1,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.78,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',5.25,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',5.424,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',5.345,0,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.2,1,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',1.615,2,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',1.835,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.465,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.52,1,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.435,0,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.84,2,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.845,3,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',1.935,1,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.14,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',1.513,1,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',3.17,3,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',2.77,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('B',3.57,0,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_LOGISTICR_DATA_TBL VALUES ('A',2.78,3,1)\")\r\n    \r\n    # Generate test data table\r\n    cursor.execute('SELECT COUNT(*) FROM objects WHERE schema_name = \\''+user+'\\' AND object_name = \\'PAL_FLOGISTICR_PREDICTDATA_TBL\\' ')\r\n    if cursor.fetchone()[0] > 0:\r\n        cursor.execute('DROP TABLE '+user+'.PAL_FLOGISTICR_PREDICTDATA_TBL')\r\n        cursor.execute('CREATE ROW TABLE \"PAL_FLOGISTICR_PREDICTDATA_TBL\"(\"ID\" INTEGER, \"V1\" VARCHAR(5000),\"V2\" DOUBLE, \"V3\" INTEGER)')\r\n    else:\r\n        cursor.execute('CREATE ROW TABLE \"PAL_FLOGISTICR_PREDICTDATA_TBL\"(\"ID\" INTEGER, \"V1\" VARCHAR(5000),\"V2\" DOUBLE, \"V3\" INTEGER)')\r\n\r\n    # Generate test data\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (0,'B',2.62,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (1,'B',2.875,0)\") \r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (2,'A',2.32,1)\") \r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (3,'A',3.215,2)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (4,'B',3.44,3)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (5,'B',3.46,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (6,'A',3.57,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (7,'B',3.19,2)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (8,'A',3.15,3)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (9,'B',3.44,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (10,'B',3.44,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (11,'A',4.07,3)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (12,'A',3.73,1)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (13,'B',3.78,2)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (14,'B',5.25,2)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (15,'A',5.424,3)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (16,'A',5.345,0)\")\r\n    cursor.execute(\"INSERT INTO PAL_FLOGISTICR_PREDICTDATA_TBL VALUES (17,'B',2.2,1)\")  \r\n\r\n    # Work with generated data\r\n    api.send('output','Define connection context')\r\n    conn = dataframe.ConnectionContext('{}'.format(url),int('{}'.format(port)), '{}'.format(user), '{}'.format(pwd), encrypt='{}'.format(useTLS), sslValidateCertificate='false')\r\n    \r\n    # Dataframes\r\n    api.send('output', 'Initiate Dataframes')\r\n\r\n    df_pal_train = dataframe.DataFrame(conn, 'select * from PAL_LOGISTICR_DATA_TBL')\r\n    df_pal_test = dataframe.DataFrame(conn, 'select * from PAL_FLOGISTICR_PREDICTDATA_TBL')\r\n\r\n    # PAL parameter\r\n    api.send('output', 'Setting PAL Parameters')\r\n\r\n    solver = 'cyclical'\r\n    tol=0.000001\r\n    max_iter=10000\r\n    stat_inf=True\r\n    pmml_export='multi-row'\r\n    lamb=0.015\r\n    alpha=1\r\n    class_map0='2'\r\n    class_map1='4' \r\n\r\n    # Instantiate and train model \r\n    api.send('output', 'Defining Model')\r\n    lr = linear_model.LogisticRegression(conn, solver=solver, tol=tol, max_iter=max_iter, stat_inf=stat_inf,pmml_export=pmml_export, lamb=lamb, alpha=alpha, class_map0=class_map0, class_map1=class_map1)\r\n    features = df_pal_train.columns\r\n    features.remove('CATEGORY')\r\n    label = 'CATEGORY'\r\n    api.send('output', 'Calling fit')\r\n    lr.fit(df_pal_train, features=features, label=label)  # has_id = True -> input frame has id column\r\n    \r\n    # Apply the trained model\r\n    api.send('output', 'Calling score')\r\n    accuracy = lr.score(df_pal_test, key='ID')\r\n\r\n    api.send('output', str(accuracy))\r\n    \r\n    #Drop sample data\r\n    api.send('output', 'Drop sample data')\r\n    cursor.execute(\"DROP TABLE PAL_FLOGISTICR_PREDICTDATA_TBL\")\r\n    cursor.execute(\"DROP TABLE PAL_LOGISTICR_DATA_TBL\")\r\n\r\nexcept Exception as inst:\r\n    api.send('debug', str(inst) )  \r\n\r\n"
+				}
+			}
+		},
+		"pythonapihanaml3": {
+			"component": "hanaml.hanaml",
+			"metadata": {
+				"label": "Python-API HANA-ML",
+				"x": -557,
+				"y": -136,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {}
+			}
+		}
+	},
+	"groups": [],
+	"connections": [
+		{
+			"metadata": {
+				"points": "90,98 141,98 141,52 191.99999904632568,52"
+			},
+			"src": {
+				"port": "output",
+				"process": "pythonapihanaml1"
+			},
+			"tgt": {
+				"port": "in1",
+				"process": "terminal1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "90,116 141,116 141,172 191.99999904632568,172"
+			},
+			"src": {
+				"port": "debug",
+				"process": "pythonapihanaml1"
+			},
+			"tgt": {
+				"port": "in1",
+				"process": "terminal2"
+			}
+		}
+	],
+	"inports": {},
+	"outports": {}
+}

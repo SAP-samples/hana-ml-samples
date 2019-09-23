@@ -1,0 +1,2002 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>hana_ml_artifact.config.config_handler API documentation</title>
+<meta name="description" content="This module allows allows interaction with the configuration functionality …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>hana_ml_artifact.config.config_handler</code></h1>
+</header>
+<section id="section-intro">
+<p>This module allows allows interaction with the configuration functionality.</p>
+<p>It consists of two parts.
+1. The ConfigHandler which provides helper functions to support easy setting
+and retrieving of configurations.
+2. Config Constants for easy access to config values.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This module allows allows interaction with the configuration functionality.
+
+It consists of two parts. 
+1. The ConfigHandler which provides helper functions to support easy setting
+and retrieving of configurations.
+2. Config Constants for easy access to config values. 
+&#34;&#34;&#34;
+import os
+import json
+from ..hana_ml_utils import StringUtils
+
+class ConfigHandler(object):
+    &#34;&#34;&#34;
+    This class handles config related functions and helper functions. The main functions are:
+
+    * Generic setting and retrieving of config values 
+    * Data source mapping setting and retrieving. Data source mapping can be set by the user
+    * Data type mapping between different generation targets based on predefined type mapping:
+        * HANA &lt;--&gt; ABAP data types
+        * HANA &lt;--&gt; CDS entity data types
+    * SQL Trace Element category identification based on predifined mapping between hana_ml package
+    generation and what is required for artifact generation
+
+    For easy editing of configuration data some of the config functions have an underlying 
+    data json file located in the data subfolder that is loaded as part of the initialization 
+    of instance of this class. 
+    
+    Specifically:
+
+    * Data type mapping 
+    * Category identification
+
+    &#34;&#34;&#34;
+    def __init__(self):
+        &#34;&#34;&#34;
+        Class for interacting with config data.
+        &#34;&#34;&#34;
+        self.config = {}
+        self._process_config_data()
+
+    def add_entry(self, key, value):
+        &#34;&#34;&#34;
+        Add data to the config under the provided key
+
+        Parameters
+        ----------
+        key: str
+            The key under which the value needs to be stored
+        value: object
+            Object that will be stored under the provided key
+        &#34;&#34;&#34;
+        self.config[key] = value
+
+    def get_entry(self, key):
+        &#34;&#34;&#34;
+        Get data from the config using the provided key
+    
+        Parameters
+        ----------
+        key: str
+            The key under which the value needs to be stored
+
+        Returns
+        -------
+        value: object
+            Object that will be stored under the provided key
+        &#34;&#34;&#34;
+        return self.config[key]
+    
+    def data_source_mapping(self, replace_str):
+        &#34;&#34;&#34;
+        Apply the data source mapping on the provided input string (replace_str)
+    
+        Parameters
+        ----------
+        replace_str: str
+            The string on which the data source mapping needs to be applied
+
+        Returns
+        -------
+        transformed_str: str
+            The transformed value based on the configured data source mapping
+
+        &#34;&#34;&#34;
+        data_source_mapping = self.get_entry( ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING )
+        return StringUtils.multi_replace(replace_str, data_source_mapping)
+
+    def is_model_category(self, category):
+        &#34;&#34;&#34;
+        Check if the category is the model category.
+    
+        Parameters
+        ----------
+        category: str
+            The category to check
+
+        Returns
+        -------
+        validated: boolean
+            Whether we are dealing with a model category
+            
+        &#34;&#34;&#34;
+        return self._is_category(category, ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL)
+
+    def is_metric_category(self, category):
+        &#34;&#34;&#34;
+        Check if the category is the metric category.
+    
+        Parameters
+        ----------
+        category: str
+            The category to check
+
+        Returns
+        -------
+        validated: boolean
+            Whether we are dealing with a metric category
+            
+        &#34;&#34;&#34;
+        return self._is_category(category, ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC)
+    
+    def is_fitted_category(self, category):
+        &#34;&#34;&#34;
+        Check if the category is the fitted category.
+    
+        Parameters
+        ----------
+        category: str
+            The category to check
+
+        Returns
+        -------
+        validated: boolean
+            Whether we are dealing with a fitted category
+            
+        &#34;&#34;&#34;
+        return self._is_category(category, ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED)
+
+    def _is_category(self, category, category_identfier):
+        &#34;&#34;&#34;
+        Generic category validation method
+    
+        Parameters
+        ----------
+        category: str
+            The category to check
+        category: str
+            The category identifier type to check (ie FITTED, MODEL)
+
+        Returns
+        -------
+        validated: boolean
+            Whether we are dealing with the category to validate
+            
+        &#34;&#34;&#34;
+        category_identfiers = self.get_entry(ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIERS)
+        if category and category_identfier in category_identfiers:
+            if any(identifier in category  for identifier in category_identfiers[category_identfier]):
+                return True
+        return False
+
+    def _process_config_data(self):
+        &#34;&#34;&#34;
+        Helper method to load the configuration data stored in the data folder
+        &#34;&#34;&#34;
+        # HDBTABLE to HDBDD Data Type conversion replacements
+        data_type_conversion_file = os.path.join(os.path.dirname(__file__), ConfigConstants.CONFIG_DATA_DIR, ConfigConstants.DATA_CONVERSION_HDBTABLE_HDBDD_FILE)
+        data_type_replacements = json.load(open(data_type_conversion_file))
+        self.add_entry(ConfigConstants.CONFIG_KEY_HDBTABLE_TO_HDBDD_TYPES, data_type_replacements)
+        # HDBTABLE to ABAP Data Type conversion replacements
+        data_type_conversion_file_abap = os.path.join(os.path.dirname(__file__), ConfigConstants.CONFIG_DATA_DIR, ConfigConstants.DATA_CONVERSION_HDBTABLE_ABAP_FILE)
+        data_type_replacements_abap = json.load(open(data_type_conversion_file_abap))
+        self.add_entry(ConfigConstants.CONFIG_KEY_HDBTABLE_TO_ABAP_TYPES, data_type_replacements_abap)
+        # Category Identifiers
+        category_identifiers = os.path.join(os.path.dirname(__file__), ConfigConstants.CONFIG_DATA_DIR, ConfigConstants.DATA_CATEGORY_IDENTIFIERS_FILE)
+        category_identifiers_dict = json.load(open(category_identifiers))
+        self.add_entry(ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIERS, category_identifiers_dict)
+
+class ConfigConstants(object):
+    &#34;&#34;&#34;
+    This class provides a central repository of config constants they are defined here. This allows
+    for easy adjustments without needed to change all the literals in the code. 
+    &#34;&#34;&#34;
+    #--------------------------------------- 
+    #---- Generic Config constants ----
+    #---------------------------------------
+
+    # Generation Types for Consumption Layer
+    GENERATION_MERGE_NONE = 1 # Each step (ie partition or fit) is on its own. For example a procedure for partiition and one for fit.  
+    GENERATION_MERGE_PARTITION = 2 # Merges the partition into the related step fit or predict. So not to create unnecessary data copies. All other steps will stay isolated.
+    GENERATION_GROUP_NONE = 11 # No grouping is applied. This means that solution specific implementation will define how to deal with this
+    GENERATION_GROUP_FUNCTIONAL = 12 # Grouping is based on functional grouping. Meaning that logical related elements such as partiion / fit / and related score will be put together
+    GROUP_FIT_TYPE = &#39;fit&#39;
+    GROUP_PREDICT_TYPE = &#39;predict&#39;
+    GROUP_FIT_PREDICT_TYPE = &#39;fit_predict&#39;
+    GROUP_UKNOWN_TYPE = &#39;unknown&#39;
+    GROUP_IDENTIFIER_MERGE_ALL = &#39;all_merged&#39;
+
+    # Generic Config Keys
+    CONFIG_KEY_OUTPUT_DIR = &#39;outputdir&#39;
+    CONFIG_KEY_OUTPUT_PATH = &#39;outputpath&#39;
+    CONFIG_KEY_PROJECT_NAME = &#39;project_name&#39;
+    CONFIG_KEY_VERSION = &#39;version&#39; 
+    CONFIG_KEY_MERGE_STRATEGY = &#39;merge_type&#39;
+    CONFIG_KEY_GROUP_STRATEGY = &#39;group_type&#39;
+
+    # Config Data
+    DATA_CONVERSION_HDBTABLE_HDBDD_FILE = &#39;hdbtable_to_hdbdd_datatype_mapping.json&#39;
+    DATA_CONVERSION_HDBTABLE_ABAP_FILE = &#39;hdbtable_to_abap_datatype_mapping.json&#39;
+    DATA_CATEGORY_IDENTIFIERS_FILE = &#39;category_identifiers.json&#39;
+    CONFIG_DATA_DIR = &#39;data&#39;
+    CONFIG_KEY_HDBTABLE_TO_HDBDD_TYPES = &#39;hdbtable_to_hdbdd_datatypes&#39;
+    CONFIG_KEY_HDBTABLE_TO_ABAP_TYPES = &#39;hdbtable_to_abap_datatypes&#39;
+    CONFIG_KEY_CATEGORY_IDENTIFIERS = &#39;category_identfiers&#39;
+    CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL = &#39;category_identfier_model&#39;
+    CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC = &#39;category_identfier_metric&#39;
+    CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED = &#39;category_identfier_fitted&#39;
+    #--------------------------------------- 
+    #---- HANA Related Config constants ----
+    #---------------------------------------
+
+    # HANA Related Config Keys
+    CONFIG_KEY_APPID = &#39;appid&#39; 
+    CONFIG_KEY_OUTPUT_PATH_HANA =&#39;output_path_hana&#39;
+    CONFIG_KEY_MODULE_NAME = &#39;module_name&#39;
+    CONFIG_KEY_SCHEMA = &#39;schema&#39; 
+    CONFIG_KEY_GRANT_SERVICE = &#39;ups&#39; 
+    
+    CONFIG_KEY_SQL_PROCESSED = &#39;sql_processed&#39; 
+
+    CONFIG_KEY_CDS_CONTEXT = &#39;cds_context&#39;
+
+    CONFIG_KEY_OUTPUT_PATH_MODULE = &#39;output_path_module&#39;
+    CONFIG_KEY_OUTPUT_PATH_MODULE_SRC = &#39;output_path_module_src&#39; 
+    CONFIG_KEY_MODULE_TEMPLATE_PATH = &#39;module_template_path&#39;
+    CONFIG_KEY_GRANTS_PATH = &#39;grants_path&#39;
+    CONFIG_KEY_SYNONYMS_PATH = &#39;synonyms_path&#39; 
+    CONFIG_KEY_PROCEDURES_PATH = &#39;procedures_path&#39; 
+    CONFIG_KEY_AMDP_PATH = &#39;amdp_path&#39;
+    CONFIG_KEY_ROLES_PATH =  &#39;roles_path&#39;
+    CONFIG_KEY_CDS_PATH =  &#39;cds_path&#39;
+
+    # --SDA
+    CONFIG_KEY_SDA_APPID = CONFIG_KEY_APPID + &#39;_sda&#39;
+    CONFIG_KEY_SDA_OUTPUT_PATH_HANA = CONFIG_KEY_OUTPUT_PATH_HANA + &#39;_sda&#39;
+    CONFIG_KEY_SDA_MODULE_NAME = CONFIG_KEY_MODULE_NAME + &#39;_sda&#39;
+    CONFIG_KEY_SDA_SCHEMA = CONFIG_KEY_SCHEMA + &#39;_sda&#39;
+    CONFIG_KEY_SDA_GRANT_SERVICE = CONFIG_KEY_GRANT_SERVICE + &#39;_sda&#39;
+    CONFIG_KEY_SDA_REMOTE_SOURCE = &#39;remote_source_sda&#39;
+    CONFIG_KEY_SDA_OUTPUT_PATH_MODULE = CONFIG_KEY_OUTPUT_PATH_MODULE + &#39;_sda&#39;
+    CONFIG_KEY_SDA_OUTPUT_PATH_MODULE_SRC = CONFIG_KEY_OUTPUT_PATH_MODULE_SRC + &#39;_sda&#39;
+    CONFIG_KEY_SDA_GRANTS_PATH = CONFIG_KEY_GRANTS_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_SYNONYMS_PATH = CONFIG_KEY_SYNONYMS_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_PROCEDURES_PATH = CONFIG_KEY_PROCEDURES_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_AMDP_PATH = &#39;amdp_path&#39; + &#39;_sda&#39;
+    CONFIG_KEY_SDA_ROLES_PATH = CONFIG_KEY_ROLES_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_CDS_PATH = CONFIG_KEY_CDS_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_VIRTUALTABLE_PATH = &#39;virtual_table_sda&#39;
+    CONFIG_KEY_SDA_MODEL_ONLY = &#39;model_only&#39;
+    CONFIG_KEY_DATA_SOURCE_MAPPING = &#39;data_source_mapping&#39;
+
+    # Project locations
+    HANA_BASE_PATH = &#39;hana&#39;
+    SDA_HANA_BASE_PATH = &#39;hana_sda&#39;
+    PROJECT_TEMPLATEDR = &#39;templates&#39;
+    PROJECT_TEMPLATE_BASE_DIR = &#39;hana&#39;
+    PROJECT_TEMPLATE_BASE_STRUCT = &#39;base_structure&#39;
+    PROJECT_TEMPLATE_BASE_SDA_STRUCT = &#39;base_sda_structure&#39;
+    MODULE_SOURCE_PATH = &#39;src&#39;
+    GRANTS_SOURCE_PATH = &#39;grants&#39;
+    SYNONYMS_SOURCE_PATH = &#39;synonyms&#39;
+    PROCEDURES_SOURCE_PATH = &#39;procedures&#39;
+    AMDP_SOURCE_PATH = &#39;amdps&#39;
+    ROLES_SOURCE_PATH = &#39;roles&#39;
+    VIRTUAL_TABLE_SOURCE_PATH = &#39;virtualtable&#39;
+    CDS_SOURCE_PATH = &#39;cds&#39;
+
+    # FileWriter - Generic
+    TEMPLATE_DIR = &#39;templates&#39;
+
+    # FileWriter - MTAYamlWriter
+    YAML_FILE_NAME = &#39;mta.yaml&#39;
+    YAML_TEMPLATE_FILE = &#39;tmp.yaml&#39;
+    YAML_TEMPLATE_APPID_PLACEHOLDER = &#39;&lt;&lt;MODULE_APPID&gt;&gt;&#39;
+    YAML_TEMPLATE_VERSION_PLACEHOLDER = &#39;&lt;&lt;MODULE_VERSION&gt;&gt;&#39;
+    YAML_TEMPLATE_NAME_PLACEHOLDER = &#39;&lt;&lt;MODULE_NAME&gt;&gt;&#39;
+    YAML_TEMPLATE_SCHEMA_PLACEHOLDER = &#39;&lt;&lt;SCHEMA_NAME&gt;&gt;&#39;
+    YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER = &#39;&lt;&lt;USP_FOR_GRANTS&gt;&gt;&#39;
+
+    # FileWriter - HDBGrantWriter
+    GRANT_FILE_NAME = &#34;grants&#34;
+    GRANT_TMP_FILE_NAME = &#39;tmp.hdbgrant&#39;
+    GRANT_TMP_SDA_FILE_NAME = &#39;tmp_sda.hdbgrant&#39;
+    GRANT_FILE_EXTENSION = &#39;.hdbgrants&#39;
+    GRANT_TEMPLATE_SDA_REMOTE_SOURCE = &#39;&lt;&lt;REMOTE_SOURCE&gt;&gt;&#39;
+    GRANT_TEMPLATE_SCHEMA_PRIVILEGES = &#39;&lt;&lt;SCHEMA_PRIVILEGES&gt;&gt;&#39;
+    GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH = &#39;&lt;&lt;SCHEMA_PRIVILEGES_WITH&gt;&gt;&#39;
+
+    # FileWriter - HDBProcedureWriter
+    PROCEDURE_FILE_EXTENSION = &#39;.hdbprocedure&#39;
+    PROCEDURE_TEMPLATE_FILE = &#39;tmp.hdbprocedure&#39;
+    PROCEDURE_TEMPLATE_SQL_PLACEHOLDER =  &#39;&lt;&lt;SQL_PLACEHOLDER&gt;&gt;&#39;
+    PROCEDURE_TEMPLATE_PROC_INTERFACE =  &#39;&lt;&lt;INTERFACE&gt;&gt;&#39;
+    PROCEDURE_TEMPLATE_PROC_NAME = &#39;&lt;&lt;PROCEDURE_NAME&gt;&gt;&#39;
+    
+    # FileWriter - HDBSynonymWriter
+    SYNONYM_FILE_NAME = &#39;synonyms&#39;
+    SYNONYM_FILE_EXTENSION = &#39;.hdbsynonym&#39;
+
+    # FileWriter - HDBRole
+    ROLE_FILE_EXTENSION = &#39;.hdbrole&#39;
+    ROLE_TEMPLATE_FILENAME = &#39;tmp.hdbrole&#39;
+    ROLE_TEMPLATE_FILENAME_WITH = &#39;tmp_with.hdbrole&#39;
+    ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER =  &#39;&lt;&lt;ROLE_NAME&gt;&gt;&#39;
+
+    # FileWriter - HDBVirtualTable
+    VIRTUAL_TABLE_FILE_EXTENSION = &#39;.hdbvirtualtable&#39;
+    VIRTUAL_TABLE_TEMPLATE_FILENAME = &#39;tmp.hdbvirtualtable&#39;
+    VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER =  &#39;&lt;&lt;CONNECTION_NAME&gt;&gt;&#39;
+    VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER =  &#39;&lt;&lt;VIRTUAL_TABLE&gt;&gt;&#39;
+    VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER = &#39;&lt;&lt;SOURCE_SCHEMA_TABLE&gt;&gt;&#39;
+
+    # FileWriter - HDBCDS
+    CDS_FILE_EXTENSION = &#39;.hdbcds&#39;
+    CDS_TEMPLATE_FILENAME = &#39;tmp.hdbcds&#39;
+    CDS_TEMPLATE_CONTEXT_NAME = &#39;&lt;&lt;CONTEXT_NAME&gt;&gt;&#39;
+    CDS_TEMPLATE_CONTEXT_CONTENT = &#39;&lt;&lt;CONTEXT_CONTENT&gt;&gt;&#39;
+
+    #--------------------------------------- 
+    #---- ABAP Related Config constants ----
+    #---------------------------------------
+
+    # ABAP Related Config Keys
+    CONFIG_KEY_OUTPUT_PATH_ABAP =&#39;output_path_abap&#39;
+    CONFIG_KEY_AMDP_PATH = &#39;amdp_path&#39;
+    ABAP_BASE_PATH = &#39;abap&#39;
+
+    # FileWriter - AMDP
+    AMDP_FILE_EXTENSION = &#39;.txt&#39;
+    AMDP_TEMPLATE_FILENAME = &#39;tmp_amdp.txt&#39;
+    AMDP_TEMPLATE_AMDP_NAME_PLACEHOLDER = &#39;&lt;&lt;AMDP_NAME&gt;&gt;&#39;
+    AMDP_TEMPLATE_OUTPUT_PLACEHOLDER = &#39;&lt;&lt;OUTPUT&gt;&gt;&#39;
+    AMDP_TEMPLATE_OUTPUT_SIGNATURE_PLACEHOLDER = &#39;&lt;&lt;OUTPUT_SIGNATURE&gt;&gt;&#39;
+    AMDP_TEMPLATE_ALGORITHM_PLACEHOLDER = &#39;&lt;&lt;ALGO&gt;&gt;&#39;
+    AMDP_TEMPLATE_INPUT_SIGNATURE_PLACEHOLDER = &#39;&lt;&lt;INPUT_SIGNATURE&gt;&gt;&#39;
+    AMDP_TEMPLATE_USING_STATEMENT_PLACEHOLDER = &#39;&lt;&lt;USING_STATEMENT&gt;&gt;&#39;
+    AMDP_TEMPLATE_MODEL_SELECT_PLACEHOLDER = &#39;&lt;&lt;MODEL_SELECT&gt;&gt;&#39;
+    AMDP_TEMPLATE_FUNCTION_NAME_PLACEHOLDER = &#39;&lt;&lt;FUNCTION&gt;&gt;&#39;
+    AMDP_TEMPLATE_FUNCTION_TYPE_PLACEHOLDER = &#39;&lt;&lt;INPUT&gt;&gt;&#39;
+    AMDP_TEMPLATE_CALL_STATEMENT_PLACEHOLDER = &#39;&lt;&lt;CALL_STATEMENT&gt;&gt;&#39;
+    AMDP_TEMPLATE_TABLE_DECLARATIONS_PLACEHOLDER = &#39;&lt;&lt;DECLARATIONS&gt;&gt; &#39;
+
+    #------------------------------------------ 
+    #---- DataHub Related Config constants ----
+    #------------------------------------------
+    # Graph Generation Scope
+    GRAPH_GENERATION_TYPE_SEPERATE = 1 # Depends on generation type but keeps the consumption layer elements seperate in different graphs 
+    GRAPH_GENERATION_TYPE_COMBINED = 2 # Combines all consumption layer elements in one graph seperated by a operator per consumption layer element
+
+    # Location Constants
+    DATAHUB_BASE_PATH = &#39;datahub&#39;
+    GRAPH_FILE_NAME = &#39;graph&#39;
+    GRAPH_FILE_EXTENSION = &#39;.json&#39;
+
+    # Generic Constants
+    DATAHUB_HANAML_OPERATOR_COMPONENT = &#39;contrib.hanaml.python_api&#39;
+    DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT = &#39;com.sap.ml.artifact.producer&#39;
+    DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT = &#39;com.sap.ml.artifact.consumer&#39;
+    DATAHUB_MLAPI_OPERATOR_METRICS_COMPONENT = &#39;com.sap.ml.submitMetrics&#39;
+    DATAHUB_OPERATOR_CONVERTER_TOBLOB_COMPONENT = &#39;com.sap.util.toBlobConverter&#39;
+    DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT = &#39;com.sap.util.toStringConverter&#39;
+    DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT = &#39;com.sap.util.toMessageConverter&#39;
+    DATAHUB_OPERATOR_GRAPH_TERMINATOR_COMPONENT = &#39;com.sap.util.graphTerminator&#39;
+    DATAHUB_OPERATOR_RESTAPI_COMPONENT = &#39;com.sap.openapi.server&#39;
+    DATAHUB_OPERATOR_RESPONSE_INTER_COMPONENT = &#39;com.sap.util.responseinterceptor&#39;
+    DATAHUB_OPERATOR_CONSTANT_GENERATOR_COMPONENT = &#39;com.sap.util.constantGenerator&#39;
+    
+    # Operator Specific constants
+    # Model Producer
+    DATAHUB_OPERATOR_MDL_PROD_IN_PORT_BLOB = &#39;inArtifact&#39;
+    DATAHUB_OPERATOR_MDL_PROD_OUT_PORT_MSG = &#39;outArtifact&#39;
+    # Model Consumer
+    DATAHUB_OPERATOR_MDL_CONS_IN_PORT_STRING = &#39;inArtifactID&#39;
+    DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB = &#39;outArtifact&#39;
+    # Metrics
+    DATAHUB_OPERATOR_METRICS_IN_PORT_METRICS = &#39;metrics&#39;
+    DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE = &#39;response&#39;
+    # ToBlob Converter
+    DATAHUB_OPERATOR_TOBLOB_IN_PORT_STRING = &#39;ininterface&#39;
+    DATAHUB_OPERATOR_TOBLOB_OUT_PORT_BLOB = &#39;outbytearray&#39;
+    # ToString Converter
+    DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB = &#39;ininterface&#39;
+    DATAHUB_OPERATOR_TOSTRING_IN_PORT_MESSAGE = &#39;inmessage&#39;
+    DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING = &#39;outstring&#39;
+    # ToMessage Converter
+    DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_STRING = &#39;instring&#39;
+    DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_ANY = &#39;inbody&#39;
+    DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE = &#39;out&#39;
+    # Graph Terminator 
+    DATAHUB_OPERATOR_GRAPH_TERMINATOR_IN_PORT_ANY = &#39;stop&#39;
+    # Python Terminator Check
+    DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE = &#39;metrics&#39;
+    DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING = &#39;artifact&#39;
+    DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE = &#39;output&#39;
+    # Constants Generator 
+    DATAHUB_OPERATOR_CONSTANT_GENERATOR_OUT_PORT_STRING = &#39;out&#39;
+    # -- Rest Enpoint Operators --
+    # Python Result Client
+    DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE = &#39;restrequestin&#39;
+    DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE = &#39;restrequestout&#39;
+    DATAHUB_OPERATOR_RESULT_IN_PORT_STRING = &#39;datain&#39;
+    # Response Interceptor
+    DATAHUB_OPERATOR_RESPONSE_INTER_REQUEST_IN_PORT_MESSAGE = &#39;in&#39;
+    DATAHUB_OPERATOR_RESPONSE_INTER_RESPONSE_IN_PORT_MESSAGE = &#39;resp&#39;
+    DATAHUB_OPERATOR_RESPONSE_INTER_OUT_PORT_MESSAGE = &#39;out&#39;
+    # OpenAPI Servflow
+    DATAHUB_OPERATOR_RESTAPI_OUT_PORT_MESSAGE = &#39;out&#39;
+    # DataHub Related Config Keys
+    CONFIG_KEY_OUTPUT_PATH_DATAHUB = &#39;output_path_datahub&#39;
+    
+
+    #-----------------------------------------------
+    #---- CloudFoundry Related Config constants ----
+    #-----------------------------------------------
+    CONFIG_KEY_OUTPUT_PATH_CF = &#39;cloudfoundry&#39;</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants"><code class="flex name class">
+<span>class <span class="ident">ConfigConstants</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class provides a central repository of config constants they are defined here. This allows
+for easy adjustments without needed to change all the literals in the code.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ConfigConstants(object):
+    &#34;&#34;&#34;
+    This class provides a central repository of config constants they are defined here. This allows
+    for easy adjustments without needed to change all the literals in the code. 
+    &#34;&#34;&#34;
+    #--------------------------------------- 
+    #---- Generic Config constants ----
+    #---------------------------------------
+
+    # Generation Types for Consumption Layer
+    GENERATION_MERGE_NONE = 1 # Each step (ie partition or fit) is on its own. For example a procedure for partiition and one for fit.  
+    GENERATION_MERGE_PARTITION = 2 # Merges the partition into the related step fit or predict. So not to create unnecessary data copies. All other steps will stay isolated.
+    GENERATION_GROUP_NONE = 11 # No grouping is applied. This means that solution specific implementation will define how to deal with this
+    GENERATION_GROUP_FUNCTIONAL = 12 # Grouping is based on functional grouping. Meaning that logical related elements such as partiion / fit / and related score will be put together
+    GROUP_FIT_TYPE = &#39;fit&#39;
+    GROUP_PREDICT_TYPE = &#39;predict&#39;
+    GROUP_FIT_PREDICT_TYPE = &#39;fit_predict&#39;
+    GROUP_UKNOWN_TYPE = &#39;unknown&#39;
+    GROUP_IDENTIFIER_MERGE_ALL = &#39;all_merged&#39;
+
+    # Generic Config Keys
+    CONFIG_KEY_OUTPUT_DIR = &#39;outputdir&#39;
+    CONFIG_KEY_OUTPUT_PATH = &#39;outputpath&#39;
+    CONFIG_KEY_PROJECT_NAME = &#39;project_name&#39;
+    CONFIG_KEY_VERSION = &#39;version&#39; 
+    CONFIG_KEY_MERGE_STRATEGY = &#39;merge_type&#39;
+    CONFIG_KEY_GROUP_STRATEGY = &#39;group_type&#39;
+
+    # Config Data
+    DATA_CONVERSION_HDBTABLE_HDBDD_FILE = &#39;hdbtable_to_hdbdd_datatype_mapping.json&#39;
+    DATA_CONVERSION_HDBTABLE_ABAP_FILE = &#39;hdbtable_to_abap_datatype_mapping.json&#39;
+    DATA_CATEGORY_IDENTIFIERS_FILE = &#39;category_identifiers.json&#39;
+    CONFIG_DATA_DIR = &#39;data&#39;
+    CONFIG_KEY_HDBTABLE_TO_HDBDD_TYPES = &#39;hdbtable_to_hdbdd_datatypes&#39;
+    CONFIG_KEY_HDBTABLE_TO_ABAP_TYPES = &#39;hdbtable_to_abap_datatypes&#39;
+    CONFIG_KEY_CATEGORY_IDENTIFIERS = &#39;category_identfiers&#39;
+    CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL = &#39;category_identfier_model&#39;
+    CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC = &#39;category_identfier_metric&#39;
+    CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED = &#39;category_identfier_fitted&#39;
+    #--------------------------------------- 
+    #---- HANA Related Config constants ----
+    #---------------------------------------
+
+    # HANA Related Config Keys
+    CONFIG_KEY_APPID = &#39;appid&#39; 
+    CONFIG_KEY_OUTPUT_PATH_HANA =&#39;output_path_hana&#39;
+    CONFIG_KEY_MODULE_NAME = &#39;module_name&#39;
+    CONFIG_KEY_SCHEMA = &#39;schema&#39; 
+    CONFIG_KEY_GRANT_SERVICE = &#39;ups&#39; 
+    
+    CONFIG_KEY_SQL_PROCESSED = &#39;sql_processed&#39; 
+
+    CONFIG_KEY_CDS_CONTEXT = &#39;cds_context&#39;
+
+    CONFIG_KEY_OUTPUT_PATH_MODULE = &#39;output_path_module&#39;
+    CONFIG_KEY_OUTPUT_PATH_MODULE_SRC = &#39;output_path_module_src&#39; 
+    CONFIG_KEY_MODULE_TEMPLATE_PATH = &#39;module_template_path&#39;
+    CONFIG_KEY_GRANTS_PATH = &#39;grants_path&#39;
+    CONFIG_KEY_SYNONYMS_PATH = &#39;synonyms_path&#39; 
+    CONFIG_KEY_PROCEDURES_PATH = &#39;procedures_path&#39; 
+    CONFIG_KEY_AMDP_PATH = &#39;amdp_path&#39;
+    CONFIG_KEY_ROLES_PATH =  &#39;roles_path&#39;
+    CONFIG_KEY_CDS_PATH =  &#39;cds_path&#39;
+
+    # --SDA
+    CONFIG_KEY_SDA_APPID = CONFIG_KEY_APPID + &#39;_sda&#39;
+    CONFIG_KEY_SDA_OUTPUT_PATH_HANA = CONFIG_KEY_OUTPUT_PATH_HANA + &#39;_sda&#39;
+    CONFIG_KEY_SDA_MODULE_NAME = CONFIG_KEY_MODULE_NAME + &#39;_sda&#39;
+    CONFIG_KEY_SDA_SCHEMA = CONFIG_KEY_SCHEMA + &#39;_sda&#39;
+    CONFIG_KEY_SDA_GRANT_SERVICE = CONFIG_KEY_GRANT_SERVICE + &#39;_sda&#39;
+    CONFIG_KEY_SDA_REMOTE_SOURCE = &#39;remote_source_sda&#39;
+    CONFIG_KEY_SDA_OUTPUT_PATH_MODULE = CONFIG_KEY_OUTPUT_PATH_MODULE + &#39;_sda&#39;
+    CONFIG_KEY_SDA_OUTPUT_PATH_MODULE_SRC = CONFIG_KEY_OUTPUT_PATH_MODULE_SRC + &#39;_sda&#39;
+    CONFIG_KEY_SDA_GRANTS_PATH = CONFIG_KEY_GRANTS_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_SYNONYMS_PATH = CONFIG_KEY_SYNONYMS_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_PROCEDURES_PATH = CONFIG_KEY_PROCEDURES_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_AMDP_PATH = &#39;amdp_path&#39; + &#39;_sda&#39;
+    CONFIG_KEY_SDA_ROLES_PATH = CONFIG_KEY_ROLES_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_CDS_PATH = CONFIG_KEY_CDS_PATH + &#39;_sda&#39;
+    CONFIG_KEY_SDA_VIRTUALTABLE_PATH = &#39;virtual_table_sda&#39;
+    CONFIG_KEY_SDA_MODEL_ONLY = &#39;model_only&#39;
+    CONFIG_KEY_DATA_SOURCE_MAPPING = &#39;data_source_mapping&#39;
+
+    # Project locations
+    HANA_BASE_PATH = &#39;hana&#39;
+    SDA_HANA_BASE_PATH = &#39;hana_sda&#39;
+    PROJECT_TEMPLATEDR = &#39;templates&#39;
+    PROJECT_TEMPLATE_BASE_DIR = &#39;hana&#39;
+    PROJECT_TEMPLATE_BASE_STRUCT = &#39;base_structure&#39;
+    PROJECT_TEMPLATE_BASE_SDA_STRUCT = &#39;base_sda_structure&#39;
+    MODULE_SOURCE_PATH = &#39;src&#39;
+    GRANTS_SOURCE_PATH = &#39;grants&#39;
+    SYNONYMS_SOURCE_PATH = &#39;synonyms&#39;
+    PROCEDURES_SOURCE_PATH = &#39;procedures&#39;
+    AMDP_SOURCE_PATH = &#39;amdps&#39;
+    ROLES_SOURCE_PATH = &#39;roles&#39;
+    VIRTUAL_TABLE_SOURCE_PATH = &#39;virtualtable&#39;
+    CDS_SOURCE_PATH = &#39;cds&#39;
+
+    # FileWriter - Generic
+    TEMPLATE_DIR = &#39;templates&#39;
+
+    # FileWriter - MTAYamlWriter
+    YAML_FILE_NAME = &#39;mta.yaml&#39;
+    YAML_TEMPLATE_FILE = &#39;tmp.yaml&#39;
+    YAML_TEMPLATE_APPID_PLACEHOLDER = &#39;&lt;&lt;MODULE_APPID&gt;&gt;&#39;
+    YAML_TEMPLATE_VERSION_PLACEHOLDER = &#39;&lt;&lt;MODULE_VERSION&gt;&gt;&#39;
+    YAML_TEMPLATE_NAME_PLACEHOLDER = &#39;&lt;&lt;MODULE_NAME&gt;&gt;&#39;
+    YAML_TEMPLATE_SCHEMA_PLACEHOLDER = &#39;&lt;&lt;SCHEMA_NAME&gt;&gt;&#39;
+    YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER = &#39;&lt;&lt;USP_FOR_GRANTS&gt;&gt;&#39;
+
+    # FileWriter - HDBGrantWriter
+    GRANT_FILE_NAME = &#34;grants&#34;
+    GRANT_TMP_FILE_NAME = &#39;tmp.hdbgrant&#39;
+    GRANT_TMP_SDA_FILE_NAME = &#39;tmp_sda.hdbgrant&#39;
+    GRANT_FILE_EXTENSION = &#39;.hdbgrants&#39;
+    GRANT_TEMPLATE_SDA_REMOTE_SOURCE = &#39;&lt;&lt;REMOTE_SOURCE&gt;&gt;&#39;
+    GRANT_TEMPLATE_SCHEMA_PRIVILEGES = &#39;&lt;&lt;SCHEMA_PRIVILEGES&gt;&gt;&#39;
+    GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH = &#39;&lt;&lt;SCHEMA_PRIVILEGES_WITH&gt;&gt;&#39;
+
+    # FileWriter - HDBProcedureWriter
+    PROCEDURE_FILE_EXTENSION = &#39;.hdbprocedure&#39;
+    PROCEDURE_TEMPLATE_FILE = &#39;tmp.hdbprocedure&#39;
+    PROCEDURE_TEMPLATE_SQL_PLACEHOLDER =  &#39;&lt;&lt;SQL_PLACEHOLDER&gt;&gt;&#39;
+    PROCEDURE_TEMPLATE_PROC_INTERFACE =  &#39;&lt;&lt;INTERFACE&gt;&gt;&#39;
+    PROCEDURE_TEMPLATE_PROC_NAME = &#39;&lt;&lt;PROCEDURE_NAME&gt;&gt;&#39;
+    
+    # FileWriter - HDBSynonymWriter
+    SYNONYM_FILE_NAME = &#39;synonyms&#39;
+    SYNONYM_FILE_EXTENSION = &#39;.hdbsynonym&#39;
+
+    # FileWriter - HDBRole
+    ROLE_FILE_EXTENSION = &#39;.hdbrole&#39;
+    ROLE_TEMPLATE_FILENAME = &#39;tmp.hdbrole&#39;
+    ROLE_TEMPLATE_FILENAME_WITH = &#39;tmp_with.hdbrole&#39;
+    ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER =  &#39;&lt;&lt;ROLE_NAME&gt;&gt;&#39;
+
+    # FileWriter - HDBVirtualTable
+    VIRTUAL_TABLE_FILE_EXTENSION = &#39;.hdbvirtualtable&#39;
+    VIRTUAL_TABLE_TEMPLATE_FILENAME = &#39;tmp.hdbvirtualtable&#39;
+    VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER =  &#39;&lt;&lt;CONNECTION_NAME&gt;&gt;&#39;
+    VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER =  &#39;&lt;&lt;VIRTUAL_TABLE&gt;&gt;&#39;
+    VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER = &#39;&lt;&lt;SOURCE_SCHEMA_TABLE&gt;&gt;&#39;
+
+    # FileWriter - HDBCDS
+    CDS_FILE_EXTENSION = &#39;.hdbcds&#39;
+    CDS_TEMPLATE_FILENAME = &#39;tmp.hdbcds&#39;
+    CDS_TEMPLATE_CONTEXT_NAME = &#39;&lt;&lt;CONTEXT_NAME&gt;&gt;&#39;
+    CDS_TEMPLATE_CONTEXT_CONTENT = &#39;&lt;&lt;CONTEXT_CONTENT&gt;&gt;&#39;
+
+    #--------------------------------------- 
+    #---- ABAP Related Config constants ----
+    #---------------------------------------
+
+    # ABAP Related Config Keys
+    CONFIG_KEY_OUTPUT_PATH_ABAP =&#39;output_path_abap&#39;
+    CONFIG_KEY_AMDP_PATH = &#39;amdp_path&#39;
+    ABAP_BASE_PATH = &#39;abap&#39;
+
+    # FileWriter - AMDP
+    AMDP_FILE_EXTENSION = &#39;.txt&#39;
+    AMDP_TEMPLATE_FILENAME = &#39;tmp_amdp.txt&#39;
+    AMDP_TEMPLATE_AMDP_NAME_PLACEHOLDER = &#39;&lt;&lt;AMDP_NAME&gt;&gt;&#39;
+    AMDP_TEMPLATE_OUTPUT_PLACEHOLDER = &#39;&lt;&lt;OUTPUT&gt;&gt;&#39;
+    AMDP_TEMPLATE_OUTPUT_SIGNATURE_PLACEHOLDER = &#39;&lt;&lt;OUTPUT_SIGNATURE&gt;&gt;&#39;
+    AMDP_TEMPLATE_ALGORITHM_PLACEHOLDER = &#39;&lt;&lt;ALGO&gt;&gt;&#39;
+    AMDP_TEMPLATE_INPUT_SIGNATURE_PLACEHOLDER = &#39;&lt;&lt;INPUT_SIGNATURE&gt;&gt;&#39;
+    AMDP_TEMPLATE_USING_STATEMENT_PLACEHOLDER = &#39;&lt;&lt;USING_STATEMENT&gt;&gt;&#39;
+    AMDP_TEMPLATE_MODEL_SELECT_PLACEHOLDER = &#39;&lt;&lt;MODEL_SELECT&gt;&gt;&#39;
+    AMDP_TEMPLATE_FUNCTION_NAME_PLACEHOLDER = &#39;&lt;&lt;FUNCTION&gt;&gt;&#39;
+    AMDP_TEMPLATE_FUNCTION_TYPE_PLACEHOLDER = &#39;&lt;&lt;INPUT&gt;&gt;&#39;
+    AMDP_TEMPLATE_CALL_STATEMENT_PLACEHOLDER = &#39;&lt;&lt;CALL_STATEMENT&gt;&gt;&#39;
+    AMDP_TEMPLATE_TABLE_DECLARATIONS_PLACEHOLDER = &#39;&lt;&lt;DECLARATIONS&gt;&gt; &#39;
+
+    #------------------------------------------ 
+    #---- DataHub Related Config constants ----
+    #------------------------------------------
+    # Graph Generation Scope
+    GRAPH_GENERATION_TYPE_SEPERATE = 1 # Depends on generation type but keeps the consumption layer elements seperate in different graphs 
+    GRAPH_GENERATION_TYPE_COMBINED = 2 # Combines all consumption layer elements in one graph seperated by a operator per consumption layer element
+
+    # Location Constants
+    DATAHUB_BASE_PATH = &#39;datahub&#39;
+    GRAPH_FILE_NAME = &#39;graph&#39;
+    GRAPH_FILE_EXTENSION = &#39;.json&#39;
+
+    # Generic Constants
+    DATAHUB_HANAML_OPERATOR_COMPONENT = &#39;contrib.hanaml.python_api&#39;
+    DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT = &#39;com.sap.ml.artifact.producer&#39;
+    DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT = &#39;com.sap.ml.artifact.consumer&#39;
+    DATAHUB_MLAPI_OPERATOR_METRICS_COMPONENT = &#39;com.sap.ml.submitMetrics&#39;
+    DATAHUB_OPERATOR_CONVERTER_TOBLOB_COMPONENT = &#39;com.sap.util.toBlobConverter&#39;
+    DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT = &#39;com.sap.util.toStringConverter&#39;
+    DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT = &#39;com.sap.util.toMessageConverter&#39;
+    DATAHUB_OPERATOR_GRAPH_TERMINATOR_COMPONENT = &#39;com.sap.util.graphTerminator&#39;
+    DATAHUB_OPERATOR_RESTAPI_COMPONENT = &#39;com.sap.openapi.server&#39;
+    DATAHUB_OPERATOR_RESPONSE_INTER_COMPONENT = &#39;com.sap.util.responseinterceptor&#39;
+    DATAHUB_OPERATOR_CONSTANT_GENERATOR_COMPONENT = &#39;com.sap.util.constantGenerator&#39;
+    
+    # Operator Specific constants
+    # Model Producer
+    DATAHUB_OPERATOR_MDL_PROD_IN_PORT_BLOB = &#39;inArtifact&#39;
+    DATAHUB_OPERATOR_MDL_PROD_OUT_PORT_MSG = &#39;outArtifact&#39;
+    # Model Consumer
+    DATAHUB_OPERATOR_MDL_CONS_IN_PORT_STRING = &#39;inArtifactID&#39;
+    DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB = &#39;outArtifact&#39;
+    # Metrics
+    DATAHUB_OPERATOR_METRICS_IN_PORT_METRICS = &#39;metrics&#39;
+    DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE = &#39;response&#39;
+    # ToBlob Converter
+    DATAHUB_OPERATOR_TOBLOB_IN_PORT_STRING = &#39;ininterface&#39;
+    DATAHUB_OPERATOR_TOBLOB_OUT_PORT_BLOB = &#39;outbytearray&#39;
+    # ToString Converter
+    DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB = &#39;ininterface&#39;
+    DATAHUB_OPERATOR_TOSTRING_IN_PORT_MESSAGE = &#39;inmessage&#39;
+    DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING = &#39;outstring&#39;
+    # ToMessage Converter
+    DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_STRING = &#39;instring&#39;
+    DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_ANY = &#39;inbody&#39;
+    DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE = &#39;out&#39;
+    # Graph Terminator 
+    DATAHUB_OPERATOR_GRAPH_TERMINATOR_IN_PORT_ANY = &#39;stop&#39;
+    # Python Terminator Check
+    DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE = &#39;metrics&#39;
+    DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING = &#39;artifact&#39;
+    DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE = &#39;output&#39;
+    # Constants Generator 
+    DATAHUB_OPERATOR_CONSTANT_GENERATOR_OUT_PORT_STRING = &#39;out&#39;
+    # -- Rest Enpoint Operators --
+    # Python Result Client
+    DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE = &#39;restrequestin&#39;
+    DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE = &#39;restrequestout&#39;
+    DATAHUB_OPERATOR_RESULT_IN_PORT_STRING = &#39;datain&#39;
+    # Response Interceptor
+    DATAHUB_OPERATOR_RESPONSE_INTER_REQUEST_IN_PORT_MESSAGE = &#39;in&#39;
+    DATAHUB_OPERATOR_RESPONSE_INTER_RESPONSE_IN_PORT_MESSAGE = &#39;resp&#39;
+    DATAHUB_OPERATOR_RESPONSE_INTER_OUT_PORT_MESSAGE = &#39;out&#39;
+    # OpenAPI Servflow
+    DATAHUB_OPERATOR_RESTAPI_OUT_PORT_MESSAGE = &#39;out&#39;
+    # DataHub Related Config Keys
+    CONFIG_KEY_OUTPUT_PATH_DATAHUB = &#39;output_path_datahub&#39;
+    
+
+    #-----------------------------------------------
+    #---- CloudFoundry Related Config constants ----
+    #-----------------------------------------------
+    CONFIG_KEY_OUTPUT_PATH_CF = &#39;cloudfoundry&#39;</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.ABAP_BASE_PATH"><code class="name">var <span class="ident">ABAP_BASE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_FILE_EXTENSION"><code class="name">var <span class="ident">AMDP_FILE_EXTENSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_SOURCE_PATH"><code class="name">var <span class="ident">AMDP_SOURCE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_ALGORITHM_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_ALGORITHM_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_AMDP_NAME_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_AMDP_NAME_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_CALL_STATEMENT_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_CALL_STATEMENT_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_FILENAME"><code class="name">var <span class="ident">AMDP_TEMPLATE_FILENAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_FUNCTION_NAME_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_FUNCTION_NAME_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_FUNCTION_TYPE_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_FUNCTION_TYPE_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_INPUT_SIGNATURE_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_INPUT_SIGNATURE_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_MODEL_SELECT_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_MODEL_SELECT_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_OUTPUT_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_OUTPUT_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_OUTPUT_SIGNATURE_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_OUTPUT_SIGNATURE_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_TABLE_DECLARATIONS_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_TABLE_DECLARATIONS_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_USING_STATEMENT_PLACEHOLDER"><code class="name">var <span class="ident">AMDP_TEMPLATE_USING_STATEMENT_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_FILE_EXTENSION"><code class="name">var <span class="ident">CDS_FILE_EXTENSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_SOURCE_PATH"><code class="name">var <span class="ident">CDS_SOURCE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_TEMPLATE_CONTEXT_CONTENT"><code class="name">var <span class="ident">CDS_TEMPLATE_CONTEXT_CONTENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_TEMPLATE_CONTEXT_NAME"><code class="name">var <span class="ident">CDS_TEMPLATE_CONTEXT_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_TEMPLATE_FILENAME"><code class="name">var <span class="ident">CDS_TEMPLATE_FILENAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_DATA_DIR"><code class="name">var <span class="ident">CONFIG_DATA_DIR</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_AMDP_PATH"><code class="name">var <span class="ident">CONFIG_KEY_AMDP_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_APPID"><code class="name">var <span class="ident">CONFIG_KEY_APPID</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIERS"><code class="name">var <span class="ident">CONFIG_KEY_CATEGORY_IDENTIFIERS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED"><code class="name">var <span class="ident">CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC"><code class="name">var <span class="ident">CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL"><code class="name">var <span class="ident">CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CDS_CONTEXT"><code class="name">var <span class="ident">CONFIG_KEY_CDS_CONTEXT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CDS_PATH"><code class="name">var <span class="ident">CONFIG_KEY_CDS_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING"><code class="name">var <span class="ident">CONFIG_KEY_DATA_SOURCE_MAPPING</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_GRANTS_PATH"><code class="name">var <span class="ident">CONFIG_KEY_GRANTS_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_GRANT_SERVICE"><code class="name">var <span class="ident">CONFIG_KEY_GRANT_SERVICE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_GROUP_STRATEGY"><code class="name">var <span class="ident">CONFIG_KEY_GROUP_STRATEGY</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_HDBTABLE_TO_ABAP_TYPES"><code class="name">var <span class="ident">CONFIG_KEY_HDBTABLE_TO_ABAP_TYPES</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_HDBTABLE_TO_HDBDD_TYPES"><code class="name">var <span class="ident">CONFIG_KEY_HDBTABLE_TO_HDBDD_TYPES</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_MERGE_STRATEGY"><code class="name">var <span class="ident">CONFIG_KEY_MERGE_STRATEGY</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_MODULE_NAME"><code class="name">var <span class="ident">CONFIG_KEY_MODULE_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_MODULE_TEMPLATE_PATH"><code class="name">var <span class="ident">CONFIG_KEY_MODULE_TEMPLATE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_DIR"><code class="name">var <span class="ident">CONFIG_KEY_OUTPUT_DIR</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH"><code class="name">var <span class="ident">CONFIG_KEY_OUTPUT_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_ABAP"><code class="name">var <span class="ident">CONFIG_KEY_OUTPUT_PATH_ABAP</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_CF"><code class="name">var <span class="ident">CONFIG_KEY_OUTPUT_PATH_CF</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB"><code class="name">var <span class="ident">CONFIG_KEY_OUTPUT_PATH_DATAHUB</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_HANA"><code class="name">var <span class="ident">CONFIG_KEY_OUTPUT_PATH_HANA</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_MODULE"><code class="name">var <span class="ident">CONFIG_KEY_OUTPUT_PATH_MODULE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_MODULE_SRC"><code class="name">var <span class="ident">CONFIG_KEY_OUTPUT_PATH_MODULE_SRC</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_PROCEDURES_PATH"><code class="name">var <span class="ident">CONFIG_KEY_PROCEDURES_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_PROJECT_NAME"><code class="name">var <span class="ident">CONFIG_KEY_PROJECT_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_ROLES_PATH"><code class="name">var <span class="ident">CONFIG_KEY_ROLES_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SCHEMA"><code class="name">var <span class="ident">CONFIG_KEY_SCHEMA</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_AMDP_PATH"><code class="name">var <span class="ident">CONFIG_KEY_SDA_AMDP_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_APPID"><code class="name">var <span class="ident">CONFIG_KEY_SDA_APPID</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_CDS_PATH"><code class="name">var <span class="ident">CONFIG_KEY_SDA_CDS_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_GRANTS_PATH"><code class="name">var <span class="ident">CONFIG_KEY_SDA_GRANTS_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_GRANT_SERVICE"><code class="name">var <span class="ident">CONFIG_KEY_SDA_GRANT_SERVICE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_MODEL_ONLY"><code class="name">var <span class="ident">CONFIG_KEY_SDA_MODEL_ONLY</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_MODULE_NAME"><code class="name">var <span class="ident">CONFIG_KEY_SDA_MODULE_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_HANA"><code class="name">var <span class="ident">CONFIG_KEY_SDA_OUTPUT_PATH_HANA</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_MODULE"><code class="name">var <span class="ident">CONFIG_KEY_SDA_OUTPUT_PATH_MODULE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_MODULE_SRC"><code class="name">var <span class="ident">CONFIG_KEY_SDA_OUTPUT_PATH_MODULE_SRC</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_PROCEDURES_PATH"><code class="name">var <span class="ident">CONFIG_KEY_SDA_PROCEDURES_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_REMOTE_SOURCE"><code class="name">var <span class="ident">CONFIG_KEY_SDA_REMOTE_SOURCE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_ROLES_PATH"><code class="name">var <span class="ident">CONFIG_KEY_SDA_ROLES_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_SCHEMA"><code class="name">var <span class="ident">CONFIG_KEY_SDA_SCHEMA</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_SYNONYMS_PATH"><code class="name">var <span class="ident">CONFIG_KEY_SDA_SYNONYMS_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_VIRTUALTABLE_PATH"><code class="name">var <span class="ident">CONFIG_KEY_SDA_VIRTUALTABLE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SQL_PROCESSED"><code class="name">var <span class="ident">CONFIG_KEY_SQL_PROCESSED</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SYNONYMS_PATH"><code class="name">var <span class="ident">CONFIG_KEY_SYNONYMS_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_VERSION"><code class="name">var <span class="ident">CONFIG_KEY_VERSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_BASE_PATH"><code class="name">var <span class="ident">DATAHUB_BASE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT"><code class="name">var <span class="ident">DATAHUB_HANAML_OPERATOR_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT"><code class="name">var <span class="ident">DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT"><code class="name">var <span class="ident">DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_MLAPI_OPERATOR_METRICS_COMPONENT"><code class="name">var <span class="ident">DATAHUB_MLAPI_OPERATOR_METRICS_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_COMPONENT"><code class="name">var <span class="ident">DATAHUB_OPERATOR_CONSTANT_GENERATOR_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_OUT_PORT_STRING"><code class="name">var <span class="ident">DATAHUB_OPERATOR_CONSTANT_GENERATOR_OUT_PORT_STRING</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOBLOB_COMPONENT"><code class="name">var <span class="ident">DATAHUB_OPERATOR_CONVERTER_TOBLOB_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT"><code class="name">var <span class="ident">DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT"><code class="name">var <span class="ident">DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_COMPONENT"><code class="name">var <span class="ident">DATAHUB_OPERATOR_GRAPH_TERMINATOR_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_IN_PORT_ANY"><code class="name">var <span class="ident">DATAHUB_OPERATOR_GRAPH_TERMINATOR_IN_PORT_ANY</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_IN_PORT_STRING"><code class="name">var <span class="ident">DATAHUB_OPERATOR_MDL_CONS_IN_PORT_STRING</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB"><code class="name">var <span class="ident">DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_IN_PORT_BLOB"><code class="name">var <span class="ident">DATAHUB_OPERATOR_MDL_PROD_IN_PORT_BLOB</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_OUT_PORT_MSG"><code class="name">var <span class="ident">DATAHUB_OPERATOR_MDL_PROD_OUT_PORT_MSG</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_METRICS_IN_PORT_METRICS"><code class="name">var <span class="ident">DATAHUB_OPERATOR_METRICS_IN_PORT_METRICS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_COMPONENT"><code class="name">var <span class="ident">DATAHUB_OPERATOR_RESPONSE_INTER_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_OUT_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_RESPONSE_INTER_OUT_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_REQUEST_IN_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_RESPONSE_INTER_REQUEST_IN_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_RESPONSE_IN_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_RESPONSE_INTER_RESPONSE_IN_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESTAPI_COMPONENT"><code class="name">var <span class="ident">DATAHUB_OPERATOR_RESTAPI_COMPONENT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESTAPI_OUT_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_RESTAPI_OUT_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_STRING"><code class="name">var <span class="ident">DATAHUB_OPERATOR_RESULT_IN_PORT_STRING</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOBLOB_IN_PORT_STRING"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TOBLOB_IN_PORT_STRING</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOBLOB_OUT_PORT_BLOB"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TOBLOB_OUT_PORT_BLOB</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_ANY"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_ANY</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_STRING"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_STRING</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_MESSAGE"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TOSTRING_IN_PORT_MESSAGE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING"><code class="name">var <span class="ident">DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATA_CATEGORY_IDENTIFIERS_FILE"><code class="name">var <span class="ident">DATA_CATEGORY_IDENTIFIERS_FILE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATA_CONVERSION_HDBTABLE_ABAP_FILE"><code class="name">var <span class="ident">DATA_CONVERSION_HDBTABLE_ABAP_FILE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.DATA_CONVERSION_HDBTABLE_HDBDD_FILE"><code class="name">var <span class="ident">DATA_CONVERSION_HDBTABLE_HDBDD_FILE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_GROUP_FUNCTIONAL"><code class="name">var <span class="ident">GENERATION_GROUP_FUNCTIONAL</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_GROUP_NONE"><code class="name">var <span class="ident">GENERATION_GROUP_NONE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_MERGE_NONE"><code class="name">var <span class="ident">GENERATION_MERGE_NONE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_MERGE_PARTITION"><code class="name">var <span class="ident">GENERATION_MERGE_PARTITION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRANTS_SOURCE_PATH"><code class="name">var <span class="ident">GRANTS_SOURCE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_FILE_EXTENSION"><code class="name">var <span class="ident">GRANT_FILE_EXTENSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_FILE_NAME"><code class="name">var <span class="ident">GRANT_FILE_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES"><code class="name">var <span class="ident">GRANT_TEMPLATE_SCHEMA_PRIVILEGES</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH"><code class="name">var <span class="ident">GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TEMPLATE_SDA_REMOTE_SOURCE"><code class="name">var <span class="ident">GRANT_TEMPLATE_SDA_REMOTE_SOURCE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TMP_FILE_NAME"><code class="name">var <span class="ident">GRANT_TMP_FILE_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TMP_SDA_FILE_NAME"><code class="name">var <span class="ident">GRANT_TMP_SDA_FILE_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_FILE_EXTENSION"><code class="name">var <span class="ident">GRAPH_FILE_EXTENSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_FILE_NAME"><code class="name">var <span class="ident">GRAPH_FILE_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_GENERATION_TYPE_COMBINED"><code class="name">var <span class="ident">GRAPH_GENERATION_TYPE_COMBINED</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_GENERATION_TYPE_SEPERATE"><code class="name">var <span class="ident">GRAPH_GENERATION_TYPE_SEPERATE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_FIT_PREDICT_TYPE"><code class="name">var <span class="ident">GROUP_FIT_PREDICT_TYPE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_FIT_TYPE"><code class="name">var <span class="ident">GROUP_FIT_TYPE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_IDENTIFIER_MERGE_ALL"><code class="name">var <span class="ident">GROUP_IDENTIFIER_MERGE_ALL</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_PREDICT_TYPE"><code class="name">var <span class="ident">GROUP_PREDICT_TYPE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_UKNOWN_TYPE"><code class="name">var <span class="ident">GROUP_UKNOWN_TYPE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.HANA_BASE_PATH"><code class="name">var <span class="ident">HANA_BASE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.MODULE_SOURCE_PATH"><code class="name">var <span class="ident">MODULE_SOURCE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURES_SOURCE_PATH"><code class="name">var <span class="ident">PROCEDURES_SOURCE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_FILE_EXTENSION"><code class="name">var <span class="ident">PROCEDURE_FILE_EXTENSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_FILE"><code class="name">var <span class="ident">PROCEDURE_TEMPLATE_FILE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_PROC_INTERFACE"><code class="name">var <span class="ident">PROCEDURE_TEMPLATE_PROC_INTERFACE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_PROC_NAME"><code class="name">var <span class="ident">PROCEDURE_TEMPLATE_PROC_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_SQL_PLACEHOLDER"><code class="name">var <span class="ident">PROCEDURE_TEMPLATE_SQL_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATEDR"><code class="name">var <span class="ident">PROJECT_TEMPLATEDR</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATE_BASE_DIR"><code class="name">var <span class="ident">PROJECT_TEMPLATE_BASE_DIR</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATE_BASE_SDA_STRUCT"><code class="name">var <span class="ident">PROJECT_TEMPLATE_BASE_SDA_STRUCT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATE_BASE_STRUCT"><code class="name">var <span class="ident">PROJECT_TEMPLATE_BASE_STRUCT</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.ROLES_SOURCE_PATH"><code class="name">var <span class="ident">ROLES_SOURCE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_FILE_EXTENSION"><code class="name">var <span class="ident">ROLE_FILE_EXTENSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_TEMPLATE_FILENAME"><code class="name">var <span class="ident">ROLE_TEMPLATE_FILENAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_TEMPLATE_FILENAME_WITH"><code class="name">var <span class="ident">ROLE_TEMPLATE_FILENAME_WITH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER"><code class="name">var <span class="ident">ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.SDA_HANA_BASE_PATH"><code class="name">var <span class="ident">SDA_HANA_BASE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.SYNONYMS_SOURCE_PATH"><code class="name">var <span class="ident">SYNONYMS_SOURCE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.SYNONYM_FILE_EXTENSION"><code class="name">var <span class="ident">SYNONYM_FILE_EXTENSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.SYNONYM_FILE_NAME"><code class="name">var <span class="ident">SYNONYM_FILE_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.TEMPLATE_DIR"><code class="name">var <span class="ident">TEMPLATE_DIR</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_FILE_EXTENSION"><code class="name">var <span class="ident">VIRTUAL_TABLE_FILE_EXTENSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_SOURCE_PATH"><code class="name">var <span class="ident">VIRTUAL_TABLE_SOURCE_PATH</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER"><code class="name">var <span class="ident">VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_FILENAME"><code class="name">var <span class="ident">VIRTUAL_TABLE_TEMPLATE_FILENAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER"><code class="name">var <span class="ident">VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER"><code class="name">var <span class="ident">VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_FILE_NAME"><code class="name">var <span class="ident">YAML_FILE_NAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_APPID_PLACEHOLDER"><code class="name">var <span class="ident">YAML_TEMPLATE_APPID_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_FILE"><code class="name">var <span class="ident">YAML_TEMPLATE_FILE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_NAME_PLACEHOLDER"><code class="name">var <span class="ident">YAML_TEMPLATE_NAME_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_SCHEMA_PLACEHOLDER"><code class="name">var <span class="ident">YAML_TEMPLATE_SCHEMA_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER"><code class="name">var <span class="ident">YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_VERSION_PLACEHOLDER"><code class="name">var <span class="ident">YAML_TEMPLATE_VERSION_PLACEHOLDER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigHandler"><code class="flex name class">
+<span>class <span class="ident">ConfigHandler</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class handles config related functions and helper functions. The main functions are:</p>
+<ul>
+<li>Generic setting and retrieving of config values </li>
+<li>Data source mapping setting and retrieving. Data source mapping can be set by the user</li>
+<li>Data type mapping between different generation targets based on predefined type mapping:<ul>
+<li>HANA &lt;&ndash;&gt; ABAP data types</li>
+<li>HANA &lt;&ndash;&gt; CDS entity data types</li>
+</ul>
+</li>
+<li>SQL Trace Element category identification based on predifined mapping between hana_ml package
+generation and what is required for artifact generation</li>
+</ul>
+<p>For easy editing of configuration data some of the config functions have an underlying
+data json file located in the data subfolder that is loaded as part of the initialization
+of instance of this class. </p>
+<p>Specifically:</p>
+<ul>
+<li>Data type mapping </li>
+<li>Category identification</li>
+</ul>
+<p>Class for interacting with config data.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ConfigHandler(object):
+    &#34;&#34;&#34;
+    This class handles config related functions and helper functions. The main functions are:
+
+    * Generic setting and retrieving of config values 
+    * Data source mapping setting and retrieving. Data source mapping can be set by the user
+    * Data type mapping between different generation targets based on predefined type mapping:
+        * HANA &lt;--&gt; ABAP data types
+        * HANA &lt;--&gt; CDS entity data types
+    * SQL Trace Element category identification based on predifined mapping between hana_ml package
+    generation and what is required for artifact generation
+
+    For easy editing of configuration data some of the config functions have an underlying 
+    data json file located in the data subfolder that is loaded as part of the initialization 
+    of instance of this class. 
+    
+    Specifically:
+
+    * Data type mapping 
+    * Category identification
+
+    &#34;&#34;&#34;
+    def __init__(self):
+        &#34;&#34;&#34;
+        Class for interacting with config data.
+        &#34;&#34;&#34;
+        self.config = {}
+        self._process_config_data()
+
+    def add_entry(self, key, value):
+        &#34;&#34;&#34;
+        Add data to the config under the provided key
+
+        Parameters
+        ----------
+        key: str
+            The key under which the value needs to be stored
+        value: object
+            Object that will be stored under the provided key
+        &#34;&#34;&#34;
+        self.config[key] = value
+
+    def get_entry(self, key):
+        &#34;&#34;&#34;
+        Get data from the config using the provided key
+    
+        Parameters
+        ----------
+        key: str
+            The key under which the value needs to be stored
+
+        Returns
+        -------
+        value: object
+            Object that will be stored under the provided key
+        &#34;&#34;&#34;
+        return self.config[key]
+    
+    def data_source_mapping(self, replace_str):
+        &#34;&#34;&#34;
+        Apply the data source mapping on the provided input string (replace_str)
+    
+        Parameters
+        ----------
+        replace_str: str
+            The string on which the data source mapping needs to be applied
+
+        Returns
+        -------
+        transformed_str: str
+            The transformed value based on the configured data source mapping
+
+        &#34;&#34;&#34;
+        data_source_mapping = self.get_entry( ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING )
+        return StringUtils.multi_replace(replace_str, data_source_mapping)
+
+    def is_model_category(self, category):
+        &#34;&#34;&#34;
+        Check if the category is the model category.
+    
+        Parameters
+        ----------
+        category: str
+            The category to check
+
+        Returns
+        -------
+        validated: boolean
+            Whether we are dealing with a model category
+            
+        &#34;&#34;&#34;
+        return self._is_category(category, ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL)
+
+    def is_metric_category(self, category):
+        &#34;&#34;&#34;
+        Check if the category is the metric category.
+    
+        Parameters
+        ----------
+        category: str
+            The category to check
+
+        Returns
+        -------
+        validated: boolean
+            Whether we are dealing with a metric category
+            
+        &#34;&#34;&#34;
+        return self._is_category(category, ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC)
+    
+    def is_fitted_category(self, category):
+        &#34;&#34;&#34;
+        Check if the category is the fitted category.
+    
+        Parameters
+        ----------
+        category: str
+            The category to check
+
+        Returns
+        -------
+        validated: boolean
+            Whether we are dealing with a fitted category
+            
+        &#34;&#34;&#34;
+        return self._is_category(category, ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED)
+
+    def _is_category(self, category, category_identfier):
+        &#34;&#34;&#34;
+        Generic category validation method
+    
+        Parameters
+        ----------
+        category: str
+            The category to check
+        category: str
+            The category identifier type to check (ie FITTED, MODEL)
+
+        Returns
+        -------
+        validated: boolean
+            Whether we are dealing with the category to validate
+            
+        &#34;&#34;&#34;
+        category_identfiers = self.get_entry(ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIERS)
+        if category and category_identfier in category_identfiers:
+            if any(identifier in category  for identifier in category_identfiers[category_identfier]):
+                return True
+        return False
+
+    def _process_config_data(self):
+        &#34;&#34;&#34;
+        Helper method to load the configuration data stored in the data folder
+        &#34;&#34;&#34;
+        # HDBTABLE to HDBDD Data Type conversion replacements
+        data_type_conversion_file = os.path.join(os.path.dirname(__file__), ConfigConstants.CONFIG_DATA_DIR, ConfigConstants.DATA_CONVERSION_HDBTABLE_HDBDD_FILE)
+        data_type_replacements = json.load(open(data_type_conversion_file))
+        self.add_entry(ConfigConstants.CONFIG_KEY_HDBTABLE_TO_HDBDD_TYPES, data_type_replacements)
+        # HDBTABLE to ABAP Data Type conversion replacements
+        data_type_conversion_file_abap = os.path.join(os.path.dirname(__file__), ConfigConstants.CONFIG_DATA_DIR, ConfigConstants.DATA_CONVERSION_HDBTABLE_ABAP_FILE)
+        data_type_replacements_abap = json.load(open(data_type_conversion_file_abap))
+        self.add_entry(ConfigConstants.CONFIG_KEY_HDBTABLE_TO_ABAP_TYPES, data_type_replacements_abap)
+        # Category Identifiers
+        category_identifiers = os.path.join(os.path.dirname(__file__), ConfigConstants.CONFIG_DATA_DIR, ConfigConstants.DATA_CATEGORY_IDENTIFIERS_FILE)
+        category_identifiers_dict = json.load(open(category_identifiers))
+        self.add_entry(ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIERS, category_identifiers_dict)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.config.config_handler.ConfigHandler.add_entry"><code class="name flex">
+<span>def <span class="ident">add_entry</span></span>(<span>self, key, value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add data to the config under the provided key</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
+<dd>The key under which the value needs to be stored</dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>object</code></dt>
+<dd>Object that will be stored under the provided key</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_entry(self, key, value):
+    &#34;&#34;&#34;
+    Add data to the config under the provided key
+
+    Parameters
+    ----------
+    key: str
+        The key under which the value needs to be stored
+    value: object
+        Object that will be stored under the provided key
+    &#34;&#34;&#34;
+    self.config[key] = value</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigHandler.data_source_mapping"><code class="name flex">
+<span>def <span class="ident">data_source_mapping</span></span>(<span>self, replace_str)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Apply the data source mapping on the provided input string (replace_str)</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>replace_str</code></strong> :&ensp;<code>str</code></dt>
+<dd>The string on which the data source mapping needs to be applied</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>transformed_str</code></strong> :&ensp;<code>str</code></dt>
+<dd>The transformed value based on the configured data source mapping</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def data_source_mapping(self, replace_str):
+    &#34;&#34;&#34;
+    Apply the data source mapping on the provided input string (replace_str)
+
+    Parameters
+    ----------
+    replace_str: str
+        The string on which the data source mapping needs to be applied
+
+    Returns
+    -------
+    transformed_str: str
+        The transformed value based on the configured data source mapping
+
+    &#34;&#34;&#34;
+    data_source_mapping = self.get_entry( ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING )
+    return StringUtils.multi_replace(replace_str, data_source_mapping)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigHandler.get_entry"><code class="name flex">
+<span>def <span class="ident">get_entry</span></span>(<span>self, key)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get data from the config using the provided key</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
+<dd>The key under which the value needs to be stored</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>value</code></strong> :&ensp;<code>object</code></dt>
+<dd>Object that will be stored under the provided key</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_entry(self, key):
+    &#34;&#34;&#34;
+    Get data from the config using the provided key
+
+    Parameters
+    ----------
+    key: str
+        The key under which the value needs to be stored
+
+    Returns
+    -------
+    value: object
+        Object that will be stored under the provided key
+    &#34;&#34;&#34;
+    return self.config[key]</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigHandler.is_fitted_category"><code class="name flex">
+<span>def <span class="ident">is_fitted_category</span></span>(<span>self, category)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if the category is the fitted category.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>category</code></strong> :&ensp;<code>str</code></dt>
+<dd>The category to check</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>validated</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Whether we are dealing with a fitted category</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_fitted_category(self, category):
+    &#34;&#34;&#34;
+    Check if the category is the fitted category.
+
+    Parameters
+    ----------
+    category: str
+        The category to check
+
+    Returns
+    -------
+    validated: boolean
+        Whether we are dealing with a fitted category
+        
+    &#34;&#34;&#34;
+    return self._is_category(category, ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigHandler.is_metric_category"><code class="name flex">
+<span>def <span class="ident">is_metric_category</span></span>(<span>self, category)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if the category is the metric category.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>category</code></strong> :&ensp;<code>str</code></dt>
+<dd>The category to check</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>validated</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Whether we are dealing with a metric category</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_metric_category(self, category):
+    &#34;&#34;&#34;
+    Check if the category is the metric category.
+
+    Parameters
+    ----------
+    category: str
+        The category to check
+
+    Returns
+    -------
+    validated: boolean
+        Whether we are dealing with a metric category
+        
+    &#34;&#34;&#34;
+    return self._is_category(category, ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.config.config_handler.ConfigHandler.is_model_category"><code class="name flex">
+<span>def <span class="ident">is_model_category</span></span>(<span>self, category)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if the category is the model category.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>category</code></strong> :&ensp;<code>str</code></dt>
+<dd>The category to check</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>validated</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Whether we are dealing with a model category</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_model_category(self, category):
+    &#34;&#34;&#34;
+    Check if the category is the model category.
+
+    Parameters
+    ----------
+    category: str
+        The category to check
+
+    Returns
+    -------
+    validated: boolean
+        Whether we are dealing with a model category
+        
+    &#34;&#34;&#34;
+    return self._is_category(category, ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="hana_ml_artifact.config" href="index.html">hana_ml_artifact.config</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants" href="#hana_ml_artifact.config.config_handler.ConfigConstants">ConfigConstants</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.ABAP_BASE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.ABAP_BASE_PATH">ABAP_BASE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_FILE_EXTENSION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_FILE_EXTENSION">AMDP_FILE_EXTENSION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_SOURCE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_SOURCE_PATH">AMDP_SOURCE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_ALGORITHM_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_ALGORITHM_PLACEHOLDER">AMDP_TEMPLATE_ALGORITHM_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_AMDP_NAME_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_AMDP_NAME_PLACEHOLDER">AMDP_TEMPLATE_AMDP_NAME_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_CALL_STATEMENT_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_CALL_STATEMENT_PLACEHOLDER">AMDP_TEMPLATE_CALL_STATEMENT_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_FILENAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_FILENAME">AMDP_TEMPLATE_FILENAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_FUNCTION_NAME_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_FUNCTION_NAME_PLACEHOLDER">AMDP_TEMPLATE_FUNCTION_NAME_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_FUNCTION_TYPE_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_FUNCTION_TYPE_PLACEHOLDER">AMDP_TEMPLATE_FUNCTION_TYPE_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_INPUT_SIGNATURE_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_INPUT_SIGNATURE_PLACEHOLDER">AMDP_TEMPLATE_INPUT_SIGNATURE_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_MODEL_SELECT_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_MODEL_SELECT_PLACEHOLDER">AMDP_TEMPLATE_MODEL_SELECT_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_OUTPUT_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_OUTPUT_PLACEHOLDER">AMDP_TEMPLATE_OUTPUT_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_OUTPUT_SIGNATURE_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_OUTPUT_SIGNATURE_PLACEHOLDER">AMDP_TEMPLATE_OUTPUT_SIGNATURE_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_TABLE_DECLARATIONS_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_TABLE_DECLARATIONS_PLACEHOLDER">AMDP_TEMPLATE_TABLE_DECLARATIONS_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_USING_STATEMENT_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.AMDP_TEMPLATE_USING_STATEMENT_PLACEHOLDER">AMDP_TEMPLATE_USING_STATEMENT_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_FILE_EXTENSION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CDS_FILE_EXTENSION">CDS_FILE_EXTENSION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_SOURCE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CDS_SOURCE_PATH">CDS_SOURCE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_TEMPLATE_CONTEXT_CONTENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CDS_TEMPLATE_CONTEXT_CONTENT">CDS_TEMPLATE_CONTEXT_CONTENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_TEMPLATE_CONTEXT_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CDS_TEMPLATE_CONTEXT_NAME">CDS_TEMPLATE_CONTEXT_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CDS_TEMPLATE_FILENAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CDS_TEMPLATE_FILENAME">CDS_TEMPLATE_FILENAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_DATA_DIR" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_DATA_DIR">CONFIG_DATA_DIR</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_AMDP_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_AMDP_PATH">CONFIG_KEY_AMDP_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_APPID" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_APPID">CONFIG_KEY_APPID</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIERS" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIERS">CONFIG_KEY_CATEGORY_IDENTIFIERS</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED">CONFIG_KEY_CATEGORY_IDENTIFIER_FITTED</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC">CONFIG_KEY_CATEGORY_IDENTIFIER_METRIC</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL">CONFIG_KEY_CATEGORY_IDENTIFIER_MODEL</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CDS_CONTEXT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CDS_CONTEXT">CONFIG_KEY_CDS_CONTEXT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CDS_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_CDS_PATH">CONFIG_KEY_CDS_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_DATA_SOURCE_MAPPING">CONFIG_KEY_DATA_SOURCE_MAPPING</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_GRANTS_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_GRANTS_PATH">CONFIG_KEY_GRANTS_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_GRANT_SERVICE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_GRANT_SERVICE">CONFIG_KEY_GRANT_SERVICE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_GROUP_STRATEGY" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_GROUP_STRATEGY">CONFIG_KEY_GROUP_STRATEGY</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_HDBTABLE_TO_ABAP_TYPES" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_HDBTABLE_TO_ABAP_TYPES">CONFIG_KEY_HDBTABLE_TO_ABAP_TYPES</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_HDBTABLE_TO_HDBDD_TYPES" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_HDBTABLE_TO_HDBDD_TYPES">CONFIG_KEY_HDBTABLE_TO_HDBDD_TYPES</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_MERGE_STRATEGY" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_MERGE_STRATEGY">CONFIG_KEY_MERGE_STRATEGY</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_MODULE_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_MODULE_NAME">CONFIG_KEY_MODULE_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_MODULE_TEMPLATE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_MODULE_TEMPLATE_PATH">CONFIG_KEY_MODULE_TEMPLATE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_DIR" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_DIR">CONFIG_KEY_OUTPUT_DIR</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH">CONFIG_KEY_OUTPUT_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_ABAP" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_ABAP">CONFIG_KEY_OUTPUT_PATH_ABAP</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_CF" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_CF">CONFIG_KEY_OUTPUT_PATH_CF</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB">CONFIG_KEY_OUTPUT_PATH_DATAHUB</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_HANA" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_HANA">CONFIG_KEY_OUTPUT_PATH_HANA</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_MODULE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_MODULE">CONFIG_KEY_OUTPUT_PATH_MODULE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_MODULE_SRC" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_OUTPUT_PATH_MODULE_SRC">CONFIG_KEY_OUTPUT_PATH_MODULE_SRC</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_PROCEDURES_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_PROCEDURES_PATH">CONFIG_KEY_PROCEDURES_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_PROJECT_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_PROJECT_NAME">CONFIG_KEY_PROJECT_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_ROLES_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_ROLES_PATH">CONFIG_KEY_ROLES_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SCHEMA" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SCHEMA">CONFIG_KEY_SCHEMA</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_AMDP_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_AMDP_PATH">CONFIG_KEY_SDA_AMDP_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_APPID" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_APPID">CONFIG_KEY_SDA_APPID</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_CDS_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_CDS_PATH">CONFIG_KEY_SDA_CDS_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_GRANTS_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_GRANTS_PATH">CONFIG_KEY_SDA_GRANTS_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_GRANT_SERVICE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_GRANT_SERVICE">CONFIG_KEY_SDA_GRANT_SERVICE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_MODEL_ONLY" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_MODEL_ONLY">CONFIG_KEY_SDA_MODEL_ONLY</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_MODULE_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_MODULE_NAME">CONFIG_KEY_SDA_MODULE_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_HANA" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_HANA">CONFIG_KEY_SDA_OUTPUT_PATH_HANA</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_MODULE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_MODULE">CONFIG_KEY_SDA_OUTPUT_PATH_MODULE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_MODULE_SRC" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_OUTPUT_PATH_MODULE_SRC">CONFIG_KEY_SDA_OUTPUT_PATH_MODULE_SRC</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_PROCEDURES_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_PROCEDURES_PATH">CONFIG_KEY_SDA_PROCEDURES_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_REMOTE_SOURCE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_REMOTE_SOURCE">CONFIG_KEY_SDA_REMOTE_SOURCE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_ROLES_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_ROLES_PATH">CONFIG_KEY_SDA_ROLES_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_SCHEMA" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_SCHEMA">CONFIG_KEY_SDA_SCHEMA</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_SYNONYMS_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_SYNONYMS_PATH">CONFIG_KEY_SDA_SYNONYMS_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_VIRTUALTABLE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SDA_VIRTUALTABLE_PATH">CONFIG_KEY_SDA_VIRTUALTABLE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SQL_PROCESSED" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SQL_PROCESSED">CONFIG_KEY_SQL_PROCESSED</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SYNONYMS_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_SYNONYMS_PATH">CONFIG_KEY_SYNONYMS_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_VERSION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.CONFIG_KEY_VERSION">CONFIG_KEY_VERSION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_BASE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_BASE_PATH">DATAHUB_BASE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT">DATAHUB_HANAML_OPERATOR_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT">DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT">DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_MLAPI_OPERATOR_METRICS_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_MLAPI_OPERATOR_METRICS_COMPONENT">DATAHUB_MLAPI_OPERATOR_METRICS_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_COMPONENT">DATAHUB_OPERATOR_CONSTANT_GENERATOR_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_OUT_PORT_STRING" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_OUT_PORT_STRING">DATAHUB_OPERATOR_CONSTANT_GENERATOR_OUT_PORT_STRING</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOBLOB_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOBLOB_COMPONENT">DATAHUB_OPERATOR_CONVERTER_TOBLOB_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT">DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT">DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_COMPONENT">DATAHUB_OPERATOR_GRAPH_TERMINATOR_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_IN_PORT_ANY" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_IN_PORT_ANY">DATAHUB_OPERATOR_GRAPH_TERMINATOR_IN_PORT_ANY</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_IN_PORT_STRING" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_IN_PORT_STRING">DATAHUB_OPERATOR_MDL_CONS_IN_PORT_STRING</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB">DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_IN_PORT_BLOB" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_IN_PORT_BLOB">DATAHUB_OPERATOR_MDL_PROD_IN_PORT_BLOB</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_OUT_PORT_MSG" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_OUT_PORT_MSG">DATAHUB_OPERATOR_MDL_PROD_OUT_PORT_MSG</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_METRICS_IN_PORT_METRICS" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_METRICS_IN_PORT_METRICS">DATAHUB_OPERATOR_METRICS_IN_PORT_METRICS</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE">DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_COMPONENT">DATAHUB_OPERATOR_RESPONSE_INTER_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_OUT_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_OUT_PORT_MESSAGE">DATAHUB_OPERATOR_RESPONSE_INTER_OUT_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_REQUEST_IN_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_REQUEST_IN_PORT_MESSAGE">DATAHUB_OPERATOR_RESPONSE_INTER_REQUEST_IN_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_RESPONSE_IN_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_RESPONSE_IN_PORT_MESSAGE">DATAHUB_OPERATOR_RESPONSE_INTER_RESPONSE_IN_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESTAPI_COMPONENT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESTAPI_COMPONENT">DATAHUB_OPERATOR_RESTAPI_COMPONENT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESTAPI_OUT_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESTAPI_OUT_PORT_MESSAGE">DATAHUB_OPERATOR_RESTAPI_OUT_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE">DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_STRING" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_STRING">DATAHUB_OPERATOR_RESULT_IN_PORT_STRING</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE">DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE">DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING">DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE">DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOBLOB_IN_PORT_STRING" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOBLOB_IN_PORT_STRING">DATAHUB_OPERATOR_TOBLOB_IN_PORT_STRING</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOBLOB_OUT_PORT_BLOB" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOBLOB_OUT_PORT_BLOB">DATAHUB_OPERATOR_TOBLOB_OUT_PORT_BLOB</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_ANY" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_ANY">DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_ANY</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_STRING" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_STRING">DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_STRING</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE">DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB">DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_MESSAGE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_MESSAGE">DATAHUB_OPERATOR_TOSTRING_IN_PORT_MESSAGE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING">DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATA_CATEGORY_IDENTIFIERS_FILE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATA_CATEGORY_IDENTIFIERS_FILE">DATA_CATEGORY_IDENTIFIERS_FILE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATA_CONVERSION_HDBTABLE_ABAP_FILE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATA_CONVERSION_HDBTABLE_ABAP_FILE">DATA_CONVERSION_HDBTABLE_ABAP_FILE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.DATA_CONVERSION_HDBTABLE_HDBDD_FILE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.DATA_CONVERSION_HDBTABLE_HDBDD_FILE">DATA_CONVERSION_HDBTABLE_HDBDD_FILE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_GROUP_FUNCTIONAL" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_GROUP_FUNCTIONAL">GENERATION_GROUP_FUNCTIONAL</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_GROUP_NONE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_GROUP_NONE">GENERATION_GROUP_NONE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_MERGE_NONE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_MERGE_NONE">GENERATION_MERGE_NONE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_MERGE_PARTITION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GENERATION_MERGE_PARTITION">GENERATION_MERGE_PARTITION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRANTS_SOURCE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRANTS_SOURCE_PATH">GRANTS_SOURCE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_FILE_EXTENSION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_FILE_EXTENSION">GRANT_FILE_EXTENSION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_FILE_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_FILE_NAME">GRANT_FILE_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES">GRANT_TEMPLATE_SCHEMA_PRIVILEGES</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH">GRANT_TEMPLATE_SCHEMA_PRIVILEGES_WITH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TEMPLATE_SDA_REMOTE_SOURCE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TEMPLATE_SDA_REMOTE_SOURCE">GRANT_TEMPLATE_SDA_REMOTE_SOURCE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TMP_FILE_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TMP_FILE_NAME">GRANT_TMP_FILE_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TMP_SDA_FILE_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRANT_TMP_SDA_FILE_NAME">GRANT_TMP_SDA_FILE_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_FILE_EXTENSION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_FILE_EXTENSION">GRAPH_FILE_EXTENSION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_FILE_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_FILE_NAME">GRAPH_FILE_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_GENERATION_TYPE_COMBINED" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_GENERATION_TYPE_COMBINED">GRAPH_GENERATION_TYPE_COMBINED</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_GENERATION_TYPE_SEPERATE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GRAPH_GENERATION_TYPE_SEPERATE">GRAPH_GENERATION_TYPE_SEPERATE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_FIT_PREDICT_TYPE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_FIT_PREDICT_TYPE">GROUP_FIT_PREDICT_TYPE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_FIT_TYPE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_FIT_TYPE">GROUP_FIT_TYPE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_IDENTIFIER_MERGE_ALL" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_IDENTIFIER_MERGE_ALL">GROUP_IDENTIFIER_MERGE_ALL</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_PREDICT_TYPE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_PREDICT_TYPE">GROUP_PREDICT_TYPE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_UKNOWN_TYPE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.GROUP_UKNOWN_TYPE">GROUP_UKNOWN_TYPE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.HANA_BASE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.HANA_BASE_PATH">HANA_BASE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.MODULE_SOURCE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.MODULE_SOURCE_PATH">MODULE_SOURCE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURES_SOURCE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURES_SOURCE_PATH">PROCEDURES_SOURCE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_FILE_EXTENSION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_FILE_EXTENSION">PROCEDURE_FILE_EXTENSION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_FILE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_FILE">PROCEDURE_TEMPLATE_FILE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_PROC_INTERFACE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_PROC_INTERFACE">PROCEDURE_TEMPLATE_PROC_INTERFACE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_PROC_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_PROC_NAME">PROCEDURE_TEMPLATE_PROC_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_SQL_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROCEDURE_TEMPLATE_SQL_PLACEHOLDER">PROCEDURE_TEMPLATE_SQL_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATEDR" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATEDR">PROJECT_TEMPLATEDR</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATE_BASE_DIR" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATE_BASE_DIR">PROJECT_TEMPLATE_BASE_DIR</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATE_BASE_SDA_STRUCT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATE_BASE_SDA_STRUCT">PROJECT_TEMPLATE_BASE_SDA_STRUCT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATE_BASE_STRUCT" href="#hana_ml_artifact.config.config_handler.ConfigConstants.PROJECT_TEMPLATE_BASE_STRUCT">PROJECT_TEMPLATE_BASE_STRUCT</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.ROLES_SOURCE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.ROLES_SOURCE_PATH">ROLES_SOURCE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_FILE_EXTENSION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_FILE_EXTENSION">ROLE_FILE_EXTENSION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_TEMPLATE_FILENAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_TEMPLATE_FILENAME">ROLE_TEMPLATE_FILENAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_TEMPLATE_FILENAME_WITH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_TEMPLATE_FILENAME_WITH">ROLE_TEMPLATE_FILENAME_WITH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER">ROLE_TEMPLATE_ROLE_NAME_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.SDA_HANA_BASE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.SDA_HANA_BASE_PATH">SDA_HANA_BASE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.SYNONYMS_SOURCE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.SYNONYMS_SOURCE_PATH">SYNONYMS_SOURCE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.SYNONYM_FILE_EXTENSION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.SYNONYM_FILE_EXTENSION">SYNONYM_FILE_EXTENSION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.SYNONYM_FILE_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.SYNONYM_FILE_NAME">SYNONYM_FILE_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.TEMPLATE_DIR" href="#hana_ml_artifact.config.config_handler.ConfigConstants.TEMPLATE_DIR">TEMPLATE_DIR</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_FILE_EXTENSION" href="#hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_FILE_EXTENSION">VIRTUAL_TABLE_FILE_EXTENSION</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_SOURCE_PATH" href="#hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_SOURCE_PATH">VIRTUAL_TABLE_SOURCE_PATH</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER">VIRTUAL_TABLE_TEMPLATE_CONNECTION_NAME_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_FILENAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_FILENAME">VIRTUAL_TABLE_TEMPLATE_FILENAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER">VIRTUAL_TABLE_TEMPLATE_SOURCE_SCHEMA_TABLE_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER">VIRTUAL_TABLE_TEMPLATE_VIRTUAL_TABLE_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_FILE_NAME" href="#hana_ml_artifact.config.config_handler.ConfigConstants.YAML_FILE_NAME">YAML_FILE_NAME</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_APPID_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_APPID_PLACEHOLDER">YAML_TEMPLATE_APPID_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_FILE" href="#hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_FILE">YAML_TEMPLATE_FILE</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_NAME_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_NAME_PLACEHOLDER">YAML_TEMPLATE_NAME_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_SCHEMA_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_SCHEMA_PLACEHOLDER">YAML_TEMPLATE_SCHEMA_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER">YAML_TEMPLATE_UPS_GRANT_PLACEHOLDER</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_VERSION_PLACEHOLDER" href="#hana_ml_artifact.config.config_handler.ConfigConstants.YAML_TEMPLATE_VERSION_PLACEHOLDER">YAML_TEMPLATE_VERSION_PLACEHOLDER</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_artifact.config.config_handler.ConfigHandler" href="#hana_ml_artifact.config.config_handler.ConfigHandler">ConfigHandler</a></code></h4>
+<ul class="two-column">
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigHandler.add_entry" href="#hana_ml_artifact.config.config_handler.ConfigHandler.add_entry">add_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigHandler.data_source_mapping" href="#hana_ml_artifact.config.config_handler.ConfigHandler.data_source_mapping">data_source_mapping</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigHandler.get_entry" href="#hana_ml_artifact.config.config_handler.ConfigHandler.get_entry">get_entry</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigHandler.is_fitted_category" href="#hana_ml_artifact.config.config_handler.ConfigHandler.is_fitted_category">is_fitted_category</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigHandler.is_metric_category" href="#hana_ml_artifact.config.config_handler.ConfigHandler.is_metric_category">is_metric_category</a></code></li>
+<li><code><a title="hana_ml_artifact.config.config_handler.ConfigHandler.is_model_category" href="#hana_ml_artifact.config.config_handler.ConfigHandler.is_model_category">is_model_category</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

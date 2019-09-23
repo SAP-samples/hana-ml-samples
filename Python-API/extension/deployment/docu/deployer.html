@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>hana_ml_deployment.deployer API documentation</title>
+<meta name="description" content="This module is the entrypoint for deployment." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>hana_ml_deployment.deployer</code></h1>
+</header>
+<section id="section-intro">
+<p>This module is the entrypoint for deployment.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This module is the entrypoint for deployment.
+&#34;&#34;&#34;
+import logging
+import sys
+import os
+import shutil
+import subprocess
+from argparse import ArgumentParser
+
+from .deployers import MTADeployer
+from .deployers import DHDeployer
+from .deployers import SDIDeployer
+from .deployers import WebIDEDeployer
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__) #pylint: disable=invalid-name
+
+# TODO: add docu for npm install of npm sap repo
+# TODO: node -v 1.12.3 npm 6.9.0 issue with node-gyp --&gt; working node 10.12 / 10.16 only with hdi deploy
+
+class Deployer(object):
+    &#34;&#34;&#34;
+    This class contains the entrypoint for the deployment functionality.
+    It provides the toplevel methods to deploy artifacts:
+
+    * Cloud Foundry / MTAR. Mainly used for HANA HDI deployments
+    * DataHub / SAP Data Intelligence Graphs through REST API
+    * WebIDE zip generation for manual import into WebIDE. This is for the HANA artifacts only.
+    &#34;&#34;&#34;
+    def deploy_mta(self, path, mta_builder, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Deploy mtar by building mtar from source and deploy through cf cli with mta plugin
+
+        Parameters
+        ----------
+        path : str
+            Path to the source that needs to be packaged into mtar and deployed.
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        mta_deployer = MTADeployer()
+        mta_deployer.deploy_mta(path, mta_builder, api, org, space, user, password)
+    
+    def deploy_datahub(self, path, project, host, port, useSSL, user, password, 
+                       tenant=&#39;default&#39;, verify_ssl=False, vflow_local=False):
+        &#34;&#34;&#34;
+        Deploy datahubb graphs through the datahub rest api.
+
+        Parameters
+        ----------
+        path : str
+            Path to the graph jsons.
+        project: str
+            Project name as to create a folder in the DataHub repo under which the 
+            graphs are stored. 
+        host : str
+            Host of the datahub tenant
+        port : int
+            Port of the datahub tenant
+        useSSL : boolean
+            Enable SSL or not.
+        user : str
+            Datahub user to deploy with.
+        password : str
+            Datahub user password to deploy with.
+        tenant : str
+            Datahub tenant name to deploy to.
+        verify_ssl : boolean
+            Verify the ssl certifcate
+        vflow_local : boolean
+            Use a local vflow engine for development purposes
+        &#34;&#34;&#34;
+        dh_deployer = DHDeployer(project, host, port, useSSL, user, password,
+                                 tenant, verify_ssl, vflow_local)
+        dh_deployer.deploy_graphs(path)
+    
+    def generate_webide_package(self, source_path, target_path=None, file_name=&#39;WebIDE&#39;):
+        &#34;&#34;&#34;
+        Generates a zip archive that can be used to import the HANA artifacts into WebIDE.
+
+        Parameters
+        ----------
+        source_path : str
+            Path to the source that needs to be packaged into zip.
+        target_path : str
+            Where to place the generated zip archive
+        file_name : str
+            Zip archive file name
+        &#34;&#34;&#34;
+        webide_deployer = WebIDEDeployer()
+        webide_deployer.generate_webide_package(source_path, target_path, file_name)
+
+    # Convenience methods 
+    def deploy_cf(self, path, mta_builder, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Purely a convenience method. Currently the same as the deploy_mta.
+
+        Parameters
+        ----------
+        path : str
+            Path to the source that needs to be packaged into mtar and deployed.
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        self.deploy_mta(path, mta_builder, api, org, space, user, password)
+
+    def deploy_hana(self, path, mta_builder, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Purely a convenience method. Currently the same as the deploy_mta.
+
+        Parameters
+        ----------
+        path : str
+            Path to the source that needs to be packaged into mtar and deployed.
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        self.deploy_mta(path, mta_builder, api, org, space, user, password)
+
+    def deploy_sapdi(self, hana_path, sapdi_path, mta_builder, api, org, space,
+                     cf_user, cf_password, host, port, useSSL, user, password,
+                     tenant=&#39;default&#39;, verify_ssl=False, vflow_local=False):
+        &#34;&#34;&#34;
+        Purely a convenience method. Combines the hana mta deployment and the graph deployment
+
+        Parameters
+        ----------
+        hana_path : str
+            Path to the hana source that needs to be packaged into mtar and deployed.
+        sapdi_path : str
+            Path to the datahub graph json that needs to be deployed through REST API
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        cf_user : str
+            Cloud Foudry user to deploy with.
+        cf_password : str
+            Cloud Foundry user password to deploy with.
+        host : str
+            Host of the datahub tenant
+        port : int
+            Port of the datahub tenant
+        useSSL : boolean
+            Enable SSL or not.
+        user : str
+            Datahub user to deploy with.
+        password : str
+            Datahub user password to deploy with.
+        tenant : str
+            Datahub tenant name to deploy to.
+        verify_ssl : boolean
+            Verify the ssl certifcate
+        vflow_local : boolean
+            Use a local vflow engine for development purposes
+        &#34;&#34;&#34;
+        self.deploy_mta(hana_path, mta_builder, api, org, space, cf_user, cf_password) 
+        self.deploy_datahub(sapdi_path,host, port, useSSL, user, password, 
+                            tenant, verify_ssl, vflow_local)
+        
+
+    </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="hana_ml_deployment.deployer.Deployer"><code class="flex name class">
+<span>class <span class="ident">Deployer</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class contains the entrypoint for the deployment functionality.
+It provides the toplevel methods to deploy artifacts:</p>
+<ul>
+<li>Cloud Foundry / MTAR. Mainly used for HANA HDI deployments</li>
+<li>DataHub / SAP Data Intelligence Graphs through REST API</li>
+<li>WebIDE zip generation for manual import into WebIDE. This is for the HANA artifacts only.</li>
+</ul></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Deployer(object):
+    &#34;&#34;&#34;
+    This class contains the entrypoint for the deployment functionality.
+    It provides the toplevel methods to deploy artifacts:
+
+    * Cloud Foundry / MTAR. Mainly used for HANA HDI deployments
+    * DataHub / SAP Data Intelligence Graphs through REST API
+    * WebIDE zip generation for manual import into WebIDE. This is for the HANA artifacts only.
+    &#34;&#34;&#34;
+    def deploy_mta(self, path, mta_builder, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Deploy mtar by building mtar from source and deploy through cf cli with mta plugin
+
+        Parameters
+        ----------
+        path : str
+            Path to the source that needs to be packaged into mtar and deployed.
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        mta_deployer = MTADeployer()
+        mta_deployer.deploy_mta(path, mta_builder, api, org, space, user, password)
+    
+    def deploy_datahub(self, path, project, host, port, useSSL, user, password, 
+                       tenant=&#39;default&#39;, verify_ssl=False, vflow_local=False):
+        &#34;&#34;&#34;
+        Deploy datahubb graphs through the datahub rest api.
+
+        Parameters
+        ----------
+        path : str
+            Path to the graph jsons.
+        project: str
+            Project name as to create a folder in the DataHub repo under which the 
+            graphs are stored. 
+        host : str
+            Host of the datahub tenant
+        port : int
+            Port of the datahub tenant
+        useSSL : boolean
+            Enable SSL or not.
+        user : str
+            Datahub user to deploy with.
+        password : str
+            Datahub user password to deploy with.
+        tenant : str
+            Datahub tenant name to deploy to.
+        verify_ssl : boolean
+            Verify the ssl certifcate
+        vflow_local : boolean
+            Use a local vflow engine for development purposes
+        &#34;&#34;&#34;
+        dh_deployer = DHDeployer(project, host, port, useSSL, user, password,
+                                 tenant, verify_ssl, vflow_local)
+        dh_deployer.deploy_graphs(path)
+    
+    def generate_webide_package(self, source_path, target_path=None, file_name=&#39;WebIDE&#39;):
+        &#34;&#34;&#34;
+        Generates a zip archive that can be used to import the HANA artifacts into WebIDE.
+
+        Parameters
+        ----------
+        source_path : str
+            Path to the source that needs to be packaged into zip.
+        target_path : str
+            Where to place the generated zip archive
+        file_name : str
+            Zip archive file name
+        &#34;&#34;&#34;
+        webide_deployer = WebIDEDeployer()
+        webide_deployer.generate_webide_package(source_path, target_path, file_name)
+
+    # Convenience methods 
+    def deploy_cf(self, path, mta_builder, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Purely a convenience method. Currently the same as the deploy_mta.
+
+        Parameters
+        ----------
+        path : str
+            Path to the source that needs to be packaged into mtar and deployed.
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        self.deploy_mta(path, mta_builder, api, org, space, user, password)
+
+    def deploy_hana(self, path, mta_builder, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Purely a convenience method. Currently the same as the deploy_mta.
+
+        Parameters
+        ----------
+        path : str
+            Path to the source that needs to be packaged into mtar and deployed.
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        self.deploy_mta(path, mta_builder, api, org, space, user, password)
+
+    def deploy_sapdi(self, hana_path, sapdi_path, mta_builder, api, org, space,
+                     cf_user, cf_password, host, port, useSSL, user, password,
+                     tenant=&#39;default&#39;, verify_ssl=False, vflow_local=False):
+        &#34;&#34;&#34;
+        Purely a convenience method. Combines the hana mta deployment and the graph deployment
+
+        Parameters
+        ----------
+        hana_path : str
+            Path to the hana source that needs to be packaged into mtar and deployed.
+        sapdi_path : str
+            Path to the datahub graph json that needs to be deployed through REST API
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        cf_user : str
+            Cloud Foudry user to deploy with.
+        cf_password : str
+            Cloud Foundry user password to deploy with.
+        host : str
+            Host of the datahub tenant
+        port : int
+            Port of the datahub tenant
+        useSSL : boolean
+            Enable SSL or not.
+        user : str
+            Datahub user to deploy with.
+        password : str
+            Datahub user password to deploy with.
+        tenant : str
+            Datahub tenant name to deploy to.
+        verify_ssl : boolean
+            Verify the ssl certifcate
+        vflow_local : boolean
+            Use a local vflow engine for development purposes
+        &#34;&#34;&#34;
+        self.deploy_mta(hana_path, mta_builder, api, org, space, cf_user, cf_password) 
+        self.deploy_datahub(sapdi_path,host, port, useSSL, user, password, 
+                            tenant, verify_ssl, vflow_local)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_deployment.deployer.Deployer.deploy_cf"><code class="name flex">
+<span>def <span class="ident">deploy_cf</span></span>(<span>self, path, mta_builder, api, org, space, user, password)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Purely a convenience method. Currently the same as the deploy_mta.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the source that needs to be packaged into mtar and deployed.</dd>
+<dt><strong><code>mta_builder</code></strong> :&ensp;<code>str</code></dt>
+<dd>Mtar builder jar location</dd>
+<dt><strong><code>api</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry api url</dd>
+<dt><strong><code>org</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry org to deploy to.</dd>
+<dt><strong><code>space</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry space to deploy to.</dd>
+<dt><strong><code>user</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foudry user to deploy with.</dd>
+<dt><strong><code>password</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry user password to deploy with.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deploy_cf(self, path, mta_builder, api, org, space, user, password):
+    &#34;&#34;&#34;
+    Purely a convenience method. Currently the same as the deploy_mta.
+
+    Parameters
+    ----------
+    path : str
+        Path to the source that needs to be packaged into mtar and deployed.
+    mta_builder : str
+        Mtar builder jar location
+    api : str
+        Cloud Foundry api url
+    org : str
+        Cloud Foundry org to deploy to.
+    space : str
+        Cloud Foundry space to deploy to.
+    user : str
+        Cloud Foudry user to deploy with.
+    password : str
+        Cloud Foundry user password to deploy with.
+    &#34;&#34;&#34;
+    self.deploy_mta(path, mta_builder, api, org, space, user, password)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployer.Deployer.deploy_datahub"><code class="name flex">
+<span>def <span class="ident">deploy_datahub</span></span>(<span>self, path, project, host, port, useSSL, user, password, tenant='default', verify_ssl=False, vflow_local=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Deploy datahubb graphs through the datahub rest api.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the graph jsons.</dd>
+<dt><strong><code>project</code></strong> :&ensp;<code>str</code></dt>
+<dd>Project name as to create a folder in the DataHub repo under which the
+graphs are stored.</dd>
+<dt><strong><code>host</code></strong> :&ensp;<code>str</code></dt>
+<dd>Host of the datahub tenant</dd>
+<dt><strong><code>port</code></strong> :&ensp;<code>int</code></dt>
+<dd>Port of the datahub tenant</dd>
+<dt><strong><code>useSSL</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Enable SSL or not.</dd>
+<dt><strong><code>user</code></strong> :&ensp;<code>str</code></dt>
+<dd>Datahub user to deploy with.</dd>
+<dt><strong><code>password</code></strong> :&ensp;<code>str</code></dt>
+<dd>Datahub user password to deploy with.</dd>
+<dt><strong><code>tenant</code></strong> :&ensp;<code>str</code></dt>
+<dd>Datahub tenant name to deploy to.</dd>
+<dt><strong><code>verify_ssl</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Verify the ssl certifcate</dd>
+<dt><strong><code>vflow_local</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Use a local vflow engine for development purposes</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deploy_datahub(self, path, project, host, port, useSSL, user, password, 
+                   tenant=&#39;default&#39;, verify_ssl=False, vflow_local=False):
+    &#34;&#34;&#34;
+    Deploy datahubb graphs through the datahub rest api.
+
+    Parameters
+    ----------
+    path : str
+        Path to the graph jsons.
+    project: str
+        Project name as to create a folder in the DataHub repo under which the 
+        graphs are stored. 
+    host : str
+        Host of the datahub tenant
+    port : int
+        Port of the datahub tenant
+    useSSL : boolean
+        Enable SSL or not.
+    user : str
+        Datahub user to deploy with.
+    password : str
+        Datahub user password to deploy with.
+    tenant : str
+        Datahub tenant name to deploy to.
+    verify_ssl : boolean
+        Verify the ssl certifcate
+    vflow_local : boolean
+        Use a local vflow engine for development purposes
+    &#34;&#34;&#34;
+    dh_deployer = DHDeployer(project, host, port, useSSL, user, password,
+                             tenant, verify_ssl, vflow_local)
+    dh_deployer.deploy_graphs(path)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployer.Deployer.deploy_hana"><code class="name flex">
+<span>def <span class="ident">deploy_hana</span></span>(<span>self, path, mta_builder, api, org, space, user, password)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Purely a convenience method. Currently the same as the deploy_mta.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the source that needs to be packaged into mtar and deployed.</dd>
+<dt><strong><code>mta_builder</code></strong> :&ensp;<code>str</code></dt>
+<dd>Mtar builder jar location</dd>
+<dt><strong><code>api</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry api url</dd>
+<dt><strong><code>org</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry org to deploy to.</dd>
+<dt><strong><code>space</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry space to deploy to.</dd>
+<dt><strong><code>user</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foudry user to deploy with.</dd>
+<dt><strong><code>password</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry user password to deploy with.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deploy_hana(self, path, mta_builder, api, org, space, user, password):
+    &#34;&#34;&#34;
+    Purely a convenience method. Currently the same as the deploy_mta.
+
+    Parameters
+    ----------
+    path : str
+        Path to the source that needs to be packaged into mtar and deployed.
+    mta_builder : str
+        Mtar builder jar location
+    api : str
+        Cloud Foundry api url
+    org : str
+        Cloud Foundry org to deploy to.
+    space : str
+        Cloud Foundry space to deploy to.
+    user : str
+        Cloud Foudry user to deploy with.
+    password : str
+        Cloud Foundry user password to deploy with.
+    &#34;&#34;&#34;
+    self.deploy_mta(path, mta_builder, api, org, space, user, password)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployer.Deployer.deploy_mta"><code class="name flex">
+<span>def <span class="ident">deploy_mta</span></span>(<span>self, path, mta_builder, api, org, space, user, password)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Deploy mtar by building mtar from source and deploy through cf cli with mta plugin</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the source that needs to be packaged into mtar and deployed.</dd>
+<dt><strong><code>mta_builder</code></strong> :&ensp;<code>str</code></dt>
+<dd>Mtar builder jar location</dd>
+<dt><strong><code>api</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry api url</dd>
+<dt><strong><code>org</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry org to deploy to.</dd>
+<dt><strong><code>space</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry space to deploy to.</dd>
+<dt><strong><code>user</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foudry user to deploy with.</dd>
+<dt><strong><code>password</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry user password to deploy with.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deploy_mta(self, path, mta_builder, api, org, space, user, password):
+    &#34;&#34;&#34;
+    Deploy mtar by building mtar from source and deploy through cf cli with mta plugin
+
+    Parameters
+    ----------
+    path : str
+        Path to the source that needs to be packaged into mtar and deployed.
+    mta_builder : str
+        Mtar builder jar location
+    api : str
+        Cloud Foundry api url
+    org : str
+        Cloud Foundry org to deploy to.
+    space : str
+        Cloud Foundry space to deploy to.
+    user : str
+        Cloud Foudry user to deploy with.
+    password : str
+        Cloud Foundry user password to deploy with.
+    &#34;&#34;&#34;
+    mta_deployer = MTADeployer()
+    mta_deployer.deploy_mta(path, mta_builder, api, org, space, user, password)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployer.Deployer.deploy_sapdi"><code class="name flex">
+<span>def <span class="ident">deploy_sapdi</span></span>(<span>self, hana_path, sapdi_path, mta_builder, api, org, space, cf_user, cf_password, host, port, useSSL, user, password, tenant='default', verify_ssl=False, vflow_local=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Purely a convenience method. Combines the hana mta deployment and the graph deployment</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>hana_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the hana source that needs to be packaged into mtar and deployed.</dd>
+<dt><strong><code>sapdi_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the datahub graph json that needs to be deployed through REST API</dd>
+<dt><strong><code>mta_builder</code></strong> :&ensp;<code>str</code></dt>
+<dd>Mtar builder jar location</dd>
+<dt><strong><code>api</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry api url</dd>
+<dt><strong><code>org</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry org to deploy to.</dd>
+<dt><strong><code>space</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry space to deploy to.</dd>
+<dt><strong><code>cf_user</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foudry user to deploy with.</dd>
+<dt><strong><code>cf_password</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry user password to deploy with.</dd>
+<dt><strong><code>host</code></strong> :&ensp;<code>str</code></dt>
+<dd>Host of the datahub tenant</dd>
+<dt><strong><code>port</code></strong> :&ensp;<code>int</code></dt>
+<dd>Port of the datahub tenant</dd>
+<dt><strong><code>useSSL</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Enable SSL or not.</dd>
+<dt><strong><code>user</code></strong> :&ensp;<code>str</code></dt>
+<dd>Datahub user to deploy with.</dd>
+<dt><strong><code>password</code></strong> :&ensp;<code>str</code></dt>
+<dd>Datahub user password to deploy with.</dd>
+<dt><strong><code>tenant</code></strong> :&ensp;<code>str</code></dt>
+<dd>Datahub tenant name to deploy to.</dd>
+<dt><strong><code>verify_ssl</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Verify the ssl certifcate</dd>
+<dt><strong><code>vflow_local</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Use a local vflow engine for development purposes</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deploy_sapdi(self, hana_path, sapdi_path, mta_builder, api, org, space,
+                 cf_user, cf_password, host, port, useSSL, user, password,
+                 tenant=&#39;default&#39;, verify_ssl=False, vflow_local=False):
+    &#34;&#34;&#34;
+    Purely a convenience method. Combines the hana mta deployment and the graph deployment
+
+    Parameters
+    ----------
+    hana_path : str
+        Path to the hana source that needs to be packaged into mtar and deployed.
+    sapdi_path : str
+        Path to the datahub graph json that needs to be deployed through REST API
+    mta_builder : str
+        Mtar builder jar location
+    api : str
+        Cloud Foundry api url
+    org : str
+        Cloud Foundry org to deploy to.
+    space : str
+        Cloud Foundry space to deploy to.
+    cf_user : str
+        Cloud Foudry user to deploy with.
+    cf_password : str
+        Cloud Foundry user password to deploy with.
+    host : str
+        Host of the datahub tenant
+    port : int
+        Port of the datahub tenant
+    useSSL : boolean
+        Enable SSL or not.
+    user : str
+        Datahub user to deploy with.
+    password : str
+        Datahub user password to deploy with.
+    tenant : str
+        Datahub tenant name to deploy to.
+    verify_ssl : boolean
+        Verify the ssl certifcate
+    vflow_local : boolean
+        Use a local vflow engine for development purposes
+    &#34;&#34;&#34;
+    self.deploy_mta(hana_path, mta_builder, api, org, space, cf_user, cf_password) 
+    self.deploy_datahub(sapdi_path,host, port, useSSL, user, password, 
+                        tenant, verify_ssl, vflow_local)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployer.Deployer.generate_webide_package"><code class="name flex">
+<span>def <span class="ident">generate_webide_package</span></span>(<span>self, source_path, target_path=None, file_name='WebIDE')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates a zip archive that can be used to import the HANA artifacts into WebIDE.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>source_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the source that needs to be packaged into zip.</dd>
+<dt><strong><code>target_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Where to place the generated zip archive</dd>
+<dt><strong><code>file_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Zip archive file name</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_webide_package(self, source_path, target_path=None, file_name=&#39;WebIDE&#39;):
+    &#34;&#34;&#34;
+    Generates a zip archive that can be used to import the HANA artifacts into WebIDE.
+
+    Parameters
+    ----------
+    source_path : str
+        Path to the source that needs to be packaged into zip.
+    target_path : str
+        Where to place the generated zip archive
+    file_name : str
+        Zip archive file name
+    &#34;&#34;&#34;
+    webide_deployer = WebIDEDeployer()
+    webide_deployer.generate_webide_package(source_path, target_path, file_name)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="hana_ml_deployment" href="index.html">hana_ml_deployment</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="hana_ml_deployment.deployer.Deployer" href="#hana_ml_deployment.deployer.Deployer">Deployer</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_deployment.deployer.Deployer.deploy_cf" href="#hana_ml_deployment.deployer.Deployer.deploy_cf">deploy_cf</a></code></li>
+<li><code><a title="hana_ml_deployment.deployer.Deployer.deploy_datahub" href="#hana_ml_deployment.deployer.Deployer.deploy_datahub">deploy_datahub</a></code></li>
+<li><code><a title="hana_ml_deployment.deployer.Deployer.deploy_hana" href="#hana_ml_deployment.deployer.Deployer.deploy_hana">deploy_hana</a></code></li>
+<li><code><a title="hana_ml_deployment.deployer.Deployer.deploy_mta" href="#hana_ml_deployment.deployer.Deployer.deploy_mta">deploy_mta</a></code></li>
+<li><code><a title="hana_ml_deployment.deployer.Deployer.deploy_sapdi" href="#hana_ml_deployment.deployer.Deployer.deploy_sapdi">deploy_sapdi</a></code></li>
+<li><code><a title="hana_ml_deployment.deployer.Deployer.generate_webide_package" href="#hana_ml_deployment.deployer.Deployer.generate_webide_package">generate_webide_package</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

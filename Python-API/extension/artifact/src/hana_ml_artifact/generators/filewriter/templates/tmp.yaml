@@ -1,0 +1,33 @@
+ID: <<MODULE_APPID>>
+_schema-version: '2.0'
+version: <<MODULE_VERSION>>
+
+modules:
+ - name: <<MODULE_NAME>>
+   type: hdb
+   path: <<MODULE_NAME>>
+   requires:                          # db module needs:
+    - name: <<MODULE_NAME>>_HDI      # RESOURCENAME within YMAL
+      properties:
+        TARGET_CONTAINER: ~{hdi-container-name}   # determination of the name by parameter: hdi-container-name
+    - group: SERVICE_REPLACEMENTS
+      name: cross-container-service-RESOURCENAME
+      properties:
+          key: LOGICAL_GRANTACCESS_SERVICE
+          service: ~{the-service-name}
+          
+resources:
+ - name: <<MODULE_NAME>>_HDI
+   parameters:
+      config:
+         schema: <<SCHEMA_NAME>>
+   properties:
+      hdi-container-name: ${service-name}         # get hdi service-name into the variable: hdi-container-name
+   type: com.sap.xs.hdi-container
+
+ - name: cross-container-service-RESOURCENAME
+   parameters:
+      service-name: <<USP_FOR_GRANTS>>
+   properties:
+      the-service-name: ${service-name}
+   type: org.cloudfoundry.existing-service

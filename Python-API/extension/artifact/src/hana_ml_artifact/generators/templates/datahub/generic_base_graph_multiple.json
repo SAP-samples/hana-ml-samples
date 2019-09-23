@@ -1,0 +1,108 @@
+{
+	"properties": {},
+	"hanaConnection": {
+		"connectionProperties": {},
+		"connectionType": "Configuration Manager",
+		"connectionId": "DSP_HaaS"
+	},
+	"description": "hanaml",
+	"processes": {
+		"terminal1": {
+			"component": "com.sap.util.terminal",
+			"metadata": {
+				"label": "Terminal",
+				"x": 196.99999904632568,
+				"y": 12,
+				"height": 80,
+				"width": 120,
+				"ui": "dynpath",
+				"config": {}
+			}
+		},
+		"terminal2": {
+			"component": "com.sap.util.terminal",
+			"metadata": {
+				"label": "Terminal",
+				"x": 196.99999904632568,
+				"y": 132,
+				"height": 80,
+				"width": 120,
+				"ui": "dynpath",
+				"config": {}
+			}
+		},
+		"pythonapihanaml1": {
+			"component": "hanaml.hanaml",
+			"metadata": {
+				"label": "Python-API HANA-ML",
+				"x": -34,
+				"y": 67,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {
+					"hanaConnection": {
+						"connectionProperties": {},
+						"connectionType": "Configuration Manager",
+						"connectionId": "HXE_D064246"
+					}
+				}
+			}
+		},
+		"pythonapihanaml2": {
+			"component": "hanaml.hanaml",
+			"metadata": {
+				"label": "Python-API HANA-ML",
+				"x": -534,
+				"y": 138,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {}
+			}
+		},
+		"pythonapihanaml3": {
+			"component": "hanaml.hanaml",
+			"metadata": {
+				"label": "Python-API HANA-ML",
+				"x": -324,
+				"y": 86,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {}
+			}
+		}
+	},
+	"groups": [],
+	"connections": [
+		{
+			"metadata": {
+				"points": "90,98 141,98 141,52 191.99999904632568,52"
+			},
+			"src": {
+				"port": "output",
+				"process": "pythonapihanaml1"
+			},
+			"tgt": {
+				"port": "in1",
+				"process": "terminal1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "90,116 141,116 141,172 191.99999904632568,172"
+			},
+			"src": {
+				"port": "debug",
+				"process": "pythonapihanaml1"
+			},
+			"tgt": {
+				"port": "in1",
+				"process": "terminal2"
+			}
+		}
+	],
+	"inports": {},
+	"outports": {}
+}

@@ -1,0 +1,2209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>hana_ml_artifact.generators.datahub API documentation</title>
+<meta name="description" content="This module handles generation of all DataJub related artifacts based on the provided
+consumption layer elements. Currenlty the functionality builds …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>hana_ml_artifact.generators.datahub</code></h1>
+</header>
+<section id="section-intro">
+<p>This module handles generation of all DataJub related artifacts based on the provided
+consumption layer elements. Currenlty the functionality builds up a graph json which
+can be further amended in the modeler if required.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This module handles generation of all DataJub related artifacts based on the provided
+consumption layer elements. Currenlty the functionality builds up a graph json which
+can be further amended in the modeler if required. 
+&#34;&#34;&#34;
+import os
+import time
+from ..config import ConfigConstants
+from ..hana_ml_utils import DirectoryHandler
+from ..hana_ml_utils import StringUtils
+from .filewriter.datahub import GraphWriter 
+
+from ..sql_processor import SqlProcessor
+
+class DataHubGenerator(object):
+    &#34;&#34;&#34;
+    This class provides DataHub specific generation functionality. It also extend the config
+    to cater for DatHub generation specific config.
+    &#34;&#34;&#34;
+    def __init__(self, config):
+        &#34;&#34;&#34;
+        This is main entry point for generating the DataHub related artifacts.
+
+        Parameters
+        ----------
+        config : dict
+            Central config object
+        &#34;&#34;&#34;
+        self.directory_handler = DirectoryHandler()
+        self.config = config
+        self._extend_config()
+
+    def generate_artifacts(self, include_rest_endpoint=False, include_ml_operators=False):
+        &#34;&#34;&#34;
+        Generate the artifacts by first building up the required folder structure for artifact storage and then 
+        generating the different required files. DataHub can be used by itself or in conjunction with a SAP DI scenario
+        where ML API specific operators are generated which are part of the SAP DI solution.
+
+        Parameters
+        ----------
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        include_ml_operators: boolean
+            Include ML operators for the SAP DI scenario
+        
+        Returns
+        -------
+        output_path : str
+            Return the output path of the root folder where the hana related artifacts are stored.
+        &#34;&#34;&#34;
+        self._build_folder_structure()
+        consumption_processor = DataHubConsumptionProcessor(self.config)
+        consumption_processor.generate(self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB), include_rest_endpoint, include_ml_operators)
+        return self.config.get_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB )
+
+    def _build_folder_structure(self):
+        &#34;&#34;&#34;
+        Build up the folder structure. It is currenlty not a deep structure but just a subbfolder datahub
+        under the root output path.
+        &#34;&#34;&#34;
+        self._clean_folder_structurre()
+        # Create base directories
+        self.directory_handler.create_directory( self.config.get_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB ))
+        
+    def _clean_folder_structurre(self):
+        &#34;&#34;&#34;
+        Clean up physical folder structure. 
+        &#34;&#34;&#34;
+        path = self.config.get_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB )
+        if os.path.exists( path ):
+            self.directory_handler.delete_directory_content( path )
+            os.rmdir( path )
+
+    def _extend_config(self):
+        &#34;&#34;&#34;
+        Extend the config to cater for DatHub generation specific config.
+        &#34;&#34;&#34;
+        output_path_datahub = os.path.join(self.config.get_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH ), ConfigConstants.DATAHUB_BASE_PATH )
+        self.config.add_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB, output_path_datahub)
+
+class DataHubConsumptionProcessor(object):
+    &#34;&#34;&#34;
+    This class provides DataHub specific generation functionality for the datahub graphs. 
+    It utilizes the consumption layer to generate the graph json. 
+    
+    When looking at the consumption layer element the following high level mapping can be
+    made to a datahub operator:
+
+    * Consumption Element = (Python) Operator
+    * Input Table / Input Variable = Input port
+    * Output Table / Output Table = Output port
+
+    However more operators are generated to cater for different use cases. For example it is
+    possible te gnerate a rest endpoint in the graph which requires additional operators and
+    connections to be supported. Same holds for the SAP DI scenario. 
+
+    Further more the  DataHub generator requires the groups functionality to adhere
+    to sap di best practices of sperating the fit and predict as 2 seperate graphs. 
+    A group is a collection of consumption layer elements that need to be combined in 1 graph.
+    An example is the partition function which can be generated as a single operator on a 
+    datahub graph. From this single operator a connection can be made to a fit and a
+    predict operator to provide the data split in train and test sets for the function call. For
+    SAP DI the fit and predict process needs to be split and hence the partition operator 
+    needs to be generated in both graphs and hence fit to 2 groups, fit and predict. In other
+    words we have a single consumption element which is part of two logical groups of consumption
+    elements, or in datahub terms, operators.
+
+    The grouping functionality was build sap di in mind, but has been setup generically to be able
+    to cater for different cases. 
+    &#34;&#34;&#34;
+    def __init__(self, config):
+        &#34;&#34;&#34;
+        This class allows to generate the arifacts for the DataHub graph. 
+
+        Parameters
+        ----------
+        config : dict
+            Central config object
+        &#34;&#34;&#34;
+        self.config = config
+        self.operator_tracker = {}
+
+    def generate(self, path, include_rest_endpoint=False, include_ml_operators=False):
+        &#34;&#34;&#34;
+        Method for generating the actual artifacts content.  
+
+        Parameters
+        ----------
+        path: str
+            The physical location where to store the artifacts. 
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        include_ml_operators: boolean
+            Include ML operators for the SAP DI scenario
+        &#34;&#34;&#34;
+        graph_writer = GraphWriter(self.config)
+
+        sql_processed_cons_layer = self.config.get_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED)[SqlProcessor.TRACE_KEY_CONSUMPTION_LAYER]
+        
+        sql_key_sql = SqlProcessor.TRACE_KEY_SQL_PROCESSED
+
+        self.graphs = {}
+        
+        for element in sql_processed_cons_layer:
+            if not isinstance(element, dict):
+                continue # ignore TODO: proper doc
+            
+            # Generate consumption layer sql    
+            if sql_key_sql in element: # TODO: gen warning if no sql
+                connections = {}
+                groups = []
+                if &#39;groups&#39; in element:
+                    if element[&#39;groups&#39;]:
+                        groups = element[&#39;groups&#39;]
+                operators = []
+                operator_id = element[&#39;name&#39;]
+                operator_display_name = element[&#39;display_name_short&#39;]
+
+                input = []
+                output = []
+                body = []
+                if &#39;input&#39; in element[sql_key_sql]:
+                    input = element[sql_key_sql][&#39;input&#39;]
+                if &#39;body&#39; in element[sql_key_sql]:
+                    body = element[sql_key_sql][&#39;body&#39;]
+                if &#39;output&#39; in element[sql_key_sql]:
+                    output = element[sql_key_sql][&#39;output&#39;]
+                
+                # Build SQL &amp; Ports arrays
+                sql = []
+                in_ports = []
+                out_ports = []
+                out_ports_values = []
+                target_schema = self.config.get_entry(ConfigConstants.CONFIG_KEY_SCHEMA)
+                for item in input:
+                    sql_str = &#39;&#39;
+                    if item[&#39;hasrel&#39;]:
+                        in_ports.append(self._generate_port(item[&#39;interface_name&#39;]))
+                        sql_str = item[sql_key_sql]
+                    else:
+                        sql_str = item[sql_key_sql].format(*item[&#39;sql_vars&#39;])
+                    sql.append(sql_str)
+                    if include_ml_operators:
+                        if self.config.is_model_category(item[&#39;cat&#39;]) and not element[&#39;function&#39;] == &#39;Score&#39;: 
+                            # Generate Blob Converter and Model Producer
+                            mdl_cons_id = operator_id + &#39;_mdlcons&#39;
+                            mdl_name = &#39;com.sap.hanaml.&#39; + self.config.get_entry(ConfigConstants.CONFIG_KEY_PROJECT_NAME) + &#39;_mdl&#39;
+                            str_converter_id = operator_id + &#39;_strconv&#39;
+                            mld_cons_ops, mdl_cons_conns = self._generate_mlapi_model_operator(mdl_name, ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT,mdl_cons_id, &#39;Model Consumer&#39;)
+                            str_converter_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT, str_converter_id, &#39;To String&#39;, None, None, None, None, None)
+                            # Generate connections
+                            # From Constant Generator to ML-Api consumer
+                            self._add_connections(groups, connections, mdl_cons_conns)
+                            # From  ML-Api consumer to String Converter
+                            self._add_connections(groups, connections, self._generate_port_connection(mdl_cons_id, ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB, str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB))
+                            # From String Converter to Operator
+                            self._add_connections(groups, connections, self._generate_port_connection(str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING, operator_id, item[&#39;interface_name&#39;]))
+                            # Add operators
+                            operators.extend(mld_cons_ops)
+                            operators.append(str_converter_op)
+
+                for item in body:
+                    proc_name = item[&#39;sql_vars&#39;][0]
+                    proc_name = target_schema + &#39;.&#34;&#39; + proc_name.upper() + &#39;&#34;&#39;
+                    sql_str = item[sql_key_sql].format(proc_name)
+                    sql.append(sql_str)
+                for item in output:
+                    # Check if we have relation defined. In case of a 1 to many relationship we need to assure 
+                    # we duplicate the port as datahub does not [yet] support 1 to many port relationships
+                    interface_name = item[&#39;interface_name&#39;]
+                    if &#39;hasrel&#39; in item and item[&#39;hasrel&#39;] and  &#39;relobject&#39; in item and item[&#39;relobject&#39;]:
+                        # First we generate the connections to all the related objects
+                        idx_tracker = 0
+                        for idx, relobject in enumerate(item[&#39;relobject&#39;]):
+                            idx_tracker = idx
+                            hasrel_interface_name = interface_name + str(idx_tracker)
+                            out_ports.append(self._generate_port(hasrel_interface_name))
+                            out_ports_values.append(self._generate_outport_value(hasrel_interface_name, target_schema, item[&#39;dbobject_name&#39;]))
+                            self._add_connections(relobject[&#39;groups&#39;], connections, self._generate_port_connection(operator_id, hasrel_interface_name, relobject[&#39;cons_name&#39;], relobject[&#39;interface_name&#39;]))
+                        # We add an index to create an additional port for normal processing
+                        interface_name += str(idx_tracker+1)
+
+                     # We process the output as normal to assure proper generation of requested opperators is done such as ml api or restpoint operators. 
+                    out_ports.append(self._generate_port(interface_name))
+                    if &#39;dbobject_name&#39; in item:
+                        out_ports_values.append(self._generate_outport_value(interface_name, target_schema, item[&#39;dbobject_name&#39;]))
+                    self._generate_output_content(include_rest_endpoint, include_ml_operators, groups, operator_id, interface_name, item, element, operators, connections)
+                    
+                    # TODO: Refactor this
+                    if &#39;sql_vars&#39; in item:
+                        sql_var_dbobject = target_schema + &#39;.&#39; + item[&#39;sql_vars&#39;][0]
+                        item[&#39;sql_vars&#39;][0] = sql_var_dbobject
+                        item[&#39;sql_vars&#39;][1] = sql_var_dbobject
+                        sql_str = item[sql_key_sql].format(*item[&#39;sql_vars&#39;])
+                        sql.append(sql_str)
+                    
+                python_script = self._generate_python_script(sql, in_ports, out_ports_values)
+                operator = self._generate_operator(ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT, operator_id, operator_display_name, None, python_script, in_ports, out_ports, None)
+                operators.append(operator)
+                if &#39;groups&#39; in element:
+                    if element[&#39;groups&#39;]:
+                        for group in element[&#39;groups&#39;]:
+                            if not group[&#39;identifier&#39;] in self.graphs:
+                                self.graphs[group[&#39;identifier&#39;]] = {}
+                            if not &#39;terminator_id&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                                self.graphs[group[&#39;identifier&#39;]][&#39;terminator_id&#39;] = None
+                            if not &#39;operators&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                                self.graphs[group[&#39;identifier&#39;]][&#39;operators&#39;] = []
+                            if not &#39;connections&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                                self.graphs[group[&#39;identifier&#39;]][&#39;connections&#39;] = []
+                            self.graphs[group[&#39;identifier&#39;]][&#39;operators&#39;].extend(operators)
+                            if connections:
+                                if group[&#39;identifier&#39;] in connections:
+                                    self.graphs[group[&#39;identifier&#39;]][&#39;connections&#39;].extend(connections[group[&#39;identifier&#39;]])
+        
+        for graph_identifier in self.graphs:
+            graph_operators = self.graphs[graph_identifier][&#39;operators&#39;]
+            graph_connections = self.graphs[graph_identifier][&#39;connections&#39;]
+            graph = self._generate_graph(&#34;&#34;, graph_operators, graph_connections)
+            graph_writer.generate(path, graph_identifier, graph) 
+
+    
+    def _get_graph_terminator_operator_id(self, group_identifier):
+        &#34;&#34;&#34;
+        In case of sap di ml operators we include a graph terminator for the fit aka train
+        graph to abide by the sap di proposed best practise for these graphs. To fit this is
+        dynamic build of the graph we have a terminator operator per graph of which we need
+        to retrieve the id to be able to generate operator connections to the singel graph
+        terminator.  
+
+        Parameters
+        ----------
+        group_identifier: str
+            The physical location where to store the artifacts. 
+        
+        Returns
+        -------
+        terminator_id : str
+            The terminator operator id within the graph
+        &#34;&#34;&#34;
+        terminator_op_id = None
+        if group_identifier in self.graphs:
+            if &#39;terminator_id&#39; in self.graphs[group_identifier]:
+                terminator_op_id = self.graphs[group_identifier][&#39;terminator_id&#39;]
+        return terminator_op_id
+
+    def _add_graph_terminator_connection(self, operator_id, groups, operators, connections, src_process, src_port, tgt_port):
+        &#34;&#34;&#34;
+        In case of sap di ml operators we include a graph terminator for the fit aka train
+        graph to abide by the sap di proposed best practise for these graphs. Here the 
+        existence of the terminator operator is checked and otherwise created before
+        the connection is generated.
+
+        Parameters
+        ----------
+        operator_id: str
+            The operator id is the link to the consumption layer element id. This is extended
+            to provide ids to related operators.
+        groups : dict
+            The groups the consumption layer element is part of
+        operators : list
+            The list of already generated operators as to extend this with the generated operators. 
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+        src_process : str
+            The source operator from which the connection starts
+        src_port : str
+            The source oeprator port from which the connection starts
+        tgt_port : str
+            The target operator port to where the connection ends
+        &#34;&#34;&#34;
+        for group in groups:
+            # Check on graph level if terminator exists
+            terminator_op_id = self._get_graph_terminator_operator_id(group[&#39;identifier&#39;])
+            if not terminator_op_id:
+                if not group[&#39;identifier&#39;] in self.graphs:
+                    self.graphs[group[&#39;identifier&#39;]] = {} 
+                if not &#39;terminator_id&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                    terminator_op_id = operator_id + &#39;_pyfin&#39;
+                    term_id = operator_id + &#39;_terminator&#39;
+                    py_finish_op = self._generate_python_graph_finished_operator(terminator_op_id,&#39;Finalize&#39;)
+                    term_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_COMPONENT, term_id, &#39;Graph Terminator&#39;, None, None, None, None, None)
+                    # From python terminator op to graph terminator 
+                    self._add_connections(groups, connections, self._generate_port_connection(terminator_op_id, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE, term_id, ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_IN_PORT_ANY))
+                    operators.append(py_finish_op)
+                    operators.append(term_op)
+                    self.graphs[group[&#39;identifier&#39;]][&#39;terminator_id&#39;] = terminator_op_id
+            self._add_connection(group[&#39;identifier&#39;], connections, self._generate_port_connection(src_process, src_port, terminator_op_id, tgt_port))
+           
+
+    def _add_connections(self, groups, connections, new_connection):
+        &#34;&#34;&#34;
+        Add a new connections in all the groups that the consumption layer element 
+        belongs to
+
+        Parameters
+        ----------
+        groups : dict
+            The groups the consumption layer element is part of
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+        new_connection : dict
+            The new connection that needs to be added
+        &#34;&#34;&#34;
+        for group in groups:
+            self._add_connection(group[&#39;identifier&#39;], connections, new_connection)
+
+    def _add_connection(self, group_identifier, connections, new_connection):
+        &#34;&#34;&#34;
+        Add a new connection
+
+        Parameters
+        ----------
+        group_identifier : str
+            The group where the connections needs to be added
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+        new_connection : dict
+            The connection that needs to be added
+        &#34;&#34;&#34;
+        if not group_identifier in connections:
+           connections[group_identifier] = []
+        if  isinstance(new_connection, list):
+           connections[group_identifier].extend(new_connection)    
+        else: 
+           connections[group_identifier].append(new_connection)
+        
+
+    def _generate_output_content(self, include_rest_endpoint, include_ml_operators, groups, operator_id, interface_name, item, element, operators, connections):
+        &#34;&#34;&#34;
+        Depending on the different use cases generate additional output content, for example operators,
+        are required. Two scenarios are currently supported:
+
+        * SAP DI (ML Operators)
+        * REST Endpoint for easy external exposure
+
+        Parameters
+        ----------
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        include_ml_operators: boolean
+            Include ML operators for the SAP DI scenario
+        groups : dict
+            The groups the consumption layer element is part of
+        operator_id: str
+            The operator id is the link to the consumption layer element id. This is extended
+            to provide ids to related operators.
+        interface_name : str
+            The interface name of the consumption layer element
+        item : dict
+            The input or output table of the 
+        operators : list
+            The list of already generated operators as to extend this with the generated operators. 
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+        &#34;&#34;&#34;
+        if include_rest_endpoint:
+            if self.config.is_fitted_category(item[&#39;cat&#39;]) and not element[&#39;function&#39;] == &#39;Score&#39;:
+                basePath = self._get_rest_endpoint_path(item[&#39;cat&#39;])
+                if include_ml_operators:
+                    basePath = &#39;${deployment}&#39;
+                rest_operators, rest_connections = self._generate_rest_endpoint_operators(operator_id, item[&#39;interface_name&#39;], basePath)
+                if rest_operators and rest_connections:
+                    operators.extend(rest_operators)
+                    self._add_connections(groups, connections, rest_connections)
+
+        if include_ml_operators:
+            # Python Terminator operator
+            # Generated as part of the model producer flow and used by metrics flow
+            if self.config.is_model_category(item[&#39;cat&#39;]):
+                # Generate Blob Converter and Model Producer
+                blob_converter_id = operator_id + &#39;_blobconv&#39;
+                mdl_prod_id = operator_id + &#39;_mdlprod&#39;
+                mdl_name = &#39;com.sap.hanaml.&#39; + self.config.get_entry(ConfigConstants.CONFIG_KEY_PROJECT_NAME) + &#39;_mdl&#39;
+                msg_converter_id = operator_id + &#39;_msgconv&#39;
+                str_converter_id = operator_id + &#39;_strconv&#39;
+                blob_converter_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOBLOB_COMPONENT, blob_converter_id, &#39;To Blob&#39;, None, None, None, None, None)
+                mld_prod_ops, __ = self._generate_mlapi_model_operator(mdl_name, ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT,mdl_prod_id, &#39;Model Producer&#39;)
+                msg_conv_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT, msg_converter_id, &#39;To Message&#39;, None, None, None, None, None)
+                str_conv_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT, str_converter_id, &#39;To String&#39;, None, None, None, None, None)
+                # Generate connections
+                # From Operator to Blob Converter
+                self._add_connections(groups, connections, self._generate_port_connection(operator_id, interface_name, blob_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOBLOB_IN_PORT_STRING))
+                # From Blob Converter to ML-Api model producer
+                self._add_connections(groups, connections, self._generate_port_connection(blob_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOBLOB_OUT_PORT_BLOB, mdl_prod_id, ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_IN_PORT_BLOB))
+                # From ML-Api model producer to message converter
+                self._add_connections(groups, connections, self._generate_port_connection(mdl_prod_id, ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_OUT_PORT_MSG, msg_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_ANY))
+                # From message converter to string converter
+                self._add_connections(groups, connections, self._generate_port_connection(msg_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE, str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_MESSAGE))
+                # From string converter to python terminator op to check when ready
+                # self._add_connections(groups, connections, self._generate_port_connection(str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING, self.terminator_ops_py_id, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING))
+                self._add_graph_terminator_connection(operator_id, groups, operators, connections, str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING)
+                # Add operators
+                operators.append(blob_converter_op)
+                operators.extend(mld_prod_ops)
+                operators.append(msg_conv_op)
+                operators.append(str_conv_op)
+            if self.config.is_metric_category(item[&#39;cat&#39;]):
+                # Add following for score result
+                # api.send(&#39;output&#39;, str(accuracy))
+                # metrics_dict = {&#34;Accuracy&#34;: accuracy}
+                ##send the metrics to the output port - Submit Metrics operator will use this to persist the metrics 
+                # api.send(&#34;metrics&#34;, api.Message(metrics_dict))
+                
+                msg_converter_id = operator_id + &#39;_msgconv&#39;
+                metrics_id = operator_id + &#39;_metrics&#39;
+                msg_converter_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT,msg_converter_id,&#39;To Message&#39;,None, None,None,None,None)
+                metrics_op = self._generate_operator(ConfigConstants.DATAHUB_MLAPI_OPERATOR_METRICS_COMPONENT,metrics_id,&#39;Submit Metrics&#39;,None, None,None,None,None)
+                # Generate connections
+                # From Operator to Blob Converter
+                self._add_connections(groups, connections, self._generate_port_connection(operator_id, interface_name, msg_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_STRING))
+                # From Blob Converter to ML-Api metric producer
+                self._add_connections(groups, connections, self._generate_port_connection(msg_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE, metrics_id, ConfigConstants.DATAHUB_OPERATOR_METRICS_IN_PORT_METRICS))
+                # From ML-Api metrics producer to python terminator op 
+                # self._add_connections(groups, connections, self._generate_port_connection(metrics_id, ConfigConstants.DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE, self.terminator_ops_py_id, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE))
+                self._add_graph_terminator_connection(operator_id, groups, operators, connections, metrics_id, ConfigConstants.DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE)
+                # Add operators
+                operators.append(msg_converter_op)
+                operators.append(metrics_op)
+
+
+    def _generate_outport_value(self, interface_name, target_schema, dbobject_name):
+        &#34;&#34;&#34;
+        As data is moved out of HANA only the schema/table name in HANA is transferred across
+        operators.  This method generates a internal dict with this reference tbat is used
+        as part of the python script generation.
+
+        Parameters
+        ----------
+        interface_name : str
+            The interface name of the consumption layer element
+        target_schema : str
+            The target schema where the dbobject_name resides
+        dbobject_name : str
+            The actual dbobject_name such as a table
+
+        Returns
+        -------
+        out_port_value : dict
+            Internal dict for easy consumption of this data 
+        
+        &#34;&#34;&#34;
+        out_port_value = {
+            &#39;port_name&#39;: interface_name,
+            &#39;dbobject_name&#39;: target_schema + &#39;.&#39; + dbobject_name
+        }
+        return out_port_value
+
+    def _generate_python_script(self, sql, in_ports, out_ports_values):        
+        &#34;&#34;&#34;
+        The generates the python script for the operator.
+
+        Parameters
+        ----------
+        sql : list
+            List of all the sql entries for the consumption element
+        in_ports : list
+            The input ports that have been generated and are needed to interact with
+        out_ports_values : list
+            The output port values. 
+
+        Returns
+        -------
+        python_script : str
+            The python script
+        &#34;&#34;&#34;
+        indent = &#39;    &#39;
+        python_script = []
+        python_script.append(&#39;from hdbcli import dbapi&#39;)
+        python_script.append(&#39;def on_input(&#39; + &#39;,&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;):&#39;)
+        
+        # on_input function content (adding indent)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Define connection context&#34;)&#39;)
+        python_script.append(indent + &#39;address = api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;host&#34;]&#39;)
+        python_script.append(indent + &#39;port =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;port&#34;]&#39;)
+        python_script.append(indent + &#39;pwd =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;password&#34;]&#39;)
+        python_script.append(indent + &#39;user =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;user&#34;]&#39;)
+        python_script.append(indent + &#39;useTLS =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;useTLS&#34;]&#39;)
+        python_script.append(indent + &#39;encrypt = &#34;false&#34;&#39;)
+        python_script.append(indent + &#39;if useTLS:&#39;)
+        python_script.append(indent + indent + &#39;encrypt = &#34;true&#34;&#39;)
+        python_script.append(indent + &#39;hana_connection = dbapi.connect(address=address, port=port, user=user, password=pwd, encrypt=encrypt, sslValidateCertificate=&#34;false&#34;)&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Generate SQL&#34;)&#39;)
+        # Add sql statements
+        python_script.append(indent + &#39;sql = &#34;&#34;&#34;&#39;)
+        python_script.append(indent + &#39;Do&#39;)
+        python_script.append(indent + &#39;Begin&#39;)
+        sql_str = StringUtils.flatten_string_array(sql, indent=indent)
+        sql_str = self.config.data_source_mapping(sql_str)
+        python_script.append(sql_str)
+        python_script.append(indent + &#39;End&#39;)
+        if in_ports:
+            python_script.append(indent + &#39;&#34;&#34;&#34;.format(&#39; + &#39;,&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;)&#39;)
+        else:
+            python_script.append(indent + &#39;&#34;&#34;&#34;&#39;)
+        python_script.append(indent + &#39;cursor = hana_connection.cursor()&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Execute SQL&#34;)&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: &#34; + sql)&#39;)
+        python_script.append(indent + &#39;success = cursor.execute(sql)&#39;)
+        python_script.append(indent + &#39;if success:&#39;)  
+        
+        for item in out_ports_values:
+            python_script.append(indent + indent + &#39;api.send(&#34;&#39; + item[&#39;port_name&#39;]+ &#39;&#34;, \&#39;&#39; + item[&#39;dbobject_name&#39;] + &#39;\&#39;)&#39;)
+
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: operator done&#34;)&#39;)  
+        
+        # Lastly based on if there are inports add api callback call or function call
+        if in_ports:
+            python_script.append(&#39;api.set_port_callback([&#39; + &#39;&#34;&#39;+ &#39;&#34;, &#34;&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;&#34;&#39; + &#39;], on_input)&#39;)
+        else:
+            python_script.append(&#39;on_input()&#39;)
+
+        return StringUtils.flatten_string_array(python_script)
+
+    def _generate_port_connection(self, src_process, src_port, tgt_process, tgt_port):
+        &#34;&#34;&#34;
+        Generates the actual graph json port connection structure
+
+        Parameters
+        ----------
+        src_process : str
+            The source operator from which the connection starts
+        src_port : str
+            The source oeprator port from which the connection starts
+        tgt_process : str
+            The target operator to where the connection ends
+        tgt_port : str
+            The target operator port to where the connection ends
+
+        Returns
+        -------
+        connection : dict
+            The connection structure.
+        &#34;&#34;&#34;
+        tr_src_process = StringUtils.remove_special_characters(src_process).title()
+        tr_tgt_process = StringUtils.remove_special_characters(tgt_process).title()
+        connection = {
+                        &#34;metadata&#34;: {},
+                        &#34;src&#34;: {
+                                &#34;port&#34;: src_port,
+                                &#34;process&#34;: tr_src_process
+                        },
+                        &#34;tgt&#34;: {
+                                &#34;port&#34;: tgt_port,
+                                &#34;process&#34;: tr_tgt_process
+                        }
+                }
+        return connection
+
+    def _generate_port(self, name, port_type=None):
+        &#34;&#34;&#34;
+        Generates the actual graph json port structure
+
+        Parameters
+        ----------
+        name : str
+            Name of the port to be used
+        port_type : str
+            Port type. For example string or message
+
+        Returns
+        -------
+        port : dict
+            The port structure.
+        &#34;&#34;&#34;
+        if not port_type:
+            port_type = &#39;string&#39;
+        port = {
+                 &#39;name&#39;: name,
+                 &#39;type&#39;: port_type
+                }
+        return port
+
+
+    def _generate_operator(self, operator_comp, operator_id, operator_label, config, script, in_ports, out_ports, extensible):
+        &#34;&#34;&#34;
+        Generates the actual graph json operator structure.
+
+        Parameters
+        ----------
+        operator_comp : str
+            Component of the operator as known by DataHub
+        operator_id : str
+            The operator id
+        operator_label : str
+            The operator label shown in the modeler on the operator
+        config : dict
+            Additional DataHub config that is required.
+        script : str
+            The python script which provides the operator functionality
+        in_ports : list
+            A list of additional in ports
+        out_ports : list
+            A list of additional out ports
+
+        Returns
+        -------
+        operator : dict
+            The operator structure.
+        &#34;&#34;&#34;
+        tr_operator_id = StringUtils.remove_special_characters(operator_id).title()
+        operator = {
+                        &#39;component&#39;: operator_comp,
+                        &#39;metadata&#39;: {
+                                &#39;label&#39;: operator_label,
+                                &#39;config&#39;: {},
+                        }
+                }
+        if config:
+            operator[&#39;metadata&#39;][&#39;config&#39;] = config
+
+        if extensible:
+            operator[&#39;metadata&#39;][&#39;extensible&#39;] = True
+        
+        if script:
+            operator[&#39;metadata&#39;][&#39;config&#39;][&#39;script&#39;] = script
+
+        if in_ports:
+            operator[&#39;metadata&#39;][&#39;additionalinports&#39;] = in_ports
+
+        if out_ports:
+            operator[&#39;metadata&#39;][&#39;additionaloutports&#39;] = out_ports
+
+        operator_object = {
+            tr_operator_id : operator
+        }
+        return operator_object
+    
+
+    def _generate_graph(self, description, operators, connections):
+        &#34;&#34;&#34;
+        Generates the actual graph json structure.
+
+        Parameters
+        ----------
+        description : str
+            Component of the operator as known by DataHub
+        operators : list
+            The list of already generated operators as to extend this with the generated operators. 
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+
+        Returns
+        -------
+        graph : dict
+            The graph structure.
+        &#34;&#34;&#34;
+        # Add operators
+        processes = {}
+        for operator in operators:
+            processes.update( operator )
+        
+        graph = {
+                &#39;description&#39;: &#39;&#39;,
+                &#39;processes&#39;: processes,
+                &#39;groups&#39;: [],
+                &#39;connections&#39;: connections,
+                &#39;inports&#39;: {},
+                &#39;outports&#39;: {},
+                &#39;properties&#39;: {}
+        }
+        return graph
+
+
+    # ----------------------------------------------------------
+    # ML-Api
+    # ----------------------------------------------------------
+    def _generate_mlapi_model_operator(self, model_name, operator_comp, operator_id, operator_label):
+        &#34;&#34;&#34;
+        Generates sap di ml api operators for model consumption or producing.
+
+        Parameters
+        ----------
+        model_name : str
+            Name of the model to use to store the model in ML API
+        operator_comp : str
+            Component of the operator as known by DataHub
+        operator_id : str
+            The operator id
+        operator_label : str
+            The operator label shown in the modeler on the operator
+
+        Returns
+        -------
+        operators : list
+            List of operators generated
+        connections : list
+            List of connections generated
+        &#34;&#34;&#34;
+        config = {}
+        operators = []
+        connections = []
+        if operator_comp == ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT:
+            # We need to add a constant generator which is a ml-api requirement
+            config[&#39;content&#39;] = &#39;${ARTIFACT:MODEL:&#39; + model_name + &#39;}&#39;
+            constant_gen_id = &#39;const_&#39; + operator_id
+            constant_gen_label = &#39;Constant &#39; + operator_label
+            constant_gen_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_COMPONENT, constant_gen_id, constant_gen_label, config, None, None, None, None)
+            model_operator = self._generate_operator(operator_comp, operator_id, operator_label, None, None, None, None, None)
+            # From constant generator op to ML-Api model consumer
+            connections.append(self._generate_port_connection(constant_gen_id, ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_OUT_PORT_STRING, operator_id, ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_IN_PORT_STRING))
+            operators.append(constant_gen_op)
+            operators.append(model_operator)
+        if operator_comp == ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT:
+            config[&#39;artifactKind&#39;] = &#39;model&#39;
+            config[&#39;artifactName&#39;] = model_name
+            model_operator = self._generate_operator(operator_comp, operator_id, operator_label, config, None, None, None, None)
+            operators.append(model_operator)
+        return operators, connections
+    
+
+    # ----------------------------------------------------------
+    # Rest Endpoint
+    # ----------------------------------------------------------
+    # Generate base path
+    def _generate_rest_endpoint_operators(self, data_operator_id, data_outport_name, basePath):
+        &#34;&#34;&#34;
+        Generates rest api related operators for exposing data external
+
+        Parameters
+        ----------
+        data_operator_id : str
+            The operator id
+        data_outport_name : str
+            The outport used to get data from which will need to be exposed
+        basePath : str
+            The base path for the url generated by DataHub for the rest endpoint
+
+        Returns
+        -------
+        operators : list
+            List of operators generated
+        connections : list
+            List of connections generated
+        &#34;&#34;&#34;
+        operators = []
+        connections = []
+        # Build Operators
+        # HANAML Api Python Operator
+        result_client_op_id = data_operator_id + &#39;_rescli&#39;
+        result_client_port_restrequest = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE, port_type=&#39;message&#39;)
+        result_client_port_restresponse = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE, port_type=&#39;message&#39;)
+        result_client_port_datain = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_STRING)
+        result_client_inports = [result_client_port_restrequest, result_client_port_datain]
+        result_client_outports = [result_client_port_restresponse]
+        result_client_script = self._generate_result_client_script(result_client_port_datain[&#39;name&#39;], result_client_port_restrequest[&#39;name&#39;],result_client_port_restresponse[&#39;name&#39;])
+        result_client_operator = self._generate_operator(ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT,result_client_op_id,&#39;Result Client&#39;, None, result_client_script, result_client_inports, result_client_outports, False)
+        # OpenAPI Servflow Operator
+        restapi_op_id = data_operator_id + &#39;_restapi&#39;
+        restapi_op_config = {
+            &#39;basePath&#39;: basePath
+        }
+        restapi_operator = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_RESTAPI_COMPONENT,restapi_op_id,&#39;Rest API&#39;, restapi_op_config, None, None, None, False)
+        # Response Interceptor Operator
+        resp_int_op_id = data_operator_id + &#39;_respint&#39;
+        resp_int_operator = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_COMPONENT,resp_int_op_id,&#39;Response Interceptor&#39;, None, None, None, None, False)
+        operators = [result_client_operator, restapi_operator, resp_int_operator]
+        # Build Connections 
+        # From Data --&gt; Result Client
+        data_to_result_client = self._generate_port_connection(data_operator_id, data_outport_name, result_client_op_id, result_client_port_datain[&#39;name&#39;])
+        # From Result Client --&gt; Response intercepter
+        result_client_to_resp_int = self._generate_port_connection(result_client_op_id, ConfigConstants.DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE, resp_int_op_id, ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_RESPONSE_IN_PORT_MESSAGE)
+        # From Response intercepter --&gt; Result Client
+        resp_int_to_result_client = self._generate_port_connection(resp_int_op_id, ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_OUT_PORT_MESSAGE, result_client_op_id, ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE)
+        # From Rest API --&gt; Response Interceptor
+        restapi_to_resp_int = self._generate_port_connection(restapi_op_id, ConfigConstants.DATAHUB_OPERATOR_RESTAPI_OUT_PORT_MESSAGE, resp_int_op_id, ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_REQUEST_IN_PORT_MESSAGE)
+        connections = [data_to_result_client, result_client_to_resp_int, resp_int_to_result_client, restapi_to_resp_int]
+        return operators, connections
+        
+    # Restendpoint has url pattern: &lt;protocol&gt;://&lt;host&gt;:&lt;port&gt;/app/pipeline-modeler/openapi/service/&lt;operator_config_basepath&gt;
+    # Best results to add / at the beginning and end of the basepath in the operator config. ie /hanaml/
+    def _generate_result_client_script(self,in_port_data_name, in_port_request_name, out_port_name): 
+        &#34;&#34;&#34;
+        Generates result client operator python script
+
+        Parameters
+        ----------
+        in_port_data_name : str
+            From which to retrieve the data (ie a HANA schema/table)
+        in_port_request_name : str
+            The in port to link the request of the data. This can be a rest endpoint operator
+        out_port_name : str
+            The out port to which the data is pushed.
+
+        Returns
+        -------
+        python_script : str
+            Generated python script 
+        &#34;&#34;&#34;       
+        indent = &#39;    &#39;
+        python_script = []
+        python_script.append(&#39;import json&#39;)
+        python_script.append(&#39;from hdbcli import dbapi&#39;)
+        python_script.append(&#39;def on_request(msg):&#39;)
+        python_script.append(indent + &#39;msg.attributes[&#34;openapi.header.content-type&#34;] = &#34;application/json&#34;&#39;)
+        python_script.append(indent + &#39;response = {}&#39;)
+        python_script.append(indent + &#39;if &#34;results&#34; in globals():&#39;)
+        python_script.append(indent + indent + &#39;response = {&#34;results&#34;: results}&#39;)
+        python_script.append(indent + &#39;else:&#39;)
+        python_script.append(indent + indent + &#39;response = {&#34;results&#34;: &#34;Sorry no results yet. Please try again in a sec&#34;}&#39;)
+        python_script.append(indent + &#39;msg.body=json.dumps(response)&#39;)
+        python_script.append(indent + &#39;api.send(&#34;&#39; + out_port_name + &#39;&#34;, msg)&#39;)
+        python_script.append(&#39;def on_data(data):&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Define connection context&#34;)&#39;)
+        python_script.append(indent + &#39;address = api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;host&#34;]&#39;)
+        python_script.append(indent + &#39;port =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;port&#34;]&#39;)
+        python_script.append(indent + &#39;pwd =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;password&#34;]&#39;)
+        python_script.append(indent + &#39;user =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;user&#34;]&#39;)
+        python_script.append(indent + &#39;useTLS =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;useTLS&#34;]&#39;)
+        python_script.append(indent + &#39;encrypt = &#34;false&#34;&#39;)
+        python_script.append(indent + &#39;if useTLS:&#39;)
+        python_script.append(indent + indent + &#39;encrypt = &#34;true&#34;&#39;)
+        python_script.append(indent + &#39;hana_connection = dbapi.connect(address=address, port=port, user=user, password=pwd, encrypt=encrypt, sslValidateCertificate=&#34;false&#34;)&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Generate SQL&#34;)&#39;)
+        # Add sql statements
+        python_script.append(indent + &#39;sql = &#34;select * from {};&#34;.format(data)&#39;)
+        python_script.append(indent + &#39;cursor = hana_connection.cursor()&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Execute SQL&#34;)&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: &#34; + sql)&#39;)
+        python_script.append(indent + &#39;success = cursor.execute(sql)&#39;)
+        python_script.append(indent + &#39;if success:&#39;)  
+        python_script.append(indent + indent + &#39;global results&#39;)
+        python_script.append(indent + indent + &#39;results = []&#39;)
+        python_script.append(indent + indent + &#39;for row in cursor:&#39;)
+        python_script.append(indent + indent + indent + &#39;results.append(str(row))&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: result operator done processing data&#34;)&#39;)  
+        
+        # Lastly based on if there are inports add api callback call or function call
+        python_script.append(&#39;api.set_port_callback(&#34;&#39; + in_port_request_name + &#39;&#34;, on_request)&#39;)
+        python_script.append(&#39;api.set_port_callback(&#34;&#39; + in_port_data_name + &#39;&#34;, on_data)&#39;)
+        
+        return StringUtils.flatten_string_array(python_script)
+
+    def _get_rest_endpoint_path(self, postfix):
+        &#34;&#34;&#34;
+        Helper function to generated rest endpoint paths
+
+        Parameters
+        ----------
+        postfix : str
+            Add additional component to the end of the path
+
+        Returns
+        -------
+        endpoint_path : str
+            Generated endpoint path
+        &#34;&#34;&#34;     
+        return &#39;/&#39; + StringUtils.remove_special_characters(self.config.get_entry(ConfigConstants.CONFIG_KEY_PROJECT_NAME)).lower() + &#39;-&#39; + StringUtils.remove_special_characters(postfix).lower() + &#39;/&#39;
+
+
+    # ----------------------------------------------------------
+    # Generic helper methods
+    # ----------------------------------------------------------
+    def _generate_python_graph_finished_operator(self, operator_id, operator_label):
+        &#34;&#34;&#34;
+        Helper function to generated graph terminator operator
+
+        Parameters
+        ----------
+        operator_id : str
+            The operator id
+        operator_label : str
+            The operator label shown in the modeler on the operator
+
+        Returns
+        -------
+        operator : dict
+            The graph json operator structure for the terminator operator
+        &#34;&#34;&#34;     
+        # inports: metrics, artifact
+        # outports: output
+        metrics_inport = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE, port_type=&#39;message&#39;)
+        artifact_inport = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING)
+        ouput_outport = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE, port_type=&#39;message&#39;)
+        script = self._generate_python_graph_finished_script([metrics_inport, artifact_inport], ouput_outport)
+        operator = self._generate_operator(ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT, operator_id, operator_label, None, script, [metrics_inport, artifact_inport], [ouput_outport], None)
+        return operator
+
+    def _generate_python_graph_finished_script(self, in_ports, out_port):
+        &#34;&#34;&#34;
+        Helper function to generated graph terminator python script
+
+        Parameters
+        ----------
+        in_ports : list
+            A list of additional in ports
+        out_ports : list
+            A list of additional out ports
+
+        Returns
+        -------
+        python_script : str
+            The generated python script
+        &#34;&#34;&#34; 
+        indent = &#39;    &#39;
+        python_script = []
+        python_script.append(&#39;def on_input(&#39; + &#39;,&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;):&#39;)
+        python_script.append(indent + &#39;api.send(&#34;&#39; + out_port[&#39;name&#39;] + &#39;&#34;, api.Message(&#34;Operators have finished.&#34;))&#39;)
+        python_script.append(&#39;api.set_port_callback([&#34;&#39; + &#39;&#34;,&#34;&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;&#34;], on_input)&#39;)
+        return StringUtils.flatten_string_array(python_script)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="hana_ml_artifact.generators.datahub.DataHubConsumptionProcessor"><code class="flex name class">
+<span>class <span class="ident">DataHubConsumptionProcessor</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class provides DataHub specific generation functionality for the datahub graphs.
+It utilizes the consumption layer to generate the graph json. </p>
+<p>When looking at the consumption layer element the following high level mapping can be
+made to a datahub operator:</p>
+<ul>
+<li>Consumption Element = (Python) Operator</li>
+<li>Input Table / Input Variable = Input port</li>
+<li>Output Table / Output Table = Output port</li>
+</ul>
+<p>However more operators are generated to cater for different use cases. For example it is
+possible te gnerate a rest endpoint in the graph which requires additional operators and
+connections to be supported. Same holds for the SAP DI scenario. </p>
+<p>Further more the
+DataHub generator requires the groups functionality to adhere
+to sap di best practices of sperating the fit and predict as 2 seperate graphs.
+A group is a collection of consumption layer elements that need to be combined in 1 graph.
+An example is the partition function which can be generated as a single operator on a
+datahub graph. From this single operator a connection can be made to a fit and a
+predict operator to provide the data split in train and test sets for the function call. For
+SAP DI the fit and predict process needs to be split and hence the partition operator
+needs to be generated in both graphs and hence fit to 2 groups, fit and predict. In other
+words we have a single consumption element which is part of two logical groups of consumption
+elements, or in datahub terms, operators.</p>
+<p>The grouping functionality was build sap di in mind, but has been setup generically to be able
+to cater for different cases. </p>
+<p>This class allows to generate the arifacts for the DataHub graph. </p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Central config object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DataHubConsumptionProcessor(object):
+    &#34;&#34;&#34;
+    This class provides DataHub specific generation functionality for the datahub graphs. 
+    It utilizes the consumption layer to generate the graph json. 
+    
+    When looking at the consumption layer element the following high level mapping can be
+    made to a datahub operator:
+
+    * Consumption Element = (Python) Operator
+    * Input Table / Input Variable = Input port
+    * Output Table / Output Table = Output port
+
+    However more operators are generated to cater for different use cases. For example it is
+    possible te gnerate a rest endpoint in the graph which requires additional operators and
+    connections to be supported. Same holds for the SAP DI scenario. 
+
+    Further more the  DataHub generator requires the groups functionality to adhere
+    to sap di best practices of sperating the fit and predict as 2 seperate graphs. 
+    A group is a collection of consumption layer elements that need to be combined in 1 graph.
+    An example is the partition function which can be generated as a single operator on a 
+    datahub graph. From this single operator a connection can be made to a fit and a
+    predict operator to provide the data split in train and test sets for the function call. For
+    SAP DI the fit and predict process needs to be split and hence the partition operator 
+    needs to be generated in both graphs and hence fit to 2 groups, fit and predict. In other
+    words we have a single consumption element which is part of two logical groups of consumption
+    elements, or in datahub terms, operators.
+
+    The grouping functionality was build sap di in mind, but has been setup generically to be able
+    to cater for different cases. 
+    &#34;&#34;&#34;
+    def __init__(self, config):
+        &#34;&#34;&#34;
+        This class allows to generate the arifacts for the DataHub graph. 
+
+        Parameters
+        ----------
+        config : dict
+            Central config object
+        &#34;&#34;&#34;
+        self.config = config
+        self.operator_tracker = {}
+
+    def generate(self, path, include_rest_endpoint=False, include_ml_operators=False):
+        &#34;&#34;&#34;
+        Method for generating the actual artifacts content.  
+
+        Parameters
+        ----------
+        path: str
+            The physical location where to store the artifacts. 
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        include_ml_operators: boolean
+            Include ML operators for the SAP DI scenario
+        &#34;&#34;&#34;
+        graph_writer = GraphWriter(self.config)
+
+        sql_processed_cons_layer = self.config.get_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED)[SqlProcessor.TRACE_KEY_CONSUMPTION_LAYER]
+        
+        sql_key_sql = SqlProcessor.TRACE_KEY_SQL_PROCESSED
+
+        self.graphs = {}
+        
+        for element in sql_processed_cons_layer:
+            if not isinstance(element, dict):
+                continue # ignore TODO: proper doc
+            
+            # Generate consumption layer sql    
+            if sql_key_sql in element: # TODO: gen warning if no sql
+                connections = {}
+                groups = []
+                if &#39;groups&#39; in element:
+                    if element[&#39;groups&#39;]:
+                        groups = element[&#39;groups&#39;]
+                operators = []
+                operator_id = element[&#39;name&#39;]
+                operator_display_name = element[&#39;display_name_short&#39;]
+
+                input = []
+                output = []
+                body = []
+                if &#39;input&#39; in element[sql_key_sql]:
+                    input = element[sql_key_sql][&#39;input&#39;]
+                if &#39;body&#39; in element[sql_key_sql]:
+                    body = element[sql_key_sql][&#39;body&#39;]
+                if &#39;output&#39; in element[sql_key_sql]:
+                    output = element[sql_key_sql][&#39;output&#39;]
+                
+                # Build SQL &amp; Ports arrays
+                sql = []
+                in_ports = []
+                out_ports = []
+                out_ports_values = []
+                target_schema = self.config.get_entry(ConfigConstants.CONFIG_KEY_SCHEMA)
+                for item in input:
+                    sql_str = &#39;&#39;
+                    if item[&#39;hasrel&#39;]:
+                        in_ports.append(self._generate_port(item[&#39;interface_name&#39;]))
+                        sql_str = item[sql_key_sql]
+                    else:
+                        sql_str = item[sql_key_sql].format(*item[&#39;sql_vars&#39;])
+                    sql.append(sql_str)
+                    if include_ml_operators:
+                        if self.config.is_model_category(item[&#39;cat&#39;]) and not element[&#39;function&#39;] == &#39;Score&#39;: 
+                            # Generate Blob Converter and Model Producer
+                            mdl_cons_id = operator_id + &#39;_mdlcons&#39;
+                            mdl_name = &#39;com.sap.hanaml.&#39; + self.config.get_entry(ConfigConstants.CONFIG_KEY_PROJECT_NAME) + &#39;_mdl&#39;
+                            str_converter_id = operator_id + &#39;_strconv&#39;
+                            mld_cons_ops, mdl_cons_conns = self._generate_mlapi_model_operator(mdl_name, ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT,mdl_cons_id, &#39;Model Consumer&#39;)
+                            str_converter_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT, str_converter_id, &#39;To String&#39;, None, None, None, None, None)
+                            # Generate connections
+                            # From Constant Generator to ML-Api consumer
+                            self._add_connections(groups, connections, mdl_cons_conns)
+                            # From  ML-Api consumer to String Converter
+                            self._add_connections(groups, connections, self._generate_port_connection(mdl_cons_id, ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB, str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB))
+                            # From String Converter to Operator
+                            self._add_connections(groups, connections, self._generate_port_connection(str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING, operator_id, item[&#39;interface_name&#39;]))
+                            # Add operators
+                            operators.extend(mld_cons_ops)
+                            operators.append(str_converter_op)
+
+                for item in body:
+                    proc_name = item[&#39;sql_vars&#39;][0]
+                    proc_name = target_schema + &#39;.&#34;&#39; + proc_name.upper() + &#39;&#34;&#39;
+                    sql_str = item[sql_key_sql].format(proc_name)
+                    sql.append(sql_str)
+                for item in output:
+                    # Check if we have relation defined. In case of a 1 to many relationship we need to assure 
+                    # we duplicate the port as datahub does not [yet] support 1 to many port relationships
+                    interface_name = item[&#39;interface_name&#39;]
+                    if &#39;hasrel&#39; in item and item[&#39;hasrel&#39;] and  &#39;relobject&#39; in item and item[&#39;relobject&#39;]:
+                        # First we generate the connections to all the related objects
+                        idx_tracker = 0
+                        for idx, relobject in enumerate(item[&#39;relobject&#39;]):
+                            idx_tracker = idx
+                            hasrel_interface_name = interface_name + str(idx_tracker)
+                            out_ports.append(self._generate_port(hasrel_interface_name))
+                            out_ports_values.append(self._generate_outport_value(hasrel_interface_name, target_schema, item[&#39;dbobject_name&#39;]))
+                            self._add_connections(relobject[&#39;groups&#39;], connections, self._generate_port_connection(operator_id, hasrel_interface_name, relobject[&#39;cons_name&#39;], relobject[&#39;interface_name&#39;]))
+                        # We add an index to create an additional port for normal processing
+                        interface_name += str(idx_tracker+1)
+
+                     # We process the output as normal to assure proper generation of requested opperators is done such as ml api or restpoint operators. 
+                    out_ports.append(self._generate_port(interface_name))
+                    if &#39;dbobject_name&#39; in item:
+                        out_ports_values.append(self._generate_outport_value(interface_name, target_schema, item[&#39;dbobject_name&#39;]))
+                    self._generate_output_content(include_rest_endpoint, include_ml_operators, groups, operator_id, interface_name, item, element, operators, connections)
+                    
+                    # TODO: Refactor this
+                    if &#39;sql_vars&#39; in item:
+                        sql_var_dbobject = target_schema + &#39;.&#39; + item[&#39;sql_vars&#39;][0]
+                        item[&#39;sql_vars&#39;][0] = sql_var_dbobject
+                        item[&#39;sql_vars&#39;][1] = sql_var_dbobject
+                        sql_str = item[sql_key_sql].format(*item[&#39;sql_vars&#39;])
+                        sql.append(sql_str)
+                    
+                python_script = self._generate_python_script(sql, in_ports, out_ports_values)
+                operator = self._generate_operator(ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT, operator_id, operator_display_name, None, python_script, in_ports, out_ports, None)
+                operators.append(operator)
+                if &#39;groups&#39; in element:
+                    if element[&#39;groups&#39;]:
+                        for group in element[&#39;groups&#39;]:
+                            if not group[&#39;identifier&#39;] in self.graphs:
+                                self.graphs[group[&#39;identifier&#39;]] = {}
+                            if not &#39;terminator_id&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                                self.graphs[group[&#39;identifier&#39;]][&#39;terminator_id&#39;] = None
+                            if not &#39;operators&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                                self.graphs[group[&#39;identifier&#39;]][&#39;operators&#39;] = []
+                            if not &#39;connections&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                                self.graphs[group[&#39;identifier&#39;]][&#39;connections&#39;] = []
+                            self.graphs[group[&#39;identifier&#39;]][&#39;operators&#39;].extend(operators)
+                            if connections:
+                                if group[&#39;identifier&#39;] in connections:
+                                    self.graphs[group[&#39;identifier&#39;]][&#39;connections&#39;].extend(connections[group[&#39;identifier&#39;]])
+        
+        for graph_identifier in self.graphs:
+            graph_operators = self.graphs[graph_identifier][&#39;operators&#39;]
+            graph_connections = self.graphs[graph_identifier][&#39;connections&#39;]
+            graph = self._generate_graph(&#34;&#34;, graph_operators, graph_connections)
+            graph_writer.generate(path, graph_identifier, graph) 
+
+    
+    def _get_graph_terminator_operator_id(self, group_identifier):
+        &#34;&#34;&#34;
+        In case of sap di ml operators we include a graph terminator for the fit aka train
+        graph to abide by the sap di proposed best practise for these graphs. To fit this is
+        dynamic build of the graph we have a terminator operator per graph of which we need
+        to retrieve the id to be able to generate operator connections to the singel graph
+        terminator.  
+
+        Parameters
+        ----------
+        group_identifier: str
+            The physical location where to store the artifacts. 
+        
+        Returns
+        -------
+        terminator_id : str
+            The terminator operator id within the graph
+        &#34;&#34;&#34;
+        terminator_op_id = None
+        if group_identifier in self.graphs:
+            if &#39;terminator_id&#39; in self.graphs[group_identifier]:
+                terminator_op_id = self.graphs[group_identifier][&#39;terminator_id&#39;]
+        return terminator_op_id
+
+    def _add_graph_terminator_connection(self, operator_id, groups, operators, connections, src_process, src_port, tgt_port):
+        &#34;&#34;&#34;
+        In case of sap di ml operators we include a graph terminator for the fit aka train
+        graph to abide by the sap di proposed best practise for these graphs. Here the 
+        existence of the terminator operator is checked and otherwise created before
+        the connection is generated.
+
+        Parameters
+        ----------
+        operator_id: str
+            The operator id is the link to the consumption layer element id. This is extended
+            to provide ids to related operators.
+        groups : dict
+            The groups the consumption layer element is part of
+        operators : list
+            The list of already generated operators as to extend this with the generated operators. 
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+        src_process : str
+            The source operator from which the connection starts
+        src_port : str
+            The source oeprator port from which the connection starts
+        tgt_port : str
+            The target operator port to where the connection ends
+        &#34;&#34;&#34;
+        for group in groups:
+            # Check on graph level if terminator exists
+            terminator_op_id = self._get_graph_terminator_operator_id(group[&#39;identifier&#39;])
+            if not terminator_op_id:
+                if not group[&#39;identifier&#39;] in self.graphs:
+                    self.graphs[group[&#39;identifier&#39;]] = {} 
+                if not &#39;terminator_id&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                    terminator_op_id = operator_id + &#39;_pyfin&#39;
+                    term_id = operator_id + &#39;_terminator&#39;
+                    py_finish_op = self._generate_python_graph_finished_operator(terminator_op_id,&#39;Finalize&#39;)
+                    term_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_COMPONENT, term_id, &#39;Graph Terminator&#39;, None, None, None, None, None)
+                    # From python terminator op to graph terminator 
+                    self._add_connections(groups, connections, self._generate_port_connection(terminator_op_id, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE, term_id, ConfigConstants.DATAHUB_OPERATOR_GRAPH_TERMINATOR_IN_PORT_ANY))
+                    operators.append(py_finish_op)
+                    operators.append(term_op)
+                    self.graphs[group[&#39;identifier&#39;]][&#39;terminator_id&#39;] = terminator_op_id
+            self._add_connection(group[&#39;identifier&#39;], connections, self._generate_port_connection(src_process, src_port, terminator_op_id, tgt_port))
+           
+
+    def _add_connections(self, groups, connections, new_connection):
+        &#34;&#34;&#34;
+        Add a new connections in all the groups that the consumption layer element 
+        belongs to
+
+        Parameters
+        ----------
+        groups : dict
+            The groups the consumption layer element is part of
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+        new_connection : dict
+            The new connection that needs to be added
+        &#34;&#34;&#34;
+        for group in groups:
+            self._add_connection(group[&#39;identifier&#39;], connections, new_connection)
+
+    def _add_connection(self, group_identifier, connections, new_connection):
+        &#34;&#34;&#34;
+        Add a new connection
+
+        Parameters
+        ----------
+        group_identifier : str
+            The group where the connections needs to be added
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+        new_connection : dict
+            The connection that needs to be added
+        &#34;&#34;&#34;
+        if not group_identifier in connections:
+           connections[group_identifier] = []
+        if  isinstance(new_connection, list):
+           connections[group_identifier].extend(new_connection)    
+        else: 
+           connections[group_identifier].append(new_connection)
+        
+
+    def _generate_output_content(self, include_rest_endpoint, include_ml_operators, groups, operator_id, interface_name, item, element, operators, connections):
+        &#34;&#34;&#34;
+        Depending on the different use cases generate additional output content, for example operators,
+        are required. Two scenarios are currently supported:
+
+        * SAP DI (ML Operators)
+        * REST Endpoint for easy external exposure
+
+        Parameters
+        ----------
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        include_ml_operators: boolean
+            Include ML operators for the SAP DI scenario
+        groups : dict
+            The groups the consumption layer element is part of
+        operator_id: str
+            The operator id is the link to the consumption layer element id. This is extended
+            to provide ids to related operators.
+        interface_name : str
+            The interface name of the consumption layer element
+        item : dict
+            The input or output table of the 
+        operators : list
+            The list of already generated operators as to extend this with the generated operators. 
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+        &#34;&#34;&#34;
+        if include_rest_endpoint:
+            if self.config.is_fitted_category(item[&#39;cat&#39;]) and not element[&#39;function&#39;] == &#39;Score&#39;:
+                basePath = self._get_rest_endpoint_path(item[&#39;cat&#39;])
+                if include_ml_operators:
+                    basePath = &#39;${deployment}&#39;
+                rest_operators, rest_connections = self._generate_rest_endpoint_operators(operator_id, item[&#39;interface_name&#39;], basePath)
+                if rest_operators and rest_connections:
+                    operators.extend(rest_operators)
+                    self._add_connections(groups, connections, rest_connections)
+
+        if include_ml_operators:
+            # Python Terminator operator
+            # Generated as part of the model producer flow and used by metrics flow
+            if self.config.is_model_category(item[&#39;cat&#39;]):
+                # Generate Blob Converter and Model Producer
+                blob_converter_id = operator_id + &#39;_blobconv&#39;
+                mdl_prod_id = operator_id + &#39;_mdlprod&#39;
+                mdl_name = &#39;com.sap.hanaml.&#39; + self.config.get_entry(ConfigConstants.CONFIG_KEY_PROJECT_NAME) + &#39;_mdl&#39;
+                msg_converter_id = operator_id + &#39;_msgconv&#39;
+                str_converter_id = operator_id + &#39;_strconv&#39;
+                blob_converter_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOBLOB_COMPONENT, blob_converter_id, &#39;To Blob&#39;, None, None, None, None, None)
+                mld_prod_ops, __ = self._generate_mlapi_model_operator(mdl_name, ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT,mdl_prod_id, &#39;Model Producer&#39;)
+                msg_conv_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT, msg_converter_id, &#39;To Message&#39;, None, None, None, None, None)
+                str_conv_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT, str_converter_id, &#39;To String&#39;, None, None, None, None, None)
+                # Generate connections
+                # From Operator to Blob Converter
+                self._add_connections(groups, connections, self._generate_port_connection(operator_id, interface_name, blob_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOBLOB_IN_PORT_STRING))
+                # From Blob Converter to ML-Api model producer
+                self._add_connections(groups, connections, self._generate_port_connection(blob_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOBLOB_OUT_PORT_BLOB, mdl_prod_id, ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_IN_PORT_BLOB))
+                # From ML-Api model producer to message converter
+                self._add_connections(groups, connections, self._generate_port_connection(mdl_prod_id, ConfigConstants.DATAHUB_OPERATOR_MDL_PROD_OUT_PORT_MSG, msg_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_ANY))
+                # From message converter to string converter
+                self._add_connections(groups, connections, self._generate_port_connection(msg_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE, str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_MESSAGE))
+                # From string converter to python terminator op to check when ready
+                # self._add_connections(groups, connections, self._generate_port_connection(str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING, self.terminator_ops_py_id, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING))
+                self._add_graph_terminator_connection(operator_id, groups, operators, connections, str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING)
+                # Add operators
+                operators.append(blob_converter_op)
+                operators.extend(mld_prod_ops)
+                operators.append(msg_conv_op)
+                operators.append(str_conv_op)
+            if self.config.is_metric_category(item[&#39;cat&#39;]):
+                # Add following for score result
+                # api.send(&#39;output&#39;, str(accuracy))
+                # metrics_dict = {&#34;Accuracy&#34;: accuracy}
+                ##send the metrics to the output port - Submit Metrics operator will use this to persist the metrics 
+                # api.send(&#34;metrics&#34;, api.Message(metrics_dict))
+                
+                msg_converter_id = operator_id + &#39;_msgconv&#39;
+                metrics_id = operator_id + &#39;_metrics&#39;
+                msg_converter_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOMESSAGE_COMPONENT,msg_converter_id,&#39;To Message&#39;,None, None,None,None,None)
+                metrics_op = self._generate_operator(ConfigConstants.DATAHUB_MLAPI_OPERATOR_METRICS_COMPONENT,metrics_id,&#39;Submit Metrics&#39;,None, None,None,None,None)
+                # Generate connections
+                # From Operator to Blob Converter
+                self._add_connections(groups, connections, self._generate_port_connection(operator_id, interface_name, msg_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_IN_PORT_STRING))
+                # From Blob Converter to ML-Api metric producer
+                self._add_connections(groups, connections, self._generate_port_connection(msg_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOMESSAGE_OUT_PORT_MESSAGE, metrics_id, ConfigConstants.DATAHUB_OPERATOR_METRICS_IN_PORT_METRICS))
+                # From ML-Api metrics producer to python terminator op 
+                # self._add_connections(groups, connections, self._generate_port_connection(metrics_id, ConfigConstants.DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE, self.terminator_ops_py_id, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE))
+                self._add_graph_terminator_connection(operator_id, groups, operators, connections, metrics_id, ConfigConstants.DATAHUB_OPERATOR_METRICS_OUT_PORT_RESPONSE, ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE)
+                # Add operators
+                operators.append(msg_converter_op)
+                operators.append(metrics_op)
+
+
+    def _generate_outport_value(self, interface_name, target_schema, dbobject_name):
+        &#34;&#34;&#34;
+        As data is moved out of HANA only the schema/table name in HANA is transferred across
+        operators.  This method generates a internal dict with this reference tbat is used
+        as part of the python script generation.
+
+        Parameters
+        ----------
+        interface_name : str
+            The interface name of the consumption layer element
+        target_schema : str
+            The target schema where the dbobject_name resides
+        dbobject_name : str
+            The actual dbobject_name such as a table
+
+        Returns
+        -------
+        out_port_value : dict
+            Internal dict for easy consumption of this data 
+        
+        &#34;&#34;&#34;
+        out_port_value = {
+            &#39;port_name&#39;: interface_name,
+            &#39;dbobject_name&#39;: target_schema + &#39;.&#39; + dbobject_name
+        }
+        return out_port_value
+
+    def _generate_python_script(self, sql, in_ports, out_ports_values):        
+        &#34;&#34;&#34;
+        The generates the python script for the operator.
+
+        Parameters
+        ----------
+        sql : list
+            List of all the sql entries for the consumption element
+        in_ports : list
+            The input ports that have been generated and are needed to interact with
+        out_ports_values : list
+            The output port values. 
+
+        Returns
+        -------
+        python_script : str
+            The python script
+        &#34;&#34;&#34;
+        indent = &#39;    &#39;
+        python_script = []
+        python_script.append(&#39;from hdbcli import dbapi&#39;)
+        python_script.append(&#39;def on_input(&#39; + &#39;,&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;):&#39;)
+        
+        # on_input function content (adding indent)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Define connection context&#34;)&#39;)
+        python_script.append(indent + &#39;address = api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;host&#34;]&#39;)
+        python_script.append(indent + &#39;port =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;port&#34;]&#39;)
+        python_script.append(indent + &#39;pwd =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;password&#34;]&#39;)
+        python_script.append(indent + &#39;user =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;user&#34;]&#39;)
+        python_script.append(indent + &#39;useTLS =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;useTLS&#34;]&#39;)
+        python_script.append(indent + &#39;encrypt = &#34;false&#34;&#39;)
+        python_script.append(indent + &#39;if useTLS:&#39;)
+        python_script.append(indent + indent + &#39;encrypt = &#34;true&#34;&#39;)
+        python_script.append(indent + &#39;hana_connection = dbapi.connect(address=address, port=port, user=user, password=pwd, encrypt=encrypt, sslValidateCertificate=&#34;false&#34;)&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Generate SQL&#34;)&#39;)
+        # Add sql statements
+        python_script.append(indent + &#39;sql = &#34;&#34;&#34;&#39;)
+        python_script.append(indent + &#39;Do&#39;)
+        python_script.append(indent + &#39;Begin&#39;)
+        sql_str = StringUtils.flatten_string_array(sql, indent=indent)
+        sql_str = self.config.data_source_mapping(sql_str)
+        python_script.append(sql_str)
+        python_script.append(indent + &#39;End&#39;)
+        if in_ports:
+            python_script.append(indent + &#39;&#34;&#34;&#34;.format(&#39; + &#39;,&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;)&#39;)
+        else:
+            python_script.append(indent + &#39;&#34;&#34;&#34;&#39;)
+        python_script.append(indent + &#39;cursor = hana_connection.cursor()&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Execute SQL&#34;)&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: &#34; + sql)&#39;)
+        python_script.append(indent + &#39;success = cursor.execute(sql)&#39;)
+        python_script.append(indent + &#39;if success:&#39;)  
+        
+        for item in out_ports_values:
+            python_script.append(indent + indent + &#39;api.send(&#34;&#39; + item[&#39;port_name&#39;]+ &#39;&#34;, \&#39;&#39; + item[&#39;dbobject_name&#39;] + &#39;\&#39;)&#39;)
+
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: operator done&#34;)&#39;)  
+        
+        # Lastly based on if there are inports add api callback call or function call
+        if in_ports:
+            python_script.append(&#39;api.set_port_callback([&#39; + &#39;&#34;&#39;+ &#39;&#34;, &#34;&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;&#34;&#39; + &#39;], on_input)&#39;)
+        else:
+            python_script.append(&#39;on_input()&#39;)
+
+        return StringUtils.flatten_string_array(python_script)
+
+    def _generate_port_connection(self, src_process, src_port, tgt_process, tgt_port):
+        &#34;&#34;&#34;
+        Generates the actual graph json port connection structure
+
+        Parameters
+        ----------
+        src_process : str
+            The source operator from which the connection starts
+        src_port : str
+            The source oeprator port from which the connection starts
+        tgt_process : str
+            The target operator to where the connection ends
+        tgt_port : str
+            The target operator port to where the connection ends
+
+        Returns
+        -------
+        connection : dict
+            The connection structure.
+        &#34;&#34;&#34;
+        tr_src_process = StringUtils.remove_special_characters(src_process).title()
+        tr_tgt_process = StringUtils.remove_special_characters(tgt_process).title()
+        connection = {
+                        &#34;metadata&#34;: {},
+                        &#34;src&#34;: {
+                                &#34;port&#34;: src_port,
+                                &#34;process&#34;: tr_src_process
+                        },
+                        &#34;tgt&#34;: {
+                                &#34;port&#34;: tgt_port,
+                                &#34;process&#34;: tr_tgt_process
+                        }
+                }
+        return connection
+
+    def _generate_port(self, name, port_type=None):
+        &#34;&#34;&#34;
+        Generates the actual graph json port structure
+
+        Parameters
+        ----------
+        name : str
+            Name of the port to be used
+        port_type : str
+            Port type. For example string or message
+
+        Returns
+        -------
+        port : dict
+            The port structure.
+        &#34;&#34;&#34;
+        if not port_type:
+            port_type = &#39;string&#39;
+        port = {
+                 &#39;name&#39;: name,
+                 &#39;type&#39;: port_type
+                }
+        return port
+
+
+    def _generate_operator(self, operator_comp, operator_id, operator_label, config, script, in_ports, out_ports, extensible):
+        &#34;&#34;&#34;
+        Generates the actual graph json operator structure.
+
+        Parameters
+        ----------
+        operator_comp : str
+            Component of the operator as known by DataHub
+        operator_id : str
+            The operator id
+        operator_label : str
+            The operator label shown in the modeler on the operator
+        config : dict
+            Additional DataHub config that is required.
+        script : str
+            The python script which provides the operator functionality
+        in_ports : list
+            A list of additional in ports
+        out_ports : list
+            A list of additional out ports
+
+        Returns
+        -------
+        operator : dict
+            The operator structure.
+        &#34;&#34;&#34;
+        tr_operator_id = StringUtils.remove_special_characters(operator_id).title()
+        operator = {
+                        &#39;component&#39;: operator_comp,
+                        &#39;metadata&#39;: {
+                                &#39;label&#39;: operator_label,
+                                &#39;config&#39;: {},
+                        }
+                }
+        if config:
+            operator[&#39;metadata&#39;][&#39;config&#39;] = config
+
+        if extensible:
+            operator[&#39;metadata&#39;][&#39;extensible&#39;] = True
+        
+        if script:
+            operator[&#39;metadata&#39;][&#39;config&#39;][&#39;script&#39;] = script
+
+        if in_ports:
+            operator[&#39;metadata&#39;][&#39;additionalinports&#39;] = in_ports
+
+        if out_ports:
+            operator[&#39;metadata&#39;][&#39;additionaloutports&#39;] = out_ports
+
+        operator_object = {
+            tr_operator_id : operator
+        }
+        return operator_object
+    
+
+    def _generate_graph(self, description, operators, connections):
+        &#34;&#34;&#34;
+        Generates the actual graph json structure.
+
+        Parameters
+        ----------
+        description : str
+            Component of the operator as known by DataHub
+        operators : list
+            The list of already generated operators as to extend this with the generated operators. 
+        connections : list
+            The connections list for this graph which will be appended with the new connection
+
+        Returns
+        -------
+        graph : dict
+            The graph structure.
+        &#34;&#34;&#34;
+        # Add operators
+        processes = {}
+        for operator in operators:
+            processes.update( operator )
+        
+        graph = {
+                &#39;description&#39;: &#39;&#39;,
+                &#39;processes&#39;: processes,
+                &#39;groups&#39;: [],
+                &#39;connections&#39;: connections,
+                &#39;inports&#39;: {},
+                &#39;outports&#39;: {},
+                &#39;properties&#39;: {}
+        }
+        return graph
+
+
+    # ----------------------------------------------------------
+    # ML-Api
+    # ----------------------------------------------------------
+    def _generate_mlapi_model_operator(self, model_name, operator_comp, operator_id, operator_label):
+        &#34;&#34;&#34;
+        Generates sap di ml api operators for model consumption or producing.
+
+        Parameters
+        ----------
+        model_name : str
+            Name of the model to use to store the model in ML API
+        operator_comp : str
+            Component of the operator as known by DataHub
+        operator_id : str
+            The operator id
+        operator_label : str
+            The operator label shown in the modeler on the operator
+
+        Returns
+        -------
+        operators : list
+            List of operators generated
+        connections : list
+            List of connections generated
+        &#34;&#34;&#34;
+        config = {}
+        operators = []
+        connections = []
+        if operator_comp == ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT:
+            # We need to add a constant generator which is a ml-api requirement
+            config[&#39;content&#39;] = &#39;${ARTIFACT:MODEL:&#39; + model_name + &#39;}&#39;
+            constant_gen_id = &#39;const_&#39; + operator_id
+            constant_gen_label = &#39;Constant &#39; + operator_label
+            constant_gen_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_COMPONENT, constant_gen_id, constant_gen_label, config, None, None, None, None)
+            model_operator = self._generate_operator(operator_comp, operator_id, operator_label, None, None, None, None, None)
+            # From constant generator op to ML-Api model consumer
+            connections.append(self._generate_port_connection(constant_gen_id, ConfigConstants.DATAHUB_OPERATOR_CONSTANT_GENERATOR_OUT_PORT_STRING, operator_id, ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_IN_PORT_STRING))
+            operators.append(constant_gen_op)
+            operators.append(model_operator)
+        if operator_comp == ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_PROD_COMPONENT:
+            config[&#39;artifactKind&#39;] = &#39;model&#39;
+            config[&#39;artifactName&#39;] = model_name
+            model_operator = self._generate_operator(operator_comp, operator_id, operator_label, config, None, None, None, None)
+            operators.append(model_operator)
+        return operators, connections
+    
+
+    # ----------------------------------------------------------
+    # Rest Endpoint
+    # ----------------------------------------------------------
+    # Generate base path
+    def _generate_rest_endpoint_operators(self, data_operator_id, data_outport_name, basePath):
+        &#34;&#34;&#34;
+        Generates rest api related operators for exposing data external
+
+        Parameters
+        ----------
+        data_operator_id : str
+            The operator id
+        data_outport_name : str
+            The outport used to get data from which will need to be exposed
+        basePath : str
+            The base path for the url generated by DataHub for the rest endpoint
+
+        Returns
+        -------
+        operators : list
+            List of operators generated
+        connections : list
+            List of connections generated
+        &#34;&#34;&#34;
+        operators = []
+        connections = []
+        # Build Operators
+        # HANAML Api Python Operator
+        result_client_op_id = data_operator_id + &#39;_rescli&#39;
+        result_client_port_restrequest = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE, port_type=&#39;message&#39;)
+        result_client_port_restresponse = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE, port_type=&#39;message&#39;)
+        result_client_port_datain = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_STRING)
+        result_client_inports = [result_client_port_restrequest, result_client_port_datain]
+        result_client_outports = [result_client_port_restresponse]
+        result_client_script = self._generate_result_client_script(result_client_port_datain[&#39;name&#39;], result_client_port_restrequest[&#39;name&#39;],result_client_port_restresponse[&#39;name&#39;])
+        result_client_operator = self._generate_operator(ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT,result_client_op_id,&#39;Result Client&#39;, None, result_client_script, result_client_inports, result_client_outports, False)
+        # OpenAPI Servflow Operator
+        restapi_op_id = data_operator_id + &#39;_restapi&#39;
+        restapi_op_config = {
+            &#39;basePath&#39;: basePath
+        }
+        restapi_operator = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_RESTAPI_COMPONENT,restapi_op_id,&#39;Rest API&#39;, restapi_op_config, None, None, None, False)
+        # Response Interceptor Operator
+        resp_int_op_id = data_operator_id + &#39;_respint&#39;
+        resp_int_operator = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_COMPONENT,resp_int_op_id,&#39;Response Interceptor&#39;, None, None, None, None, False)
+        operators = [result_client_operator, restapi_operator, resp_int_operator]
+        # Build Connections 
+        # From Data --&gt; Result Client
+        data_to_result_client = self._generate_port_connection(data_operator_id, data_outport_name, result_client_op_id, result_client_port_datain[&#39;name&#39;])
+        # From Result Client --&gt; Response intercepter
+        result_client_to_resp_int = self._generate_port_connection(result_client_op_id, ConfigConstants.DATAHUB_OPERATOR_RESULT_OUT_PORT_MESSAGE, resp_int_op_id, ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_RESPONSE_IN_PORT_MESSAGE)
+        # From Response intercepter --&gt; Result Client
+        resp_int_to_result_client = self._generate_port_connection(resp_int_op_id, ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_OUT_PORT_MESSAGE, result_client_op_id, ConfigConstants.DATAHUB_OPERATOR_RESULT_IN_PORT_MESSAGE)
+        # From Rest API --&gt; Response Interceptor
+        restapi_to_resp_int = self._generate_port_connection(restapi_op_id, ConfigConstants.DATAHUB_OPERATOR_RESTAPI_OUT_PORT_MESSAGE, resp_int_op_id, ConfigConstants.DATAHUB_OPERATOR_RESPONSE_INTER_REQUEST_IN_PORT_MESSAGE)
+        connections = [data_to_result_client, result_client_to_resp_int, resp_int_to_result_client, restapi_to_resp_int]
+        return operators, connections
+        
+    # Restendpoint has url pattern: &lt;protocol&gt;://&lt;host&gt;:&lt;port&gt;/app/pipeline-modeler/openapi/service/&lt;operator_config_basepath&gt;
+    # Best results to add / at the beginning and end of the basepath in the operator config. ie /hanaml/
+    def _generate_result_client_script(self,in_port_data_name, in_port_request_name, out_port_name): 
+        &#34;&#34;&#34;
+        Generates result client operator python script
+
+        Parameters
+        ----------
+        in_port_data_name : str
+            From which to retrieve the data (ie a HANA schema/table)
+        in_port_request_name : str
+            The in port to link the request of the data. This can be a rest endpoint operator
+        out_port_name : str
+            The out port to which the data is pushed.
+
+        Returns
+        -------
+        python_script : str
+            Generated python script 
+        &#34;&#34;&#34;       
+        indent = &#39;    &#39;
+        python_script = []
+        python_script.append(&#39;import json&#39;)
+        python_script.append(&#39;from hdbcli import dbapi&#39;)
+        python_script.append(&#39;def on_request(msg):&#39;)
+        python_script.append(indent + &#39;msg.attributes[&#34;openapi.header.content-type&#34;] = &#34;application/json&#34;&#39;)
+        python_script.append(indent + &#39;response = {}&#39;)
+        python_script.append(indent + &#39;if &#34;results&#34; in globals():&#39;)
+        python_script.append(indent + indent + &#39;response = {&#34;results&#34;: results}&#39;)
+        python_script.append(indent + &#39;else:&#39;)
+        python_script.append(indent + indent + &#39;response = {&#34;results&#34;: &#34;Sorry no results yet. Please try again in a sec&#34;}&#39;)
+        python_script.append(indent + &#39;msg.body=json.dumps(response)&#39;)
+        python_script.append(indent + &#39;api.send(&#34;&#39; + out_port_name + &#39;&#34;, msg)&#39;)
+        python_script.append(&#39;def on_data(data):&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Define connection context&#34;)&#39;)
+        python_script.append(indent + &#39;address = api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;host&#34;]&#39;)
+        python_script.append(indent + &#39;port =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;port&#34;]&#39;)
+        python_script.append(indent + &#39;pwd =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;password&#34;]&#39;)
+        python_script.append(indent + &#39;user =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;user&#34;]&#39;)
+        python_script.append(indent + &#39;useTLS =  api.config.hanaConnection[&#34;connectionProperties&#34;][&#34;useTLS&#34;]&#39;)
+        python_script.append(indent + &#39;encrypt = &#34;false&#34;&#39;)
+        python_script.append(indent + &#39;if useTLS:&#39;)
+        python_script.append(indent + indent + &#39;encrypt = &#34;true&#34;&#39;)
+        python_script.append(indent + &#39;hana_connection = dbapi.connect(address=address, port=port, user=user, password=pwd, encrypt=encrypt, sslValidateCertificate=&#34;false&#34;)&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Generate SQL&#34;)&#39;)
+        # Add sql statements
+        python_script.append(indent + &#39;sql = &#34;select * from {};&#34;.format(data)&#39;)
+        python_script.append(indent + &#39;cursor = hana_connection.cursor()&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: Execute SQL&#34;)&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: &#34; + sql)&#39;)
+        python_script.append(indent + &#39;success = cursor.execute(sql)&#39;)
+        python_script.append(indent + &#39;if success:&#39;)  
+        python_script.append(indent + indent + &#39;global results&#39;)
+        python_script.append(indent + indent + &#39;results = []&#39;)
+        python_script.append(indent + indent + &#39;for row in cursor:&#39;)
+        python_script.append(indent + indent + indent + &#39;results.append(str(row))&#39;)
+        python_script.append(indent + &#39;api.logger.debug(&#34;HANAML: result operator done processing data&#34;)&#39;)  
+        
+        # Lastly based on if there are inports add api callback call or function call
+        python_script.append(&#39;api.set_port_callback(&#34;&#39; + in_port_request_name + &#39;&#34;, on_request)&#39;)
+        python_script.append(&#39;api.set_port_callback(&#34;&#39; + in_port_data_name + &#39;&#34;, on_data)&#39;)
+        
+        return StringUtils.flatten_string_array(python_script)
+
+    def _get_rest_endpoint_path(self, postfix):
+        &#34;&#34;&#34;
+        Helper function to generated rest endpoint paths
+
+        Parameters
+        ----------
+        postfix : str
+            Add additional component to the end of the path
+
+        Returns
+        -------
+        endpoint_path : str
+            Generated endpoint path
+        &#34;&#34;&#34;     
+        return &#39;/&#39; + StringUtils.remove_special_characters(self.config.get_entry(ConfigConstants.CONFIG_KEY_PROJECT_NAME)).lower() + &#39;-&#39; + StringUtils.remove_special_characters(postfix).lower() + &#39;/&#39;
+
+
+    # ----------------------------------------------------------
+    # Generic helper methods
+    # ----------------------------------------------------------
+    def _generate_python_graph_finished_operator(self, operator_id, operator_label):
+        &#34;&#34;&#34;
+        Helper function to generated graph terminator operator
+
+        Parameters
+        ----------
+        operator_id : str
+            The operator id
+        operator_label : str
+            The operator label shown in the modeler on the operator
+
+        Returns
+        -------
+        operator : dict
+            The graph json operator structure for the terminator operator
+        &#34;&#34;&#34;     
+        # inports: metrics, artifact
+        # outports: output
+        metrics_inport = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_MESSAGE, port_type=&#39;message&#39;)
+        artifact_inport = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_IN_PORT_STRING)
+        ouput_outport = self._generate_port(ConfigConstants.DATAHUB_OPERATOR_TERMINATOR_OUT_PORT_MESSAGE, port_type=&#39;message&#39;)
+        script = self._generate_python_graph_finished_script([metrics_inport, artifact_inport], ouput_outport)
+        operator = self._generate_operator(ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT, operator_id, operator_label, None, script, [metrics_inport, artifact_inport], [ouput_outport], None)
+        return operator
+
+    def _generate_python_graph_finished_script(self, in_ports, out_port):
+        &#34;&#34;&#34;
+        Helper function to generated graph terminator python script
+
+        Parameters
+        ----------
+        in_ports : list
+            A list of additional in ports
+        out_ports : list
+            A list of additional out ports
+
+        Returns
+        -------
+        python_script : str
+            The generated python script
+        &#34;&#34;&#34; 
+        indent = &#39;    &#39;
+        python_script = []
+        python_script.append(&#39;def on_input(&#39; + &#39;,&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;):&#39;)
+        python_script.append(indent + &#39;api.send(&#34;&#39; + out_port[&#39;name&#39;] + &#39;&#34;, api.Message(&#34;Operators have finished.&#34;))&#39;)
+        python_script.append(&#39;api.set_port_callback([&#34;&#39; + &#39;&#34;,&#34;&#39;.join(port[&#39;name&#39;] for port in in_ports) + &#39;&#34;], on_input)&#39;)
+        return StringUtils.flatten_string_array(python_script)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generators.datahub.DataHubConsumptionProcessor.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self, path, include_rest_endpoint=False, include_ml_operators=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Method for generating the actual artifacts content.
+</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The physical location where to store the artifacts.</dd>
+<dt><strong><code>include_rest_endpoint</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.</dd>
+<dt><strong><code>include_ml_operators</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Include ML operators for the SAP DI scenario</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate(self, path, include_rest_endpoint=False, include_ml_operators=False):
+    &#34;&#34;&#34;
+    Method for generating the actual artifacts content.  
+
+    Parameters
+    ----------
+    path: str
+        The physical location where to store the artifacts. 
+    include_rest_endpoint: boolean
+        Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+    include_ml_operators: boolean
+        Include ML operators for the SAP DI scenario
+    &#34;&#34;&#34;
+    graph_writer = GraphWriter(self.config)
+
+    sql_processed_cons_layer = self.config.get_entry(ConfigConstants.CONFIG_KEY_SQL_PROCESSED)[SqlProcessor.TRACE_KEY_CONSUMPTION_LAYER]
+    
+    sql_key_sql = SqlProcessor.TRACE_KEY_SQL_PROCESSED
+
+    self.graphs = {}
+    
+    for element in sql_processed_cons_layer:
+        if not isinstance(element, dict):
+            continue # ignore TODO: proper doc
+        
+        # Generate consumption layer sql    
+        if sql_key_sql in element: # TODO: gen warning if no sql
+            connections = {}
+            groups = []
+            if &#39;groups&#39; in element:
+                if element[&#39;groups&#39;]:
+                    groups = element[&#39;groups&#39;]
+            operators = []
+            operator_id = element[&#39;name&#39;]
+            operator_display_name = element[&#39;display_name_short&#39;]
+
+            input = []
+            output = []
+            body = []
+            if &#39;input&#39; in element[sql_key_sql]:
+                input = element[sql_key_sql][&#39;input&#39;]
+            if &#39;body&#39; in element[sql_key_sql]:
+                body = element[sql_key_sql][&#39;body&#39;]
+            if &#39;output&#39; in element[sql_key_sql]:
+                output = element[sql_key_sql][&#39;output&#39;]
+            
+            # Build SQL &amp; Ports arrays
+            sql = []
+            in_ports = []
+            out_ports = []
+            out_ports_values = []
+            target_schema = self.config.get_entry(ConfigConstants.CONFIG_KEY_SCHEMA)
+            for item in input:
+                sql_str = &#39;&#39;
+                if item[&#39;hasrel&#39;]:
+                    in_ports.append(self._generate_port(item[&#39;interface_name&#39;]))
+                    sql_str = item[sql_key_sql]
+                else:
+                    sql_str = item[sql_key_sql].format(*item[&#39;sql_vars&#39;])
+                sql.append(sql_str)
+                if include_ml_operators:
+                    if self.config.is_model_category(item[&#39;cat&#39;]) and not element[&#39;function&#39;] == &#39;Score&#39;: 
+                        # Generate Blob Converter and Model Producer
+                        mdl_cons_id = operator_id + &#39;_mdlcons&#39;
+                        mdl_name = &#39;com.sap.hanaml.&#39; + self.config.get_entry(ConfigConstants.CONFIG_KEY_PROJECT_NAME) + &#39;_mdl&#39;
+                        str_converter_id = operator_id + &#39;_strconv&#39;
+                        mld_cons_ops, mdl_cons_conns = self._generate_mlapi_model_operator(mdl_name, ConfigConstants.DATAHUB_MLAPI_OPERATOR_MDL_CONS_COMPONENT,mdl_cons_id, &#39;Model Consumer&#39;)
+                        str_converter_op = self._generate_operator(ConfigConstants.DATAHUB_OPERATOR_CONVERTER_TOSTRING_COMPONENT, str_converter_id, &#39;To String&#39;, None, None, None, None, None)
+                        # Generate connections
+                        # From Constant Generator to ML-Api consumer
+                        self._add_connections(groups, connections, mdl_cons_conns)
+                        # From  ML-Api consumer to String Converter
+                        self._add_connections(groups, connections, self._generate_port_connection(mdl_cons_id, ConfigConstants.DATAHUB_OPERATOR_MDL_CONS_OUT_PORT_BLOB, str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_IN_PORT_BLOB))
+                        # From String Converter to Operator
+                        self._add_connections(groups, connections, self._generate_port_connection(str_converter_id, ConfigConstants.DATAHUB_OPERATOR_TOSTRING_OUT_PORT_STRING, operator_id, item[&#39;interface_name&#39;]))
+                        # Add operators
+                        operators.extend(mld_cons_ops)
+                        operators.append(str_converter_op)
+
+            for item in body:
+                proc_name = item[&#39;sql_vars&#39;][0]
+                proc_name = target_schema + &#39;.&#34;&#39; + proc_name.upper() + &#39;&#34;&#39;
+                sql_str = item[sql_key_sql].format(proc_name)
+                sql.append(sql_str)
+            for item in output:
+                # Check if we have relation defined. In case of a 1 to many relationship we need to assure 
+                # we duplicate the port as datahub does not [yet] support 1 to many port relationships
+                interface_name = item[&#39;interface_name&#39;]
+                if &#39;hasrel&#39; in item and item[&#39;hasrel&#39;] and  &#39;relobject&#39; in item and item[&#39;relobject&#39;]:
+                    # First we generate the connections to all the related objects
+                    idx_tracker = 0
+                    for idx, relobject in enumerate(item[&#39;relobject&#39;]):
+                        idx_tracker = idx
+                        hasrel_interface_name = interface_name + str(idx_tracker)
+                        out_ports.append(self._generate_port(hasrel_interface_name))
+                        out_ports_values.append(self._generate_outport_value(hasrel_interface_name, target_schema, item[&#39;dbobject_name&#39;]))
+                        self._add_connections(relobject[&#39;groups&#39;], connections, self._generate_port_connection(operator_id, hasrel_interface_name, relobject[&#39;cons_name&#39;], relobject[&#39;interface_name&#39;]))
+                    # We add an index to create an additional port for normal processing
+                    interface_name += str(idx_tracker+1)
+
+                 # We process the output as normal to assure proper generation of requested opperators is done such as ml api or restpoint operators. 
+                out_ports.append(self._generate_port(interface_name))
+                if &#39;dbobject_name&#39; in item:
+                    out_ports_values.append(self._generate_outport_value(interface_name, target_schema, item[&#39;dbobject_name&#39;]))
+                self._generate_output_content(include_rest_endpoint, include_ml_operators, groups, operator_id, interface_name, item, element, operators, connections)
+                
+                # TODO: Refactor this
+                if &#39;sql_vars&#39; in item:
+                    sql_var_dbobject = target_schema + &#39;.&#39; + item[&#39;sql_vars&#39;][0]
+                    item[&#39;sql_vars&#39;][0] = sql_var_dbobject
+                    item[&#39;sql_vars&#39;][1] = sql_var_dbobject
+                    sql_str = item[sql_key_sql].format(*item[&#39;sql_vars&#39;])
+                    sql.append(sql_str)
+                
+            python_script = self._generate_python_script(sql, in_ports, out_ports_values)
+            operator = self._generate_operator(ConfigConstants.DATAHUB_HANAML_OPERATOR_COMPONENT, operator_id, operator_display_name, None, python_script, in_ports, out_ports, None)
+            operators.append(operator)
+            if &#39;groups&#39; in element:
+                if element[&#39;groups&#39;]:
+                    for group in element[&#39;groups&#39;]:
+                        if not group[&#39;identifier&#39;] in self.graphs:
+                            self.graphs[group[&#39;identifier&#39;]] = {}
+                        if not &#39;terminator_id&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                            self.graphs[group[&#39;identifier&#39;]][&#39;terminator_id&#39;] = None
+                        if not &#39;operators&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                            self.graphs[group[&#39;identifier&#39;]][&#39;operators&#39;] = []
+                        if not &#39;connections&#39; in self.graphs[group[&#39;identifier&#39;]]:
+                            self.graphs[group[&#39;identifier&#39;]][&#39;connections&#39;] = []
+                        self.graphs[group[&#39;identifier&#39;]][&#39;operators&#39;].extend(operators)
+                        if connections:
+                            if group[&#39;identifier&#39;] in connections:
+                                self.graphs[group[&#39;identifier&#39;]][&#39;connections&#39;].extend(connections[group[&#39;identifier&#39;]])
+    
+    for graph_identifier in self.graphs:
+        graph_operators = self.graphs[graph_identifier][&#39;operators&#39;]
+        graph_connections = self.graphs[graph_identifier][&#39;connections&#39;]
+        graph = self._generate_graph(&#34;&#34;, graph_operators, graph_connections)
+        graph_writer.generate(path, graph_identifier, graph) </code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="hana_ml_artifact.generators.datahub.DataHubGenerator"><code class="flex name class">
+<span>class <span class="ident">DataHubGenerator</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class provides DataHub specific generation functionality. It also extend the config
+to cater for DatHub generation specific config.</p>
+<p>This is main entry point for generating the DataHub related artifacts.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Central config object</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DataHubGenerator(object):
+    &#34;&#34;&#34;
+    This class provides DataHub specific generation functionality. It also extend the config
+    to cater for DatHub generation specific config.
+    &#34;&#34;&#34;
+    def __init__(self, config):
+        &#34;&#34;&#34;
+        This is main entry point for generating the DataHub related artifacts.
+
+        Parameters
+        ----------
+        config : dict
+            Central config object
+        &#34;&#34;&#34;
+        self.directory_handler = DirectoryHandler()
+        self.config = config
+        self._extend_config()
+
+    def generate_artifacts(self, include_rest_endpoint=False, include_ml_operators=False):
+        &#34;&#34;&#34;
+        Generate the artifacts by first building up the required folder structure for artifact storage and then 
+        generating the different required files. DataHub can be used by itself or in conjunction with a SAP DI scenario
+        where ML API specific operators are generated which are part of the SAP DI solution.
+
+        Parameters
+        ----------
+        include_rest_endpoint: boolean
+            Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+        include_ml_operators: boolean
+            Include ML operators for the SAP DI scenario
+        
+        Returns
+        -------
+        output_path : str
+            Return the output path of the root folder where the hana related artifacts are stored.
+        &#34;&#34;&#34;
+        self._build_folder_structure()
+        consumption_processor = DataHubConsumptionProcessor(self.config)
+        consumption_processor.generate(self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB), include_rest_endpoint, include_ml_operators)
+        return self.config.get_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB )
+
+    def _build_folder_structure(self):
+        &#34;&#34;&#34;
+        Build up the folder structure. It is currenlty not a deep structure but just a subbfolder datahub
+        under the root output path.
+        &#34;&#34;&#34;
+        self._clean_folder_structurre()
+        # Create base directories
+        self.directory_handler.create_directory( self.config.get_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB ))
+        
+    def _clean_folder_structurre(self):
+        &#34;&#34;&#34;
+        Clean up physical folder structure. 
+        &#34;&#34;&#34;
+        path = self.config.get_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB )
+        if os.path.exists( path ):
+            self.directory_handler.delete_directory_content( path )
+            os.rmdir( path )
+
+    def _extend_config(self):
+        &#34;&#34;&#34;
+        Extend the config to cater for DatHub generation specific config.
+        &#34;&#34;&#34;
+        output_path_datahub = os.path.join(self.config.get_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH ), ConfigConstants.DATAHUB_BASE_PATH )
+        self.config.add_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB, output_path_datahub)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.generators.datahub.DataHubGenerator.generate_artifacts"><code class="name flex">
+<span>def <span class="ident">generate_artifacts</span></span>(<span>self, include_rest_endpoint=False, include_ml_operators=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate the artifacts by first building up the required folder structure for artifact storage and then
+generating the different required files. DataHub can be used by itself or in conjunction with a SAP DI scenario
+where ML API specific operators are generated which are part of the SAP DI solution.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>include_rest_endpoint</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.</dd>
+<dt><strong><code>include_ml_operators</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Include ML operators for the SAP DI scenario</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>output_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Return the output path of the root folder where the hana related artifacts are stored.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def generate_artifacts(self, include_rest_endpoint=False, include_ml_operators=False):
+    &#34;&#34;&#34;
+    Generate the artifacts by first building up the required folder structure for artifact storage and then 
+    generating the different required files. DataHub can be used by itself or in conjunction with a SAP DI scenario
+    where ML API specific operators are generated which are part of the SAP DI solution.
+
+    Parameters
+    ----------
+    include_rest_endpoint: boolean
+        Include a rest endpoint. Normal SAP DI usage needs a rest endpoint.
+    include_ml_operators: boolean
+        Include ML operators for the SAP DI scenario
+    
+    Returns
+    -------
+    output_path : str
+        Return the output path of the root folder where the hana related artifacts are stored.
+    &#34;&#34;&#34;
+    self._build_folder_structure()
+    consumption_processor = DataHubConsumptionProcessor(self.config)
+    consumption_processor.generate(self.config.get_entry(ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB), include_rest_endpoint, include_ml_operators)
+    return self.config.get_entry( ConfigConstants.CONFIG_KEY_OUTPUT_PATH_DATAHUB )</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="hana_ml_artifact.generators" href="index.html">hana_ml_artifact.generators</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="hana_ml_artifact.generators.datahub.DataHubConsumptionProcessor" href="#hana_ml_artifact.generators.datahub.DataHubConsumptionProcessor">DataHubConsumptionProcessor</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generators.datahub.DataHubConsumptionProcessor.generate" href="#hana_ml_artifact.generators.datahub.DataHubConsumptionProcessor.generate">generate</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_artifact.generators.datahub.DataHubGenerator" href="#hana_ml_artifact.generators.datahub.DataHubGenerator">DataHubGenerator</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.generators.datahub.DataHubGenerator.generate_artifacts" href="#hana_ml_artifact.generators.datahub.DataHubGenerator.generate_artifacts">generate_artifacts</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+class ZCL_<<AMDP_NAME>> definition
+  public
+  final
+  create public .
+
+public section.
+    interfaces IF_AMDP_MARKER_HDB.
+    types:
+        begin of <<OUTPUT>>_TABLE,
+            <<OUTPUT_SIGNATURE>>
+        end of <<OUTPUT>>_TABLE,
+        tt_<<ALGO>>_<<OUTPUT>> TYPE STANDARD TABLE OF <<OUTPUT>>_TABLE,
+        begin of <<INPUT>>_DATA,
+            <<INPUT_SIGNATURE>>
+        end of <<INPUT>>_DATA,
+        tt_<<ALGO>>_<<INPUT>>_DATA TYPE STANDARD TABLE OF <<INPUT>>_DATA.
+    data:
+        lt_<<ALGO>>_<<INPUT>>_DATA TYPE tt_<<ALGO>>_<<INPUT>>_DATA,
+        lt_<<ALGO>>_<<OUTPUT>> TYPE tt_<<ALGO>>_<<OUTPUT>>.
+
+    methods:
+        <<FUNCTION>>
+          IMPORTING
+            VALUE(lt_<<ALGO>>_<<INPUT>>_DATA) TYPE tt_<<ALGO>>_<<INPUT>>_DATA
+          EXPORTING
+            VALUE(lt_<<ALGO>>_<<OUTPUT>>) TYPE tt_<<ALGO>>_<<OUTPUT>>.
+
+protected section.
+private section.
+ENDCLASS.
+
+
+CLASS ZCL_<<AMDP_NAME>> IMPLEMENTATION.
+
+method <<FUNCTION>>
+    by database procedure
+        for hdb
+        language sqlscript
+        OPTIONS READ-ONLY
+        <<USING_STATEMENT>>.
+        <<MODEL_SELECT>>
+        
+        <<DECLARATIONS>> 
+        
+        <<CALL_STATEMENT>>
+
+endmethod.
+
+ENDCLASS.

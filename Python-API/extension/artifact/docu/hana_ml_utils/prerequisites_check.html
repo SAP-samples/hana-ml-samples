@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>hana_ml_artifact.hana_ml_utils.prerequisites_check API documentation</title>
+<meta name="description" content="This module provides helper functionality for system prerequisites." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>hana_ml_artifact.hana_ml_utils.prerequisites_check</code></h1>
+</header>
+<section id="section-intro">
+<p>This module provides helper functionality for system prerequisites.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This module provides helper functionality for system prerequisites.
+&#34;&#34;&#34;
+import logging
+import subprocess
+
+logger = logging.getLogger(__name__) #pylint: disable=invalid-name
+
+class PrerequisitesValidator(object):
+    &#34;&#34;&#34;
+    This class provides file helper functionality.
+    &#34;&#34;&#34;
+    # Depending on underlying logic being called the successfull output stream can be either stdout or stderr. This means
+    # the stdout check only is not sufficient and requires additional checks on stderr. 
+    def is_java_available(self):
+        &#34;&#34;&#34;
+        Check if java is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        # Java output is retrieved via the stderr stream of the subprocess. 
+        # So check for error and handle accordingly
+        result, error = self.call_subprocess([&#39;java&#39;, &#39;-version&#39;])
+        version = None
+        if error:   # TODO: better handling to distinguish between actual error and a successful run received as error.
+            is_available = True
+            newline_index = result.index(&#39;\n&#39;)
+            version = result[:newline_index]
+        return is_available, version
+
+    def is_cfcli_available(self):
+        &#34;&#34;&#34;
+        Check if cloud foundry cli is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;cf&#39;, &#39;-v&#39;])
+        version = None
+        if &#39;cf version&#39; in result:
+            is_available = True
+            newline_index = result.index(&#39;\n&#39;) - 1
+            version = result[11:newline_index]
+        return is_available, version
+    
+    def is_cfcli_mta_available(self):
+        &#34;&#34;&#34;
+        Check if cloud foundry cli mta plugin is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;cf&#39;, &#39;deploy&#39;])
+        version = None
+        if error == True:
+            is_available = False
+        elif error == False and &#39;not a registered command&#39; in result:
+            is_available = False
+        elif error == False and &#39;Missing positional argument&#39;:
+            is_available = True
+            version = &#39;Unknown&#39;
+        return is_available, version
+
+    def is_npm_available(self):
+        &#34;&#34;&#34;
+        Check if npm (node package manager) is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;npm&#39;, &#39;-v&#39;])
+        version = None
+        if not result is &#39;&#39;:
+            is_available = True
+            version = result
+        return is_available, version
+    
+    def call_subprocess(self, args, do_decode=True, enable_shell=False): 
+        &#34;&#34;&#34;
+        Interact with subprocess directly 
+
+        Parameters
+        ----------
+        args : list
+            The arguments used to launch the process. This may be a list or a string.
+        do_decode : boolean
+            decode the result
+        enable_shell : boolean
+            run through the shell
+
+        Returns
+        -------
+        result : str
+            Result of the call
+        error : boolean
+            Has an error occured
+        &#34;&#34;&#34;
+        result = &#39;&#39;
+        error = False
+        try:
+            proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=enable_shell)
+            (out, err) = proc.communicate()
+            if not err == b&#39;&#39;:  # Check if we have a empty byte string
+                result = err.decode(&#39;utf-8&#39;)
+                error = True
+            elif do_decode:
+                result = out.decode(&#39;utf-8&#39;)
+            else:
+                result = out
+        except:
+            error=True
+        return result, error
+
+
+if __name__ == &#39;__main__&#39;:
+    &#34;&#34;&#34;
+    Main functino for convenience to run the check functionality directly
+    &#34;&#34;&#34;
+    pre_validator = PrerequisitesValidator()
+    is_available, version = pre_validator.is_java_available()
+    print(&#34;Result: &#34;, is_available, version)
+    is_available, version = pre_validator.is_cfcli_available()
+    print(&#34;Result: &#34;, is_available, version)
+    is_available, version = pre_validator.is_cfcli_mta_available()
+    print(&#34;Result: &#34;, is_available, version)
+    is_available, version = pre_validator.is_npm_available()
+    print(&#34;Result: &#34;, is_available, version)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator"><code class="flex name class">
+<span>class <span class="ident">PrerequisitesValidator</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class provides file helper functionality.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrerequisitesValidator(object):
+    &#34;&#34;&#34;
+    This class provides file helper functionality.
+    &#34;&#34;&#34;
+    # Depending on underlying logic being called the successfull output stream can be either stdout or stderr. This means
+    # the stdout check only is not sufficient and requires additional checks on stderr. 
+    def is_java_available(self):
+        &#34;&#34;&#34;
+        Check if java is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        # Java output is retrieved via the stderr stream of the subprocess. 
+        # So check for error and handle accordingly
+        result, error = self.call_subprocess([&#39;java&#39;, &#39;-version&#39;])
+        version = None
+        if error:   # TODO: better handling to distinguish between actual error and a successful run received as error.
+            is_available = True
+            newline_index = result.index(&#39;\n&#39;)
+            version = result[:newline_index]
+        return is_available, version
+
+    def is_cfcli_available(self):
+        &#34;&#34;&#34;
+        Check if cloud foundry cli is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;cf&#39;, &#39;-v&#39;])
+        version = None
+        if &#39;cf version&#39; in result:
+            is_available = True
+            newline_index = result.index(&#39;\n&#39;) - 1
+            version = result[11:newline_index]
+        return is_available, version
+    
+    def is_cfcli_mta_available(self):
+        &#34;&#34;&#34;
+        Check if cloud foundry cli mta plugin is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;cf&#39;, &#39;deploy&#39;])
+        version = None
+        if error == True:
+            is_available = False
+        elif error == False and &#39;not a registered command&#39; in result:
+            is_available = False
+        elif error == False and &#39;Missing positional argument&#39;:
+            is_available = True
+            version = &#39;Unknown&#39;
+        return is_available, version
+
+    def is_npm_available(self):
+        &#34;&#34;&#34;
+        Check if npm (node package manager) is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;npm&#39;, &#39;-v&#39;])
+        version = None
+        if not result is &#39;&#39;:
+            is_available = True
+            version = result
+        return is_available, version
+    
+    def call_subprocess(self, args, do_decode=True, enable_shell=False): 
+        &#34;&#34;&#34;
+        Interact with subprocess directly 
+
+        Parameters
+        ----------
+        args : list
+            The arguments used to launch the process. This may be a list or a string.
+        do_decode : boolean
+            decode the result
+        enable_shell : boolean
+            run through the shell
+
+        Returns
+        -------
+        result : str
+            Result of the call
+        error : boolean
+            Has an error occured
+        &#34;&#34;&#34;
+        result = &#39;&#39;
+        error = False
+        try:
+            proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=enable_shell)
+            (out, err) = proc.communicate()
+            if not err == b&#39;&#39;:  # Check if we have a empty byte string
+                result = err.decode(&#39;utf-8&#39;)
+                error = True
+            elif do_decode:
+                result = out.decode(&#39;utf-8&#39;)
+            else:
+                result = out
+        except:
+            error=True
+        return result, error</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.call_subprocess"><code class="name flex">
+<span>def <span class="ident">call_subprocess</span></span>(<span>self, args, do_decode=True, enable_shell=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Interact with subprocess directly </p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>args</code></strong> :&ensp;<code>list</code></dt>
+<dd>The arguments used to launch the process. This may be a list or a string.</dd>
+<dt><strong><code>do_decode</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>decode the result</dd>
+<dt><strong><code>enable_shell</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>run through the shell</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>result</code></strong> :&ensp;<code>str</code></dt>
+<dd>Result of the call</dd>
+<dt><strong><code>error</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Has an error occured</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def call_subprocess(self, args, do_decode=True, enable_shell=False): 
+    &#34;&#34;&#34;
+    Interact with subprocess directly 
+
+    Parameters
+    ----------
+    args : list
+        The arguments used to launch the process. This may be a list or a string.
+    do_decode : boolean
+        decode the result
+    enable_shell : boolean
+        run through the shell
+
+    Returns
+    -------
+    result : str
+        Result of the call
+    error : boolean
+        Has an error occured
+    &#34;&#34;&#34;
+    result = &#39;&#39;
+    error = False
+    try:
+        proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=enable_shell)
+        (out, err) = proc.communicate()
+        if not err == b&#39;&#39;:  # Check if we have a empty byte string
+            result = err.decode(&#39;utf-8&#39;)
+            error = True
+        elif do_decode:
+            result = out.decode(&#39;utf-8&#39;)
+        else:
+            result = out
+    except:
+        error=True
+    return result, error</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_cfcli_available"><code class="name flex">
+<span>def <span class="ident">is_cfcli_available</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if cloud foundry cli is available</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_available</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Is java available</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Java version</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_cfcli_available(self):
+    &#34;&#34;&#34;
+    Check if cloud foundry cli is available
+
+    Returns
+    -------
+    is_available : boolean
+        Is java available
+    version : str
+        Java version
+    &#34;&#34;&#34;
+    is_available = False
+    result, error = self.call_subprocess([&#39;cf&#39;, &#39;-v&#39;])
+    version = None
+    if &#39;cf version&#39; in result:
+        is_available = True
+        newline_index = result.index(&#39;\n&#39;) - 1
+        version = result[11:newline_index]
+    return is_available, version</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_cfcli_mta_available"><code class="name flex">
+<span>def <span class="ident">is_cfcli_mta_available</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if cloud foundry cli mta plugin is available</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_available</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Is java available</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Java version</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_cfcli_mta_available(self):
+    &#34;&#34;&#34;
+    Check if cloud foundry cli mta plugin is available
+
+    Returns
+    -------
+    is_available : boolean
+        Is java available
+    version : str
+        Java version
+    &#34;&#34;&#34;
+    is_available = False
+    result, error = self.call_subprocess([&#39;cf&#39;, &#39;deploy&#39;])
+    version = None
+    if error == True:
+        is_available = False
+    elif error == False and &#39;not a registered command&#39; in result:
+        is_available = False
+    elif error == False and &#39;Missing positional argument&#39;:
+        is_available = True
+        version = &#39;Unknown&#39;
+    return is_available, version</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_java_available"><code class="name flex">
+<span>def <span class="ident">is_java_available</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if java is available</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_available</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Is java available</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Java version</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_java_available(self):
+    &#34;&#34;&#34;
+    Check if java is available
+
+    Returns
+    -------
+    is_available : boolean
+        Is java available
+    version : str
+        Java version
+    &#34;&#34;&#34;
+    is_available = False
+    # Java output is retrieved via the stderr stream of the subprocess. 
+    # So check for error and handle accordingly
+    result, error = self.call_subprocess([&#39;java&#39;, &#39;-version&#39;])
+    version = None
+    if error:   # TODO: better handling to distinguish between actual error and a successful run received as error.
+        is_available = True
+        newline_index = result.index(&#39;\n&#39;)
+        version = result[:newline_index]
+    return is_available, version</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_npm_available"><code class="name flex">
+<span>def <span class="ident">is_npm_available</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if npm (node package manager) is available</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_available</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Is java available</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Java version</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_npm_available(self):
+    &#34;&#34;&#34;
+    Check if npm (node package manager) is available
+
+    Returns
+    -------
+    is_available : boolean
+        Is java available
+    version : str
+        Java version
+    &#34;&#34;&#34;
+    is_available = False
+    result, error = self.call_subprocess([&#39;npm&#39;, &#39;-v&#39;])
+    version = None
+    if not result is &#39;&#39;:
+        is_available = True
+        version = result
+    return is_available, version</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="hana_ml_artifact.hana_ml_utils" href="index.html">hana_ml_artifact.hana_ml_utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator" href="#hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator">PrerequisitesValidator</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.call_subprocess" href="#hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.call_subprocess">call_subprocess</a></code></li>
+<li><code><a title="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_cfcli_available" href="#hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_cfcli_available">is_cfcli_available</a></code></li>
+<li><code><a title="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_cfcli_mta_available" href="#hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_cfcli_mta_available">is_cfcli_mta_available</a></code></li>
+<li><code><a title="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_java_available" href="#hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_java_available">is_java_available</a></code></li>
+<li><code><a title="hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_npm_available" href="#hana_ml_artifact.hana_ml_utils.prerequisites_check.PrerequisitesValidator.is_npm_available">is_npm_available</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

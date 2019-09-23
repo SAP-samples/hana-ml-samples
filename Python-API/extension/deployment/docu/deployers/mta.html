@@ -1,0 +1,1656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>hana_ml_deployment.deployers.mta API documentation</title>
+<meta name="description" content="This module provides Multi-Target Application (MTA) related functionality." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>hana_ml_deployment.deployers.mta</code></h1>
+</header>
+<section id="section-intro">
+<p>This module provides Multi-Target Application (MTA) related functionality.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This module provides Multi-Target Application (MTA) related functionality.
+&#34;&#34;&#34;
+import logging
+import os
+import subprocess
+import sys
+
+# Additional Impprts for MTAGenerator
+import zipfile
+import shutil
+from shutil import copyfile
+
+from pathlib import Path
+
+# TODO: Add shlex for proper subprocess.popen command list generation. Assures fringe cases on some OSs are handled as well. 
+
+# Chosen to use cloudfoundry community python client to validate credentials / org / space as this is cleaner then handling this through subprocess and parsing the output stream. 
+# However for the actual deploy subprocess needs to be used as this is a specific plugin and is not supported. Could be added to the python client but for now for 
+# prototyping sake subprocess is used for this call and parsed accordingly.
+from cloudfoundry_client.client import CloudFoundryClient
+from cloudfoundry_client.operations.push.push import PushOperation
+
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+
+# logging.basicConfig(stream=sys.stdout, format=&#39;&#39;,
+                # level=logging.INFO, datefmt=None)
+logger = logging.getLogger(__name__) #pylint: disable=invalid-name
+
+class PrerequisitesValidator(object):
+    &#34;&#34;&#34;
+    This class provides file helper functionality.
+    &#34;&#34;&#34;
+    # Depending on underlying logic being called the successfull output stream can be either stdout or stderr. This means
+    # the stdout check only is not sufficient and requires additional checks on stderr. 
+    def is_java_available(self):
+        &#34;&#34;&#34;
+        Check if java is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        # Java output is retrieved via the stderr stream of the subprocess. 
+        # So check for error and handle accordingly
+        result, error = self.call_subprocess([&#39;java&#39;, &#39;-version&#39;])
+        version = None
+        if error:   # TODO: better handling to distinguish between actual error and a successful run received as error.
+            is_available = True
+            newline_index = result.index(&#39;\n&#39;)
+            version = result[:newline_index]
+        return is_available, version
+
+    def is_cfcli_available(self):
+        &#34;&#34;&#34;
+        Check if cloud foundry cli is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;cf&#39;, &#39;-v&#39;])
+        version = None
+        if &#39;cf version&#39; in result:
+            is_available = True
+            newline_index = result.index(&#39;\n&#39;) - 1
+            version = result[11:newline_index]
+        return is_available, version
+    
+    def is_cfcli_mta_available(self):
+        &#34;&#34;&#34;
+        Check if cloud foundry cli mta plugin is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;cf&#39;, &#39;deploy&#39;])
+        version = None
+        if error == True:
+            is_available = False
+        elif error == False and &#39;not a registered command&#39; in result:
+            is_available = False
+        elif error == False and &#39;Missing positional argument&#39;:
+            is_available = True
+            version = &#39;Unknown&#39;
+        return is_available, version
+
+    def is_npm_available(self):
+        &#34;&#34;&#34;
+        Check if npm (node package manager) is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;npm&#39;, &#39;-v&#39;])
+        version = None
+        if not result is &#39;&#39;:
+            is_available = True
+            version = result
+        return is_available, version
+    
+    def call_subprocess(self, args, do_decode=True, enable_shell=False):
+        &#34;&#34;&#34;
+        Interact with subprocess directly 
+
+        Parameters
+        ----------
+        args : list
+            The arguments used to launch the process. This may be a list or a string.
+        do_decode : boolean
+            decode the result
+        enable_shell : boolean
+            run through the shell
+
+        Returns
+        -------
+        result : str
+            Result of the call
+        error : boolean
+            Has an error occured
+        &#34;&#34;&#34;
+        result = &#39;&#39;
+        error = False
+        try:
+            proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=enable_shell)
+            (out, err) = proc.communicate()
+            if not err == b&#39;&#39;:  # Check if we have a empty byte string
+                result = err.decode(&#39;utf-8&#39;)
+                error = True
+            elif do_decode:
+                result = out.decode(&#39;utf-8&#39;)
+            else:
+                result = out
+        except:
+            error=True
+        return result, error
+
+
+class MTADeployer(object):
+    &#34;&#34;&#34;
+    This class provides MTA deployer related functionality. 
+
+    It allows for deploying MTAR archives to cloud foundry.
+
+    To be able to use this functionlity the following is required:
+
+    * Cloud Foundry Client
+    * MTA Plugin for Cloud Foundry CLI (only 2.0.7 at this stage)
+    * node and NPM (Node Package Manager) installed
+    * MTA Archive Builder
+    &#34;&#34;&#34;
+    def __init__(self):
+        &#34;&#34;&#34;
+        Initialize the MTA Deployer by validating the prerequisites
+        &#34;&#34;&#34;
+        # Validate dependency to CF CLI
+        self.validator = PrerequisitesValidator()
+        self.is_cf_available, cf_version = self.validator.is_cfcli_available()
+        self.is_cfmta_available, __ = self.validator.is_cfcli_mta_available()
+        if not self.is_cf_available:
+            logger.error(&#39;Cloud Foundry CLI is not available and required to perform deployments. Please download and install first before you continue. More info: https://tools.hana.ondemand.com/#cloud&#39;)
+            exit(1)
+        else:
+            logger.info(&#34;Cloud Foundry CLI found with version: {}&#34;.format(cf_version))
+            if not self.is_cfmta_available:
+                logger.error(&#39;MTA Cloud Foundry CLI plugin not installed.  Please install, more info: https://tools.hana.ondemand.com/#cloud&#39;)
+                exit(1)
+
+
+    def deploy_mta(self, source_path, mta_builder, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Build mtar archive and deploy mtar.
+
+        Parameters
+        ----------
+        source_path : str
+            Path to the source that needs to be packaged into mtar and deployed.
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        mtar_builder = MtarBuilder()
+        mtar_file_path = mtar_builder.build_mtar(mta_builder, source_path, None)
+        self.deploy_cf(mtar_file_path, api, org, space, user, password)
+        
+    def deploy_cf(self, mtar, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Deploy mtar archive
+
+        Parameters
+        ----------
+        mtar : str
+            Path to the mtar archive
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        if not os.path.isabs(mtar):
+            file_name = os.path.basename(mtar)
+            mtar = os.path.join(os.getcwd(), file_name)
+
+        if os.path.exists(mtar):
+            # Verifying required data is provided
+            if api == None or org == None or space == None or user == None or password == None:
+                logger.error(&#39;Missing cl arguments. Minimal mtar, api, org, space, user, password required.&#39;)
+                exit(1)
+
+            # Setup cloud foundry client for validating org and space availability
+            proxy = dict(http=os.environ.get(&#39;HTTP_PROXY&#39;, &#39;&#39;), https=os.environ.get(&#39;HTTPS_PROXY&#39;, &#39;&#39;))
+            client = CloudFoundryClient(api, proxy=proxy, verify=False)
+
+            # Login to api validating login credentials provided
+            # CF Client does not properly allow for handling raised exception. It exits beforehand so try / except does not do much. Left now for reference. 
+            try:
+                client.init_with_user_credentials(user, password)
+            except BaseException as ex:
+                error_message = &#39;&#39;
+                if type(ex).__name__ == &#39;OAuthError&#39; or type(ex).__name__ == &#39;oauth2_client.credentials_manager.OAuthError&#39;:
+                    # Credentials are not correct log accordingly
+                    error_message = &#39;Provided username or password incorrect.&#39;
+                else:
+                    error_message = &#39;Error {} occured while trying to authenticate with user {} against api {}.&#39;.format(type(ex).__name__, user, api)
+                logger.error(error_message)
+                exit(1)
+
+            # Get org and space guid
+            org_guid = None
+            space_guid = None
+            for organization in client.v2.organizations.list(**{&#39;name&#39;: [org]}):
+                org_guid = organization[&#39;metadata&#39;][&#39;guid&#39;]
+                for org_space in organization.spaces(**{&#39;name&#39;: [space]}): # perform a GET on spaces_url attribute
+                    space_guid = org_space[&#39;metadata&#39;][&#39;guid&#39;]
+
+            if org_guid == None:
+                logger.error(&#39;Provided orgnization {} is not available on the provided api url {}.&#39;.format(org, api))
+                exit(1)
+            
+            if space_guid == None:
+                logger.error(&#39;Provided space {} is not available in the provided organization {}.&#39;.format(space, org))
+                exit(1)
+
+            logger.info(&#39;Start deployment of: {}&#39;.format(mtar))
+            
+            # Populate cli arguments for cf login
+            cf_cli_args = [&#39;cf&#39;, &#39;login&#39;]
+            # Api
+            cf_cli_args.extend([&#39;-a&#39;, api])
+            # Username
+            cf_cli_args.extend([&#39;-u&#39;, user])
+            # Password
+            cf_cli_args.extend([&#39;-p&#39;, password])
+            # Organization
+            cf_cli_args.extend([&#39;-o&#39;, org])
+            # Space
+            cf_cli_args.extend([&#39;-s&#39;, space])
+
+            # Call cf cli to login to correct api / org / space
+            proc = subprocess.Popen(cf_cli_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            (out, err) = proc.communicate()
+            result = out.decode(&#39;utf-8&#39;)
+            if err == b&#39;&#39; and out.decode(&#39;utf-8&#39;).find(&#39;FAILED&#39;) == -1:
+                # Login via cf cli is succesfull
+                # Populate cli deploy arguments
+                cf_cli_args = [&#39;cf&#39;, &#39;deploy&#39;, mtar, &#39;-f&#39;] # @TODO: We are forcing deployment using the -f argument. Check if this can cause unwanted behaviour.
+                proc = subprocess.Popen(cf_cli_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+                process_failed = False
+                err=None
+
+                for line in proc.stdout: 
+                    line_decoded = line.decode()
+                    if process_failed and err == None:
+                        err=line_decoded
+                    if line_decoded.find(&#39;FAILED&#39;) &gt; -1:
+                        process_failed = True    
+                    logger.info(&#39;CF_OUTPUT: {}&#39;.format(line_decoded))
+
+                if process_failed:
+                    logger.error(&#39;Deployment not succesfull. Error: {}&#39;.format(err))
+                else:
+                    logger.info(&#39;Deployment operation was succesfull. Please check output for other issues.&#39;)
+            else:
+                logger.error(&#39;Deployment not succesfull. Error: {}&#39;.format(result))
+                
+            logger.info(&#39;MTAR Deployment process done&#39;)
+        else:
+            logger.error(&#39;Deployment could not be started as deployment file not found: {}&#39;.format(mtar))
+
+class MtarBuilder(object):
+    &#34;&#34;&#34;
+    MTAR builder by using the mtar archive builder
+    &#34;&#34;&#34;
+    JAR_ARGS_BUILDTARGET = &#39;--build-target&#39;
+    JAR_ARGS_EXTENSION = &#39;--extension&#39;
+    JAR_ARGS_SHOWDATADIR = &#39;--show-data-dir&#39;
+    JAR_GENERIC_FILENAME = &#39;mtabuilder.jar&#39;
+
+    def __init__(self):
+        &#34;&#34;&#34;
+        Initialize the MTAR builder.
+        &#34;&#34;&#34;
+        # Validate dependency on mta builder jar
+        self.validator = PrerequisitesValidator()
+        self.is_java_available, java_version = self.validator.is_java_available()
+        self.is_npm_available, npm_version = self.validator.is_npm_available()
+        if not self.is_java_available:
+            logger.error(&#39;JAVA is not available and is required. Please download and install first before you continue&#39;)
+            exit(1)
+        else:
+            logger.info(&#34;JAVA found with version: {}&#34;.format(java_version))
+        
+        if not self.is_npm_available: # @TODO: Double check this requirement and see wether there is a way to generate mta project without npm requirement
+            logger.error(&#39;NPM is not available and is required. Please download and install first before you continue&#39;)
+            exit(1)
+        else:
+            logger.info(&#34;NPM found with version: {}&#34;.format(npm_version))
+
+
+    def build_mtar(self, jar, mtadir, extension, buildtarget=&#39;CF&#39;, showdatadir=False):
+        &#34;&#34;&#34;
+        Build the mtar using the mtar builder jar
+        
+        Parameters
+        ----------
+        jar : str
+            MTAR Archive builder jar path
+        mtadir : str
+            Location of the source for the mtar
+        extension : str
+            Extending the mtar archive
+        buildtarget : str
+            Which build target to use.
+        showdatadir : boolean
+            Provide additional debugging functionality while building mtar
+        
+        Returns
+        -------
+        file_path: str
+            The file path wher ethe mtar is created
+        &#34;&#34;&#34;
+
+        if jar == None or mtadir == None:
+            logger.error(&#39;Missing cl arguments. Minimal mtadir and jar required.&#39;)
+            exit(1)
+        elif not os.path.exists(jar):
+            logger.error(&#39;Jar argument incorrect. {} does not exist&#39;.format(jar))
+            exit(1)
+        elif not os.path.exists(mtadir):
+            logger.error(&#39;Mtadir argument incorrect. {} does not exist&#39;.format(mtadir))
+            exit(1)
+        else:
+            logger.info(&#39;Starting MTA Generation&#39;)
+            logger.info(&#39;MTA Builder Tool: {}, Content directory: {}&#39;.format(jar, mtadir))        
+        
+        if not os.path.isabs(jar):
+            jar = os.path.join(os.getcwd(), jar)
+        
+        # As the mta builder tool does not support defining the content location. The currrent os location needs to be changed
+        # as the jar file assumes the current location is where the mta project dir is. 
+        if os.path.isabs(mtadir):
+            os.chdir(mtadir)
+        else:
+            os.chdir(os.path.join(os.getcwd(), mtadir))
+
+        # Populate cli arguments for jar
+        jar_args = [&#39;java&#39;, &#39;-jar&#39;]
+        # Jar file
+        jar_args.append(jar)
+        # Build target
+        jar_args.append(self.JAR_ARGS_BUILDTARGET + &#39;=&#39; + buildtarget)
+        # Extension
+        if not extension == None:
+            jar_args.append(self.JAR_ARGS_EXTENSION + &#39;=&#39; + extension)
+        # Show data dir
+        if showdatadir:
+           jar_args.append(self.JAR_ARGS_SHOWDATADIR)
+        # Build commmand
+        jar_args.append(&#39;build&#39;)
+
+        subprocess.call(jar_args)
+
+        logger.info(&#39;MTA Generation done&#39;)
+        file_name = os.path.basename(mtadir) + &#39;.mtar&#39;
+        file_path = os.path.join(mtadir, file_name)
+        return file_path
+
+
+    def zip_directory(self, path, zip_file):
+        &#34;&#34;&#34;
+        Zip directory content
+
+        Parameters
+        ----------
+        path : str
+            Target location
+        zip_file : zipfile.ZipFile
+            zip file to which to add the content
+        &#34;&#34;&#34;
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                zip_file.write(os.path.join(root, file))
+    
+    def delete_directory_content(self, path):
+        &#34;&#34;&#34;
+        Delete directory content
+
+        Parameters
+        ----------
+        path : str
+            Target location
+        &#34;&#34;&#34;
+        for the_file in os.listdir(path):
+            file_path = os.path.join(path, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path): shutil.rmtree(file_path)
+            except Exception as e:
+                print(e)
+    
+    def add_module_entry_to_manifest(self, name, manifest_file):
+        &#34;&#34;&#34;
+        Helper function to create manifest file for mtar archive
+
+        Parameters
+        ----------
+        name : str
+            Name to use
+        manifest_file : file
+            The manifest file to write to
+        &#34;&#34;&#34;
+        manifest_file.write(&#39;\n&#39;) 
+        manifest_file.write(&#39;Name: &#39; + name + &#39;/data.zip&#39;)
+        manifest_file.write(&#39;\n&#39;) 
+        manifest_file.write(&#39;MTA-Module: &#39; + name)
+        manifest_file.write(&#39;\n&#39;) 
+        manifest_file.write(&#39;Content-Type: application/zip&#39;)
+        manifest_file.close()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="hana_ml_deployment.deployers.mta.MTADeployer"><code class="flex name class">
+<span>class <span class="ident">MTADeployer</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class provides MTA deployer related functionality. </p>
+<p>It allows for deploying MTAR archives to cloud foundry.</p>
+<p>To be able to use this functionlity the following is required:</p>
+<ul>
+<li>Cloud Foundry Client</li>
+<li>MTA Plugin for Cloud Foundry CLI (only 2.0.7 at this stage)</li>
+<li>node and NPM (Node Package Manager) installed</li>
+<li>MTA Archive Builder</li>
+</ul>
+<p>Initialize the MTA Deployer by validating the prerequisites</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MTADeployer(object):
+    &#34;&#34;&#34;
+    This class provides MTA deployer related functionality. 
+
+    It allows for deploying MTAR archives to cloud foundry.
+
+    To be able to use this functionlity the following is required:
+
+    * Cloud Foundry Client
+    * MTA Plugin for Cloud Foundry CLI (only 2.0.7 at this stage)
+    * node and NPM (Node Package Manager) installed
+    * MTA Archive Builder
+    &#34;&#34;&#34;
+    def __init__(self):
+        &#34;&#34;&#34;
+        Initialize the MTA Deployer by validating the prerequisites
+        &#34;&#34;&#34;
+        # Validate dependency to CF CLI
+        self.validator = PrerequisitesValidator()
+        self.is_cf_available, cf_version = self.validator.is_cfcli_available()
+        self.is_cfmta_available, __ = self.validator.is_cfcli_mta_available()
+        if not self.is_cf_available:
+            logger.error(&#39;Cloud Foundry CLI is not available and required to perform deployments. Please download and install first before you continue. More info: https://tools.hana.ondemand.com/#cloud&#39;)
+            exit(1)
+        else:
+            logger.info(&#34;Cloud Foundry CLI found with version: {}&#34;.format(cf_version))
+            if not self.is_cfmta_available:
+                logger.error(&#39;MTA Cloud Foundry CLI plugin not installed.  Please install, more info: https://tools.hana.ondemand.com/#cloud&#39;)
+                exit(1)
+
+
+    def deploy_mta(self, source_path, mta_builder, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Build mtar archive and deploy mtar.
+
+        Parameters
+        ----------
+        source_path : str
+            Path to the source that needs to be packaged into mtar and deployed.
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        mtar_builder = MtarBuilder()
+        mtar_file_path = mtar_builder.build_mtar(mta_builder, source_path, None)
+        self.deploy_cf(mtar_file_path, api, org, space, user, password)
+        
+    def deploy_cf(self, mtar, api, org, space, user, password):
+        &#34;&#34;&#34;
+        Deploy mtar archive
+
+        Parameters
+        ----------
+        mtar : str
+            Path to the mtar archive
+        mta_builder : str
+            Mtar builder jar location
+        api : str
+            Cloud Foundry api url
+        org : str
+            Cloud Foundry org to deploy to.
+        space : str
+            Cloud Foundry space to deploy to.
+        user : str
+            Cloud Foudry user to deploy with.
+        password : str
+            Cloud Foundry user password to deploy with.
+        &#34;&#34;&#34;
+        if not os.path.isabs(mtar):
+            file_name = os.path.basename(mtar)
+            mtar = os.path.join(os.getcwd(), file_name)
+
+        if os.path.exists(mtar):
+            # Verifying required data is provided
+            if api == None or org == None or space == None or user == None or password == None:
+                logger.error(&#39;Missing cl arguments. Minimal mtar, api, org, space, user, password required.&#39;)
+                exit(1)
+
+            # Setup cloud foundry client for validating org and space availability
+            proxy = dict(http=os.environ.get(&#39;HTTP_PROXY&#39;, &#39;&#39;), https=os.environ.get(&#39;HTTPS_PROXY&#39;, &#39;&#39;))
+            client = CloudFoundryClient(api, proxy=proxy, verify=False)
+
+            # Login to api validating login credentials provided
+            # CF Client does not properly allow for handling raised exception. It exits beforehand so try / except does not do much. Left now for reference. 
+            try:
+                client.init_with_user_credentials(user, password)
+            except BaseException as ex:
+                error_message = &#39;&#39;
+                if type(ex).__name__ == &#39;OAuthError&#39; or type(ex).__name__ == &#39;oauth2_client.credentials_manager.OAuthError&#39;:
+                    # Credentials are not correct log accordingly
+                    error_message = &#39;Provided username or password incorrect.&#39;
+                else:
+                    error_message = &#39;Error {} occured while trying to authenticate with user {} against api {}.&#39;.format(type(ex).__name__, user, api)
+                logger.error(error_message)
+                exit(1)
+
+            # Get org and space guid
+            org_guid = None
+            space_guid = None
+            for organization in client.v2.organizations.list(**{&#39;name&#39;: [org]}):
+                org_guid = organization[&#39;metadata&#39;][&#39;guid&#39;]
+                for org_space in organization.spaces(**{&#39;name&#39;: [space]}): # perform a GET on spaces_url attribute
+                    space_guid = org_space[&#39;metadata&#39;][&#39;guid&#39;]
+
+            if org_guid == None:
+                logger.error(&#39;Provided orgnization {} is not available on the provided api url {}.&#39;.format(org, api))
+                exit(1)
+            
+            if space_guid == None:
+                logger.error(&#39;Provided space {} is not available in the provided organization {}.&#39;.format(space, org))
+                exit(1)
+
+            logger.info(&#39;Start deployment of: {}&#39;.format(mtar))
+            
+            # Populate cli arguments for cf login
+            cf_cli_args = [&#39;cf&#39;, &#39;login&#39;]
+            # Api
+            cf_cli_args.extend([&#39;-a&#39;, api])
+            # Username
+            cf_cli_args.extend([&#39;-u&#39;, user])
+            # Password
+            cf_cli_args.extend([&#39;-p&#39;, password])
+            # Organization
+            cf_cli_args.extend([&#39;-o&#39;, org])
+            # Space
+            cf_cli_args.extend([&#39;-s&#39;, space])
+
+            # Call cf cli to login to correct api / org / space
+            proc = subprocess.Popen(cf_cli_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            (out, err) = proc.communicate()
+            result = out.decode(&#39;utf-8&#39;)
+            if err == b&#39;&#39; and out.decode(&#39;utf-8&#39;).find(&#39;FAILED&#39;) == -1:
+                # Login via cf cli is succesfull
+                # Populate cli deploy arguments
+                cf_cli_args = [&#39;cf&#39;, &#39;deploy&#39;, mtar, &#39;-f&#39;] # @TODO: We are forcing deployment using the -f argument. Check if this can cause unwanted behaviour.
+                proc = subprocess.Popen(cf_cli_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+                process_failed = False
+                err=None
+
+                for line in proc.stdout: 
+                    line_decoded = line.decode()
+                    if process_failed and err == None:
+                        err=line_decoded
+                    if line_decoded.find(&#39;FAILED&#39;) &gt; -1:
+                        process_failed = True    
+                    logger.info(&#39;CF_OUTPUT: {}&#39;.format(line_decoded))
+
+                if process_failed:
+                    logger.error(&#39;Deployment not succesfull. Error: {}&#39;.format(err))
+                else:
+                    logger.info(&#39;Deployment operation was succesfull. Please check output for other issues.&#39;)
+            else:
+                logger.error(&#39;Deployment not succesfull. Error: {}&#39;.format(result))
+                
+            logger.info(&#39;MTAR Deployment process done&#39;)
+        else:
+            logger.error(&#39;Deployment could not be started as deployment file not found: {}&#39;.format(mtar))</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_deployment.deployers.mta.MTADeployer.deploy_cf"><code class="name flex">
+<span>def <span class="ident">deploy_cf</span></span>(<span>self, mtar, api, org, space, user, password)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Deploy mtar archive</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>mtar</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the mtar archive</dd>
+<dt><strong><code>mta_builder</code></strong> :&ensp;<code>str</code></dt>
+<dd>Mtar builder jar location</dd>
+<dt><strong><code>api</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry api url</dd>
+<dt><strong><code>org</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry org to deploy to.</dd>
+<dt><strong><code>space</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry space to deploy to.</dd>
+<dt><strong><code>user</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foudry user to deploy with.</dd>
+<dt><strong><code>password</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry user password to deploy with.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deploy_cf(self, mtar, api, org, space, user, password):
+    &#34;&#34;&#34;
+    Deploy mtar archive
+
+    Parameters
+    ----------
+    mtar : str
+        Path to the mtar archive
+    mta_builder : str
+        Mtar builder jar location
+    api : str
+        Cloud Foundry api url
+    org : str
+        Cloud Foundry org to deploy to.
+    space : str
+        Cloud Foundry space to deploy to.
+    user : str
+        Cloud Foudry user to deploy with.
+    password : str
+        Cloud Foundry user password to deploy with.
+    &#34;&#34;&#34;
+    if not os.path.isabs(mtar):
+        file_name = os.path.basename(mtar)
+        mtar = os.path.join(os.getcwd(), file_name)
+
+    if os.path.exists(mtar):
+        # Verifying required data is provided
+        if api == None or org == None or space == None or user == None or password == None:
+            logger.error(&#39;Missing cl arguments. Minimal mtar, api, org, space, user, password required.&#39;)
+            exit(1)
+
+        # Setup cloud foundry client for validating org and space availability
+        proxy = dict(http=os.environ.get(&#39;HTTP_PROXY&#39;, &#39;&#39;), https=os.environ.get(&#39;HTTPS_PROXY&#39;, &#39;&#39;))
+        client = CloudFoundryClient(api, proxy=proxy, verify=False)
+
+        # Login to api validating login credentials provided
+        # CF Client does not properly allow for handling raised exception. It exits beforehand so try / except does not do much. Left now for reference. 
+        try:
+            client.init_with_user_credentials(user, password)
+        except BaseException as ex:
+            error_message = &#39;&#39;
+            if type(ex).__name__ == &#39;OAuthError&#39; or type(ex).__name__ == &#39;oauth2_client.credentials_manager.OAuthError&#39;:
+                # Credentials are not correct log accordingly
+                error_message = &#39;Provided username or password incorrect.&#39;
+            else:
+                error_message = &#39;Error {} occured while trying to authenticate with user {} against api {}.&#39;.format(type(ex).__name__, user, api)
+            logger.error(error_message)
+            exit(1)
+
+        # Get org and space guid
+        org_guid = None
+        space_guid = None
+        for organization in client.v2.organizations.list(**{&#39;name&#39;: [org]}):
+            org_guid = organization[&#39;metadata&#39;][&#39;guid&#39;]
+            for org_space in organization.spaces(**{&#39;name&#39;: [space]}): # perform a GET on spaces_url attribute
+                space_guid = org_space[&#39;metadata&#39;][&#39;guid&#39;]
+
+        if org_guid == None:
+            logger.error(&#39;Provided orgnization {} is not available on the provided api url {}.&#39;.format(org, api))
+            exit(1)
+        
+        if space_guid == None:
+            logger.error(&#39;Provided space {} is not available in the provided organization {}.&#39;.format(space, org))
+            exit(1)
+
+        logger.info(&#39;Start deployment of: {}&#39;.format(mtar))
+        
+        # Populate cli arguments for cf login
+        cf_cli_args = [&#39;cf&#39;, &#39;login&#39;]
+        # Api
+        cf_cli_args.extend([&#39;-a&#39;, api])
+        # Username
+        cf_cli_args.extend([&#39;-u&#39;, user])
+        # Password
+        cf_cli_args.extend([&#39;-p&#39;, password])
+        # Organization
+        cf_cli_args.extend([&#39;-o&#39;, org])
+        # Space
+        cf_cli_args.extend([&#39;-s&#39;, space])
+
+        # Call cf cli to login to correct api / org / space
+        proc = subprocess.Popen(cf_cli_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        (out, err) = proc.communicate()
+        result = out.decode(&#39;utf-8&#39;)
+        if err == b&#39;&#39; and out.decode(&#39;utf-8&#39;).find(&#39;FAILED&#39;) == -1:
+            # Login via cf cli is succesfull
+            # Populate cli deploy arguments
+            cf_cli_args = [&#39;cf&#39;, &#39;deploy&#39;, mtar, &#39;-f&#39;] # @TODO: We are forcing deployment using the -f argument. Check if this can cause unwanted behaviour.
+            proc = subprocess.Popen(cf_cli_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+            process_failed = False
+            err=None
+
+            for line in proc.stdout: 
+                line_decoded = line.decode()
+                if process_failed and err == None:
+                    err=line_decoded
+                if line_decoded.find(&#39;FAILED&#39;) &gt; -1:
+                    process_failed = True    
+                logger.info(&#39;CF_OUTPUT: {}&#39;.format(line_decoded))
+
+            if process_failed:
+                logger.error(&#39;Deployment not succesfull. Error: {}&#39;.format(err))
+            else:
+                logger.info(&#39;Deployment operation was succesfull. Please check output for other issues.&#39;)
+        else:
+            logger.error(&#39;Deployment not succesfull. Error: {}&#39;.format(result))
+            
+        logger.info(&#39;MTAR Deployment process done&#39;)
+    else:
+        logger.error(&#39;Deployment could not be started as deployment file not found: {}&#39;.format(mtar))</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.MTADeployer.deploy_mta"><code class="name flex">
+<span>def <span class="ident">deploy_mta</span></span>(<span>self, source_path, mta_builder, api, org, space, user, password)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Build mtar archive and deploy mtar.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>source_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the source that needs to be packaged into mtar and deployed.</dd>
+<dt><strong><code>mta_builder</code></strong> :&ensp;<code>str</code></dt>
+<dd>Mtar builder jar location</dd>
+<dt><strong><code>api</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry api url</dd>
+<dt><strong><code>org</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry org to deploy to.</dd>
+<dt><strong><code>space</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry space to deploy to.</dd>
+<dt><strong><code>user</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foudry user to deploy with.</dd>
+<dt><strong><code>password</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cloud Foundry user password to deploy with.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deploy_mta(self, source_path, mta_builder, api, org, space, user, password):
+    &#34;&#34;&#34;
+    Build mtar archive and deploy mtar.
+
+    Parameters
+    ----------
+    source_path : str
+        Path to the source that needs to be packaged into mtar and deployed.
+    mta_builder : str
+        Mtar builder jar location
+    api : str
+        Cloud Foundry api url
+    org : str
+        Cloud Foundry org to deploy to.
+    space : str
+        Cloud Foundry space to deploy to.
+    user : str
+        Cloud Foudry user to deploy with.
+    password : str
+        Cloud Foundry user password to deploy with.
+    &#34;&#34;&#34;
+    mtar_builder = MtarBuilder()
+    mtar_file_path = mtar_builder.build_mtar(mta_builder, source_path, None)
+    self.deploy_cf(mtar_file_path, api, org, space, user, password)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.MtarBuilder"><code class="flex name class">
+<span>class <span class="ident">MtarBuilder</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>MTAR builder by using the mtar archive builder</p>
+<p>Initialize the MTAR builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MtarBuilder(object):
+    &#34;&#34;&#34;
+    MTAR builder by using the mtar archive builder
+    &#34;&#34;&#34;
+    JAR_ARGS_BUILDTARGET = &#39;--build-target&#39;
+    JAR_ARGS_EXTENSION = &#39;--extension&#39;
+    JAR_ARGS_SHOWDATADIR = &#39;--show-data-dir&#39;
+    JAR_GENERIC_FILENAME = &#39;mtabuilder.jar&#39;
+
+    def __init__(self):
+        &#34;&#34;&#34;
+        Initialize the MTAR builder.
+        &#34;&#34;&#34;
+        # Validate dependency on mta builder jar
+        self.validator = PrerequisitesValidator()
+        self.is_java_available, java_version = self.validator.is_java_available()
+        self.is_npm_available, npm_version = self.validator.is_npm_available()
+        if not self.is_java_available:
+            logger.error(&#39;JAVA is not available and is required. Please download and install first before you continue&#39;)
+            exit(1)
+        else:
+            logger.info(&#34;JAVA found with version: {}&#34;.format(java_version))
+        
+        if not self.is_npm_available: # @TODO: Double check this requirement and see wether there is a way to generate mta project without npm requirement
+            logger.error(&#39;NPM is not available and is required. Please download and install first before you continue&#39;)
+            exit(1)
+        else:
+            logger.info(&#34;NPM found with version: {}&#34;.format(npm_version))
+
+
+    def build_mtar(self, jar, mtadir, extension, buildtarget=&#39;CF&#39;, showdatadir=False):
+        &#34;&#34;&#34;
+        Build the mtar using the mtar builder jar
+        
+        Parameters
+        ----------
+        jar : str
+            MTAR Archive builder jar path
+        mtadir : str
+            Location of the source for the mtar
+        extension : str
+            Extending the mtar archive
+        buildtarget : str
+            Which build target to use.
+        showdatadir : boolean
+            Provide additional debugging functionality while building mtar
+        
+        Returns
+        -------
+        file_path: str
+            The file path wher ethe mtar is created
+        &#34;&#34;&#34;
+
+        if jar == None or mtadir == None:
+            logger.error(&#39;Missing cl arguments. Minimal mtadir and jar required.&#39;)
+            exit(1)
+        elif not os.path.exists(jar):
+            logger.error(&#39;Jar argument incorrect. {} does not exist&#39;.format(jar))
+            exit(1)
+        elif not os.path.exists(mtadir):
+            logger.error(&#39;Mtadir argument incorrect. {} does not exist&#39;.format(mtadir))
+            exit(1)
+        else:
+            logger.info(&#39;Starting MTA Generation&#39;)
+            logger.info(&#39;MTA Builder Tool: {}, Content directory: {}&#39;.format(jar, mtadir))        
+        
+        if not os.path.isabs(jar):
+            jar = os.path.join(os.getcwd(), jar)
+        
+        # As the mta builder tool does not support defining the content location. The currrent os location needs to be changed
+        # as the jar file assumes the current location is where the mta project dir is. 
+        if os.path.isabs(mtadir):
+            os.chdir(mtadir)
+        else:
+            os.chdir(os.path.join(os.getcwd(), mtadir))
+
+        # Populate cli arguments for jar
+        jar_args = [&#39;java&#39;, &#39;-jar&#39;]
+        # Jar file
+        jar_args.append(jar)
+        # Build target
+        jar_args.append(self.JAR_ARGS_BUILDTARGET + &#39;=&#39; + buildtarget)
+        # Extension
+        if not extension == None:
+            jar_args.append(self.JAR_ARGS_EXTENSION + &#39;=&#39; + extension)
+        # Show data dir
+        if showdatadir:
+           jar_args.append(self.JAR_ARGS_SHOWDATADIR)
+        # Build commmand
+        jar_args.append(&#39;build&#39;)
+
+        subprocess.call(jar_args)
+
+        logger.info(&#39;MTA Generation done&#39;)
+        file_name = os.path.basename(mtadir) + &#39;.mtar&#39;
+        file_path = os.path.join(mtadir, file_name)
+        return file_path
+
+
+    def zip_directory(self, path, zip_file):
+        &#34;&#34;&#34;
+        Zip directory content
+
+        Parameters
+        ----------
+        path : str
+            Target location
+        zip_file : zipfile.ZipFile
+            zip file to which to add the content
+        &#34;&#34;&#34;
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                zip_file.write(os.path.join(root, file))
+    
+    def delete_directory_content(self, path):
+        &#34;&#34;&#34;
+        Delete directory content
+
+        Parameters
+        ----------
+        path : str
+            Target location
+        &#34;&#34;&#34;
+        for the_file in os.listdir(path):
+            file_path = os.path.join(path, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path): shutil.rmtree(file_path)
+            except Exception as e:
+                print(e)
+    
+    def add_module_entry_to_manifest(self, name, manifest_file):
+        &#34;&#34;&#34;
+        Helper function to create manifest file for mtar archive
+
+        Parameters
+        ----------
+        name : str
+            Name to use
+        manifest_file : file
+            The manifest file to write to
+        &#34;&#34;&#34;
+        manifest_file.write(&#39;\n&#39;) 
+        manifest_file.write(&#39;Name: &#39; + name + &#39;/data.zip&#39;)
+        manifest_file.write(&#39;\n&#39;) 
+        manifest_file.write(&#39;MTA-Module: &#39; + name)
+        manifest_file.write(&#39;\n&#39;) 
+        manifest_file.write(&#39;Content-Type: application/zip&#39;)
+        manifest_file.close()</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="hana_ml_deployment.deployers.mta.MtarBuilder.JAR_ARGS_BUILDTARGET"><code class="name">var <span class="ident">JAR_ARGS_BUILDTARGET</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.MtarBuilder.JAR_ARGS_EXTENSION"><code class="name">var <span class="ident">JAR_ARGS_EXTENSION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.MtarBuilder.JAR_ARGS_SHOWDATADIR"><code class="name">var <span class="ident">JAR_ARGS_SHOWDATADIR</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.MtarBuilder.JAR_GENERIC_FILENAME"><code class="name">var <span class="ident">JAR_GENERIC_FILENAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_deployment.deployers.mta.MtarBuilder.add_module_entry_to_manifest"><code class="name flex">
+<span>def <span class="ident">add_module_entry_to_manifest</span></span>(<span>self, name, manifest_file)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Helper function to create manifest file for mtar archive</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name to use</dd>
+<dt><strong><code>manifest_file</code></strong> :&ensp;<code>file</code></dt>
+<dd>The manifest file to write to</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_module_entry_to_manifest(self, name, manifest_file):
+    &#34;&#34;&#34;
+    Helper function to create manifest file for mtar archive
+
+    Parameters
+    ----------
+    name : str
+        Name to use
+    manifest_file : file
+        The manifest file to write to
+    &#34;&#34;&#34;
+    manifest_file.write(&#39;\n&#39;) 
+    manifest_file.write(&#39;Name: &#39; + name + &#39;/data.zip&#39;)
+    manifest_file.write(&#39;\n&#39;) 
+    manifest_file.write(&#39;MTA-Module: &#39; + name)
+    manifest_file.write(&#39;\n&#39;) 
+    manifest_file.write(&#39;Content-Type: application/zip&#39;)
+    manifest_file.close()</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.MtarBuilder.build_mtar"><code class="name flex">
+<span>def <span class="ident">build_mtar</span></span>(<span>self, jar, mtadir, extension, buildtarget='CF', showdatadir=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Build the mtar using the mtar builder jar</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>jar</code></strong> :&ensp;<code>str</code></dt>
+<dd>MTAR Archive builder jar path</dd>
+<dt><strong><code>mtadir</code></strong> :&ensp;<code>str</code></dt>
+<dd>Location of the source for the mtar</dd>
+<dt><strong><code>extension</code></strong> :&ensp;<code>str</code></dt>
+<dd>Extending the mtar archive</dd>
+<dt><strong><code>buildtarget</code></strong> :&ensp;<code>str</code></dt>
+<dd>Which build target to use.</dd>
+<dt><strong><code>showdatadir</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Provide additional debugging functionality while building mtar</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The file path wher ethe mtar is created</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def build_mtar(self, jar, mtadir, extension, buildtarget=&#39;CF&#39;, showdatadir=False):
+    &#34;&#34;&#34;
+    Build the mtar using the mtar builder jar
+    
+    Parameters
+    ----------
+    jar : str
+        MTAR Archive builder jar path
+    mtadir : str
+        Location of the source for the mtar
+    extension : str
+        Extending the mtar archive
+    buildtarget : str
+        Which build target to use.
+    showdatadir : boolean
+        Provide additional debugging functionality while building mtar
+    
+    Returns
+    -------
+    file_path: str
+        The file path wher ethe mtar is created
+    &#34;&#34;&#34;
+
+    if jar == None or mtadir == None:
+        logger.error(&#39;Missing cl arguments. Minimal mtadir and jar required.&#39;)
+        exit(1)
+    elif not os.path.exists(jar):
+        logger.error(&#39;Jar argument incorrect. {} does not exist&#39;.format(jar))
+        exit(1)
+    elif not os.path.exists(mtadir):
+        logger.error(&#39;Mtadir argument incorrect. {} does not exist&#39;.format(mtadir))
+        exit(1)
+    else:
+        logger.info(&#39;Starting MTA Generation&#39;)
+        logger.info(&#39;MTA Builder Tool: {}, Content directory: {}&#39;.format(jar, mtadir))        
+    
+    if not os.path.isabs(jar):
+        jar = os.path.join(os.getcwd(), jar)
+    
+    # As the mta builder tool does not support defining the content location. The currrent os location needs to be changed
+    # as the jar file assumes the current location is where the mta project dir is. 
+    if os.path.isabs(mtadir):
+        os.chdir(mtadir)
+    else:
+        os.chdir(os.path.join(os.getcwd(), mtadir))
+
+    # Populate cli arguments for jar
+    jar_args = [&#39;java&#39;, &#39;-jar&#39;]
+    # Jar file
+    jar_args.append(jar)
+    # Build target
+    jar_args.append(self.JAR_ARGS_BUILDTARGET + &#39;=&#39; + buildtarget)
+    # Extension
+    if not extension == None:
+        jar_args.append(self.JAR_ARGS_EXTENSION + &#39;=&#39; + extension)
+    # Show data dir
+    if showdatadir:
+       jar_args.append(self.JAR_ARGS_SHOWDATADIR)
+    # Build commmand
+    jar_args.append(&#39;build&#39;)
+
+    subprocess.call(jar_args)
+
+    logger.info(&#39;MTA Generation done&#39;)
+    file_name = os.path.basename(mtadir) + &#39;.mtar&#39;
+    file_path = os.path.join(mtadir, file_name)
+    return file_path</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.MtarBuilder.delete_directory_content"><code class="name flex">
+<span>def <span class="ident">delete_directory_content</span></span>(<span>self, path)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Delete directory content</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Target location</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def delete_directory_content(self, path):
+    &#34;&#34;&#34;
+    Delete directory content
+
+    Parameters
+    ----------
+    path : str
+        Target location
+    &#34;&#34;&#34;
+    for the_file in os.listdir(path):
+        file_path = os.path.join(path, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path): shutil.rmtree(file_path)
+        except Exception as e:
+            print(e)</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.MtarBuilder.zip_directory"><code class="name flex">
+<span>def <span class="ident">zip_directory</span></span>(<span>self, path, zip_file)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Zip directory content</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Target location</dd>
+<dt><strong><code>zip_file</code></strong> :&ensp;<code>zipfile.ZipFile</code></dt>
+<dd>zip file to which to add the content</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def zip_directory(self, path, zip_file):
+    &#34;&#34;&#34;
+    Zip directory content
+
+    Parameters
+    ----------
+    path : str
+        Target location
+    zip_file : zipfile.ZipFile
+        zip file to which to add the content
+    &#34;&#34;&#34;
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            zip_file.write(os.path.join(root, file))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.PrerequisitesValidator"><code class="flex name class">
+<span>class <span class="ident">PrerequisitesValidator</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class provides file helper functionality.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrerequisitesValidator(object):
+    &#34;&#34;&#34;
+    This class provides file helper functionality.
+    &#34;&#34;&#34;
+    # Depending on underlying logic being called the successfull output stream can be either stdout or stderr. This means
+    # the stdout check only is not sufficient and requires additional checks on stderr. 
+    def is_java_available(self):
+        &#34;&#34;&#34;
+        Check if java is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        # Java output is retrieved via the stderr stream of the subprocess. 
+        # So check for error and handle accordingly
+        result, error = self.call_subprocess([&#39;java&#39;, &#39;-version&#39;])
+        version = None
+        if error:   # TODO: better handling to distinguish between actual error and a successful run received as error.
+            is_available = True
+            newline_index = result.index(&#39;\n&#39;)
+            version = result[:newline_index]
+        return is_available, version
+
+    def is_cfcli_available(self):
+        &#34;&#34;&#34;
+        Check if cloud foundry cli is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;cf&#39;, &#39;-v&#39;])
+        version = None
+        if &#39;cf version&#39; in result:
+            is_available = True
+            newline_index = result.index(&#39;\n&#39;) - 1
+            version = result[11:newline_index]
+        return is_available, version
+    
+    def is_cfcli_mta_available(self):
+        &#34;&#34;&#34;
+        Check if cloud foundry cli mta plugin is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;cf&#39;, &#39;deploy&#39;])
+        version = None
+        if error == True:
+            is_available = False
+        elif error == False and &#39;not a registered command&#39; in result:
+            is_available = False
+        elif error == False and &#39;Missing positional argument&#39;:
+            is_available = True
+            version = &#39;Unknown&#39;
+        return is_available, version
+
+    def is_npm_available(self):
+        &#34;&#34;&#34;
+        Check if npm (node package manager) is available
+
+        Returns
+        -------
+        is_available : boolean
+            Is java available
+        version : str
+            Java version
+        &#34;&#34;&#34;
+        is_available = False
+        result, error = self.call_subprocess([&#39;npm&#39;, &#39;-v&#39;])
+        version = None
+        if not result is &#39;&#39;:
+            is_available = True
+            version = result
+        return is_available, version
+    
+    def call_subprocess(self, args, do_decode=True, enable_shell=False):
+        &#34;&#34;&#34;
+        Interact with subprocess directly 
+
+        Parameters
+        ----------
+        args : list
+            The arguments used to launch the process. This may be a list or a string.
+        do_decode : boolean
+            decode the result
+        enable_shell : boolean
+            run through the shell
+
+        Returns
+        -------
+        result : str
+            Result of the call
+        error : boolean
+            Has an error occured
+        &#34;&#34;&#34;
+        result = &#39;&#39;
+        error = False
+        try:
+            proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=enable_shell)
+            (out, err) = proc.communicate()
+            if not err == b&#39;&#39;:  # Check if we have a empty byte string
+                result = err.decode(&#39;utf-8&#39;)
+                error = True
+            elif do_decode:
+                result = out.decode(&#39;utf-8&#39;)
+            else:
+                result = out
+        except:
+            error=True
+        return result, error</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="hana_ml_deployment.deployers.mta.PrerequisitesValidator.call_subprocess"><code class="name flex">
+<span>def <span class="ident">call_subprocess</span></span>(<span>self, args, do_decode=True, enable_shell=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Interact with subprocess directly </p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>args</code></strong> :&ensp;<code>list</code></dt>
+<dd>The arguments used to launch the process. This may be a list or a string.</dd>
+<dt><strong><code>do_decode</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>decode the result</dd>
+<dt><strong><code>enable_shell</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>run through the shell</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>result</code></strong> :&ensp;<code>str</code></dt>
+<dd>Result of the call</dd>
+<dt><strong><code>error</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Has an error occured</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def call_subprocess(self, args, do_decode=True, enable_shell=False):
+    &#34;&#34;&#34;
+    Interact with subprocess directly 
+
+    Parameters
+    ----------
+    args : list
+        The arguments used to launch the process. This may be a list or a string.
+    do_decode : boolean
+        decode the result
+    enable_shell : boolean
+        run through the shell
+
+    Returns
+    -------
+    result : str
+        Result of the call
+    error : boolean
+        Has an error occured
+    &#34;&#34;&#34;
+    result = &#39;&#39;
+    error = False
+    try:
+        proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=enable_shell)
+        (out, err) = proc.communicate()
+        if not err == b&#39;&#39;:  # Check if we have a empty byte string
+            result = err.decode(&#39;utf-8&#39;)
+            error = True
+        elif do_decode:
+            result = out.decode(&#39;utf-8&#39;)
+        else:
+            result = out
+    except:
+        error=True
+    return result, error</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_cfcli_available"><code class="name flex">
+<span>def <span class="ident">is_cfcli_available</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if cloud foundry cli is available</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_available</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Is java available</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Java version</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_cfcli_available(self):
+    &#34;&#34;&#34;
+    Check if cloud foundry cli is available
+
+    Returns
+    -------
+    is_available : boolean
+        Is java available
+    version : str
+        Java version
+    &#34;&#34;&#34;
+    is_available = False
+    result, error = self.call_subprocess([&#39;cf&#39;, &#39;-v&#39;])
+    version = None
+    if &#39;cf version&#39; in result:
+        is_available = True
+        newline_index = result.index(&#39;\n&#39;) - 1
+        version = result[11:newline_index]
+    return is_available, version</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_cfcli_mta_available"><code class="name flex">
+<span>def <span class="ident">is_cfcli_mta_available</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if cloud foundry cli mta plugin is available</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_available</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Is java available</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Java version</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_cfcli_mta_available(self):
+    &#34;&#34;&#34;
+    Check if cloud foundry cli mta plugin is available
+
+    Returns
+    -------
+    is_available : boolean
+        Is java available
+    version : str
+        Java version
+    &#34;&#34;&#34;
+    is_available = False
+    result, error = self.call_subprocess([&#39;cf&#39;, &#39;deploy&#39;])
+    version = None
+    if error == True:
+        is_available = False
+    elif error == False and &#39;not a registered command&#39; in result:
+        is_available = False
+    elif error == False and &#39;Missing positional argument&#39;:
+        is_available = True
+        version = &#39;Unknown&#39;
+    return is_available, version</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_java_available"><code class="name flex">
+<span>def <span class="ident">is_java_available</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if java is available</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_available</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Is java available</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Java version</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_java_available(self):
+    &#34;&#34;&#34;
+    Check if java is available
+
+    Returns
+    -------
+    is_available : boolean
+        Is java available
+    version : str
+        Java version
+    &#34;&#34;&#34;
+    is_available = False
+    # Java output is retrieved via the stderr stream of the subprocess. 
+    # So check for error and handle accordingly
+    result, error = self.call_subprocess([&#39;java&#39;, &#39;-version&#39;])
+    version = None
+    if error:   # TODO: better handling to distinguish between actual error and a successful run received as error.
+        is_available = True
+        newline_index = result.index(&#39;\n&#39;)
+        version = result[:newline_index]
+    return is_available, version</code></pre>
+</details>
+</dd>
+<dt id="hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_npm_available"><code class="name flex">
+<span>def <span class="ident">is_npm_available</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if npm (node package manager) is available</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>is_available</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Is java available</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Java version</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_npm_available(self):
+    &#34;&#34;&#34;
+    Check if npm (node package manager) is available
+
+    Returns
+    -------
+    is_available : boolean
+        Is java available
+    version : str
+        Java version
+    &#34;&#34;&#34;
+    is_available = False
+    result, error = self.call_subprocess([&#39;npm&#39;, &#39;-v&#39;])
+    version = None
+    if not result is &#39;&#39;:
+        is_available = True
+        version = result
+    return is_available, version</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="hana_ml_deployment.deployers" href="index.html">hana_ml_deployment.deployers</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="hana_ml_deployment.deployers.mta.MTADeployer" href="#hana_ml_deployment.deployers.mta.MTADeployer">MTADeployer</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_deployment.deployers.mta.MTADeployer.deploy_cf" href="#hana_ml_deployment.deployers.mta.MTADeployer.deploy_cf">deploy_cf</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.MTADeployer.deploy_mta" href="#hana_ml_deployment.deployers.mta.MTADeployer.deploy_mta">deploy_mta</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_deployment.deployers.mta.MtarBuilder" href="#hana_ml_deployment.deployers.mta.MtarBuilder">MtarBuilder</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_deployment.deployers.mta.MtarBuilder.JAR_ARGS_BUILDTARGET" href="#hana_ml_deployment.deployers.mta.MtarBuilder.JAR_ARGS_BUILDTARGET">JAR_ARGS_BUILDTARGET</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.MtarBuilder.JAR_ARGS_EXTENSION" href="#hana_ml_deployment.deployers.mta.MtarBuilder.JAR_ARGS_EXTENSION">JAR_ARGS_EXTENSION</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.MtarBuilder.JAR_ARGS_SHOWDATADIR" href="#hana_ml_deployment.deployers.mta.MtarBuilder.JAR_ARGS_SHOWDATADIR">JAR_ARGS_SHOWDATADIR</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.MtarBuilder.JAR_GENERIC_FILENAME" href="#hana_ml_deployment.deployers.mta.MtarBuilder.JAR_GENERIC_FILENAME">JAR_GENERIC_FILENAME</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.MtarBuilder.add_module_entry_to_manifest" href="#hana_ml_deployment.deployers.mta.MtarBuilder.add_module_entry_to_manifest">add_module_entry_to_manifest</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.MtarBuilder.build_mtar" href="#hana_ml_deployment.deployers.mta.MtarBuilder.build_mtar">build_mtar</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.MtarBuilder.delete_directory_content" href="#hana_ml_deployment.deployers.mta.MtarBuilder.delete_directory_content">delete_directory_content</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.MtarBuilder.zip_directory" href="#hana_ml_deployment.deployers.mta.MtarBuilder.zip_directory">zip_directory</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="hana_ml_deployment.deployers.mta.PrerequisitesValidator" href="#hana_ml_deployment.deployers.mta.PrerequisitesValidator">PrerequisitesValidator</a></code></h4>
+<ul class="">
+<li><code><a title="hana_ml_deployment.deployers.mta.PrerequisitesValidator.call_subprocess" href="#hana_ml_deployment.deployers.mta.PrerequisitesValidator.call_subprocess">call_subprocess</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_cfcli_available" href="#hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_cfcli_available">is_cfcli_available</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_cfcli_mta_available" href="#hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_cfcli_mta_available">is_cfcli_mta_available</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_java_available" href="#hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_java_available">is_java_available</a></code></li>
+<li><code><a title="hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_npm_available" href="#hana_ml_deployment.deployers.mta.PrerequisitesValidator.is_npm_available">is_npm_available</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
