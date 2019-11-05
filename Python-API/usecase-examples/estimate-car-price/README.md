@@ -19,5 +19,5 @@ The tutorial and this repository are not part of an official product of SAP. Hop
 
 # License
 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
-This file is licensed under the SAP Sample Code License except as noted otherwise in the LICENSE file 
+This file is licensed under the SAP Sample Code License except as noted otherwise in the [LICENSE file](SAP Sample Code License Agreement v1.0.pdf)
 https://github.com/SAP-samples/hana-ml-samples/blob/master/Python-API/usecase-examples/estimate-car-price/SAP%20Sample%20Code%20License%20Agreement%20v1.0.pdf
