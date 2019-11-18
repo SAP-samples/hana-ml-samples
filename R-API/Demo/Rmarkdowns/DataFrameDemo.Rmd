@@ -1,0 +1,114 @@
+---
+title: "DataFrameDemo"
+author: "PAL team"
+date: "9/25/2019"
+output: html_document
+---
+
+## HANA DataFrame
+HANA DataFrame is composed of HANA ConnectionContext and SQL statement. It represents a database query as a DataFrame. Most operations of HANA DataFrame are designed not bring data back from the database unless explicityly requested.
+
+```{r}
+conn <- hanaml.ConnectionContext(dsn = 'xxx.xxx.xxx.xxx:30015',
+                                 user = 'DM_PAL',
+                                 password = 'xxxxxxxx',
+                                 odbc = FALSE,
+                                 jdbcDriver = "/home/machine/sap/hdbclient/ngdbc.jar",
+                                 identifier.quote = "\"")
+```
+
+```{r}
+
+library(datasets)
+data(iris)
+summary(iris)
+```
+
+```{r}
+hana.df <- ConvertToHANADataFrame(conn, iris, "IRIS_DATA", force = TRUE, native = TRUE)
+```
+
+```{r}
+hana.df <- conn$table("IRIS_DATA")
+```
+
+## Collect()
+Collect() performs a sqlQuery to fetch the data from HANA DB, it can be used together with Head(N) to fetch top N rows:
+
+```{r}
+hana.df$Head(10)$Collect()
+```
+
+## Count()
+Count performs a sqlQuery to fetch the row number of the data from HANA DB.
+
+```{r}
+hana.df$Count()
+```
+
+## Sort(cols)
+Sort the data in HANA DB according to a list of columns.
+
+```{r}
+hana.df$Sort(list("Sepal.Length"))$Head(10)$Collect()
+```
+
+## Drop(cols)
+Create a new select statement to remove a list of columns.
+
+```{r}
+hana.df$Drop(list("Sepal.Length"))$Head(10)$Collect()
+```
+
+## AddId()
+Create ID columns.
+```{r}
+hana.df$AddId("NEW_ID")$Head(10)$Collect()
+```
+
+## DropDuplicates()
+Remove duplicated rows.
+```{r}
+hana.df$DropDuplicates()$Head(10)$Collect()
+```
+
+## Join(other)
+Join two HANA DataFrame.
+```{r}
+hana.df$Alias("L")$Join(hana.df$Alias("R"), on_expression = "L.\"Sepal.Length\" = R.\"Sepal.Length\"")$Head(10)$Collect()
+```
+
+## Select(cols)
+Create a new select statement to select subset of columns.
+```{r}
+hana.df$Select("Sepal.Length")$Head(10)$Collect()
+```
+
+## save(table)
+Persist data to a new HANA table.
+```{r}
+hana.df$save(table = "TEST", force = TRUE, schema = "DM_PAL")
+```
+
+## dtypes()
+Return table structure of HANA table.
+```{r}
+hana.df$dtypes(list("Sepal.Length", "Species"))
+```
+
+```{r}
+hana.df$columns.df
+```
+
+## Describe()
+Return statistics of HANA table.
+```{r}
+hana.df$Describe()
+```
+
+## DataManipulation()
+Unload table from memory.
+```{r}
+DataManipulation(conn, "IRIS_DATA")
+```
+

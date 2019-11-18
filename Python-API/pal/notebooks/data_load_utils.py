@@ -181,7 +181,7 @@ class DataSets:
                     "NREMPLOYED", "LABEL") \
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
 
-        DataSets.load_data_auto(connection, fq_tables, cols, inlist,'../datasets/bank-additional-full.csv',train_percentage,valid_percentage,test_percentage, batch_size,force)
+        DataSets.load_data_auto(connection, fq_tables, cols, inlist, "../datasets/bank-additional-full.csv",train_percentage,valid_percentage,test_percentage, batch_size,force)
         if len(tables) == 1:
             return tables[0]
         return tuple(tables)
@@ -318,7 +318,7 @@ class DataSets:
     )'
         inlist = '("SEPALLENGTHCM", "SEPALWIDTHCM", "PETALLENGTHCM", "PETALWIDTHCM", "SPECIES")\
                     VALUES (?, ?, ?, ?, ?)'
-        DataSets.load_data_auto(connection, fq_tables, cols, inlist,'../datasets/iris.csv',train_percentage,valid_percentage,test_percentage, batch_size,force)
+        DataSets.load_data_auto(connection, fq_tables, cols, inlist, "../datasets/iris.csv",train_percentage,valid_percentage,test_percentage, batch_size,force)
         if len(tables) == 1:
             return tables[0]
         return tuple(tables)
@@ -353,7 +353,7 @@ class DataSets:
                     "NOX", "RM", "AGE", "DIS", "RAD", "TAX", "PTRATIO", "BLACK", "LSTAT", "MEDV", "ID") \
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
 
-        DataSets.load_data_auto(connection, fq_tables, cols, inlist,'../datasets/boston-house-prices.csv',train_percentage,valid_percentage,test_percentage, batch_size,force)
+        DataSets.load_data_auto(connection, fq_tables, cols, inlist, "../datasets/boston-house-prices.csv",train_percentage,valid_percentage,test_percentage, batch_size,force)
         if len(tables) == 1:
             return tables[0]
         return tuple(tables)
@@ -641,3 +641,38 @@ class DataSets:
         if len(tables) == 1:
             return tables[0]
         return tuple(tables)
+    @staticmethod
+    def load_apriori_data(connection, schema=None, batch_size=10000, force=False,train_percentage=1.0,valid_percentage=0.0,test_percentage=0.0):
+        if schema is None:
+            schema = Settings.user
+        full_tbl = "PAL_APRIORI_TRANS_TBL"
+        tables = [full_tbl]
+        fq_tables = [schema + '.' + tbl for tbl in tables]
+        cols = '( \
+                CUSTOMER INTEGER DEFAULT NULL,\
+                ITEM VARCHAR(20)\
+                )'
+        inlist = '("CUSTOMER", "ITEM") \
+            VALUES (?, ?)'
+        DataSets.load_data_auto(connection, fq_tables, cols, inlist,'../datasets/apriori_item_data.csv',train_percentage,valid_percentage,test_percentage, batch_size,force)
+        if len(tables) == 1:
+            return tables[0]
+        return tuple(tables)	
+    @staticmethod
+    def load_spm_data(connection, schema=None, batch_size=10000, force=False,train_percentage=1.0,valid_percentage=0.0,test_percentage=0.0):
+        if schema is None:
+            schema = Settings.user
+        full_tbl = "PAL_SPM_DATA_TBL"
+        tables = [full_tbl]
+        fq_tables = [schema + '.' + tbl for tbl in tables]
+        cols = '( \
+		        CUSTID VARCHAR(100),\
+                TRANSID INTEGER,\
+                ITEMS VARCHAR(100)\
+                )'
+        inlist = '("CUSTID","TRANSID","ITEMS") \
+            VALUES (?, ? , ?)'
+        DataSets.load_data_auto(connection, fq_tables, cols, inlist,'../datasets/spm_data.csv',train_percentage,valid_percentage,test_percentage, batch_size,force)
+        if len(tables) == 1:
+            return tables[0]
+        return tuple(tables)			

@@ -19,7 +19,7 @@ rm(list=ls())
 # Please install the hana.ml.r library before you load it if not done already.
 # Change the location of the package below for you to install it. 
 # set your .libpath to where you want the package installed and make sure ALL of the pre required R packages (please refer to our getting started documentaiton) are already installed and loaded. 
-install.packages("C:/HANA_work/ML/SP04/hana.ml.r-1.0.3.tar.gz", type = "source", repos=NULL)
+
 library(hana.ml.r)
 library(plot3D)
 knitr::opts_chunk$set(echo = TRUE)
@@ -36,6 +36,20 @@ conn <- hanaml.ConnectionContext('HANA3','DEVUSER','Trextrex1')
 #Load data
 **The data is loaded into 3 tables, one for the test set, another for the training set, and finally the validation set:**
 
+```{r}
+bank_train <- read.csv("../Datasets/bank-additional-train.csv",
+                  header = FALSE,
+                  col.names = c('ID','AGE','JOB','MARITAL','EDUCATION','DBM_DEFAULT', 'HOUSING','LOAN','CONTACT','DBM_MONTH','DAY_OF_WEEK','DURATION','CAMPAIGN','PDAYS','PREVIOUS','POUTCOME','EMP_VAR_RATE','CONS_PRICE_IDX','CONS_CONF_IDX','EURIBOR3M','NREMPLOYED', 'LABEL'))
+bank_test <- read.csv("../Datasets/bank-additional-test.csv",
+                  header = FALSE,
+                  col.names = c('ID','AGE','JOB','MARITAL','EDUCATION','DBM_DEFAULT', 'HOUSING','LOAN','CONTACT','DBM_MONTH','DAY_OF_WEEK','DURATION','CAMPAIGN','PDAYS','PREVIOUS','POUTCOME','EMP_VAR_RATE','CONS_PRICE_IDX','CONS_CONF_IDX','EURIBOR3M','NREMPLOYED', 'LABEL'))
+bank_full <- read.csv("../Datasets/bank-additional-full.csv",
+                  header = FALSE,
+                  col.names = c('ID','AGE','JOB','MARITAL','EDUCATION','DBM_DEFAULT', 'HOUSING','LOAN','CONTACT','DBM_MONTH','DAY_OF_WEEK','DURATION','CAMPAIGN','PDAYS','PREVIOUS','POUTCOME','EMP_VAR_RATE','CONS_PRICE_IDX','CONS_CONF_IDX','EURIBOR3M','NREMPLOYED', 'LABEL'))
+bank_validation <- read.csv("../Datasets/bank-additional-validation.csv",
+                  header = FALSE,
+                  col.names = c('ID','AGE','JOB','MARITAL','EDUCATION','DBM_DEFAULT', 'HOUSING','LOAN','CONTACT','DBM_MONTH','DAY_OF_WEEK','DURATION','CAMPAIGN','PDAYS','PREVIOUS','POUTCOME','EMP_VAR_RATE','CONS_PRICE_IDX','CONS_CONF_IDX','EURIBOR3M','NREMPLOYED', 'LABEL'))
+```
 
 
 ## Defining datasets
@@ -45,12 +59,10 @@ train.tbl = 'DBM2_RTRAINING_TBL'
 valid.tbl = 'DBM2_RVALIDATION_TBL'
 test.tbl = 'DBM2_RTEST_TBL' 
 
-full.set <- conn$table(full.tbl)
-test.set <- conn$table(test.tbl)
-train.set <- conn$table(train.tbl)
-valid.set <- conn$table(valid.tbl)
-
-
+train.set <- ConvertToHANADataFrame(conn.context, bank_train, train.tbl, force = TRUE, native = TRUE)
+test.set <- ConvertToHANADataFrame(conn.context, bank_test, test.tbl, force = TRUE, native = TRUE)
+full.set <- ConvertToHANADataFrame(conn.context, bank_full, full.tbl, force = TRUE, native = TRUE)
+valid.set <- ConvertToHANADataFrame(conn.context, bank_validation, valid.tbl, force = TRUE, native = TRUE)
 ```
 
 ## Exploring the data
@@ -86,7 +98,7 @@ enet.lambda = 0.01
 enet.alpha = 0.769
 
 lr2 = hanaml.LogisticRegression(conn, solver='cyclical', tol=0.000001, max.iter=10000,stat.inf=1, multi.class = FALSE,
-                            pmml.export=2,lamb = enet.lambda, alpha = enet.alpha, class.map0 = "no",class.map1 = "yes", df =train.set)
+                            pmml.export=2,lamb = enet.lambda, alpha = enet.alpha, class.map0 = "no",class.map1 = "yes", data =train.set)
 ```
 
 # Looking at the coefficients. Looking at the top 5 values
@@ -96,7 +108,7 @@ head(lr2$coef$Sort(list("COEFFICIENT"),desc= TRUE)$Collect(),5)
 # Look at predictions
 ```{r Look at predictions ,warning=FALSE, message = FALSE}
 
-result.df <- lr2$predict(lr2,input.df=test.set, key = "ID")
+result.df <- lr2$predict(lr2,data=test.set, key = "ID")
 ```
 
 # Checking on accuracy
@@ -123,7 +135,7 @@ acc_val = list()
 for (val in enet.lambdas){
   for (val2 in enet.alphas){
     lr2 = hanaml.LogisticRegression(conn, solver='cyclical', tol=0.000001, max.iter=10000,stat.inf=1, 
-                                 pmml.export=2,lamb = val, alpha = val2, class.map0 = "no",class.map1 = "yes" ,df = train.set, formula=LABEL~AGE+JOB+MARITAL+EDUCATION+DBM_DEFAULT+HOUSING+LOAN+CONTACT+DBM_MONTH+DAY_OF_WEEK+DURATION+CAMPAIGN+PDAYS+PREVIOUS+POUTCOME+EMP_VAR_RATE+CONS_PRICE_IDX)  ## REVISIT add all columns
+                                 pmml.export=2,lamb = val, alpha = val2, class.map0 = "no",class.map1 = "yes" ,data = train.set, formula=LABEL~AGE+JOB+MARITAL+EDUCATION+DBM_DEFAULT+HOUSING+LOAN+CONTACT+DBM_MONTH+DAY_OF_WEEK+DURATION+CAMPAIGN+PDAYS+PREVIOUS+POUTCOME+EMP_VAR_RATE+CONS_PRICE_IDX)  ## REVISIT add all columns
     
     feature.list = list('AGE','JOB','MARITAL','EDUCATION','DBM_DEFAULT', 'HOUSING','LOAN','CONTACT','DBM_MONTH','DAY_OF_WEEK','DURATION','CAMPAIGN','PDAYS','PREVIOUS','POUTCOME','EMP_VAR_RATE','CONS_PRICE_IDX','CONS_CONF_IDX','EURIBOR3M','NREMPLOYED')
     

@@ -1,0 +1,51 @@
+---
+title: "ConnectionContextDemo.Rmd"
+author: "R ML library team"
+date: "9/23/2019"
+output: html_document
+---
+
+## Connection Context Example
+
+HANA ML R API supports both JDBC and ODBC connection to HANA DB:
+
+```{r}
+library(hana.ml.r)
+```
+
+## JDBC Connection Context
+
+To use JDBC, you need to check whether JDK and rJava has been installed or not. Use option jdbcDriverPath to point to HANA client jdbc driver (ngdbc.jar) and set odbc = FALSE:
+
+```{r}
+conn <- hanaml.ConnectionContext(dsn = 'xxx.xxx.xxx.xxx:30015',
+                                 user = 'DM_PAL',
+                                 password = 'xxxxxxxxx',
+                                 odbc = FALSE,
+                                 jdbcDriver = "/home/machine/sap/hdbclient/ngdbc.jar")
+```
+
+## ODBC Connection Context
+To use ODBC, you need to set up HANA instance in the odbc driver manager.
+```{r}
+conn2 <- hanaml.ConnectionContext(dsn = 'DEV',
+                                 user = 'DM_PAL',
+                                 password = 'Abcd1234')
+```
+
+
+## GetCurrentSchema()
+Return the current schema.
+
+```{r}
+conn$GetCurrentSchema()
+```
+
+## Create HANA DataFrame referencing to HANA table
+table() provides a way to create HANA DataFrame. 
+```{r}
+hana.df <- conn$table("IRIS_DATA_FULL_TBL")
+```
+```{r}
+hana.df$Head(5)$Collect()
+```

@@ -26,9 +26,21 @@ Parameters for the connection string (DSN,user,password):
 ```{r Creating connection , warning= FALSE, message = FALSE}
 library(hana.ml.r)
 library(futile.logger)
-library(RODBC)
+library(RJDBC)
 knitr::opts_chunk$set(echo = TRUE,comment = NA)
-conn.context <- hanaml.ConnectionContext('HANA3','DEVUSER','Trextrex1')
+conn <- hanaml.ConnectionContext(dsn = 'xxx.xxx.xxx.xxx:30015',
+                                 user = 'DM_PAL',
+                                 password = 'PAL_COOL',
+                                 odbc = FALSE,
+                                 jdbcDriver = "/home/machine/sap/hdbclient/ngdbc.jar",
+                                 identifier.quote = "\"")
+```
+
+```{r}
+library(datasets)
+data(iris)
+summary(iris)
+
 ```
 
 ## Defining datasets
@@ -37,25 +49,37 @@ The second data set without the variable SPECIES.
 
 The variable SPECIES already shows up the clusters, there are 3 speciesin the full data set. To have another data set without this variable helps to check how the algorithm will cluster the data and to see the impact of SPECIES variable on the study.
 
-```{r dataframe creation}
-full.set <- conn.context$table("IRIS")
-full_WithoutSpecies.set <- conn.context$sql("SELECT ID, SEPALLENGTHCM, SEPALWIDTHCM, PETALLENGTHCM, PETALWIDTHCM FROM IRIS")
+```{r DataFrame creation}
+full.set <- ConvertToHANADataFrame(conn, iris, "IRIS_DATA", force = TRUE, native = TRUE)
 ```
+```{r}
+full.set$Head(10)$Collect()
+```
+
+```{r}
+full.set <- full.set$AddId("ID")
+```
+
+```{r}
+full_WithoutSpecies.set <- full.set$Select(list("ID", "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"))
+```
+
+
 
 ## Let's look at the columns
 
-```{r dataframe columns}
+```{r DataFrame columns}
 as.character(full.set$columns)
 ```
 ## Let's look at the data types
-```{r dataframe dtypes}
+```{r DataFrame dtypes}
 sapply(full.set$dtypes(), paste, collapse = ",")
 ```
 
 ## Simple Exploration
 Let us look at the number of rows in the data set
 
-```{r dataframe rows}
+```{r DataFrame rows}
 sprintf('Number of rows in Iris dataset: %s', full.set$nrows)
 ```
 
@@ -63,15 +87,19 @@ sprintf('Number of rows in Iris dataset: %s', full.set$nrows)
 The goal is to find the optimal number of cluster for the given data set
 
 # K-means with 5 clusters
+```{r}
+library(cluster)
+km <- hanaml.Kmeans(conn, full.set, key = "ID", n.clusters = 5)
+```
+
 ```{r Model creation with 5 clusters, warning= FALSE, message = FALSE}
 library(sets)
-library(cluster)
 library(dplyr)
-km <- hanaml.Kmeans(conn.context,full.set,n.clusters = 5)
 kplot<- clusplot(full.set$Collect(), km$labels$Collect()$CLUSTER_ID, color=TRUE, shade=TRUE, 
   	labels=2, lines=0)
 Cluster_number<- select(km$labels$Collect(),2) %>% distinct()
 print(Cluster_number)
+
 
 ```
 
@@ -80,7 +108,7 @@ The superposition assumes that there can be merged. The number of cluster will b
 
 # K-means with 3 clusters
 ```{r Model creation with 3 clusters}
-km2 <- hanaml.Kmeans(conn.context ,full.set,n.clusters = 3)
+km2 <- hanaml.Kmeans(conn ,full.set,n.clusters = 3)
 kplot2<- clusplot(full.set$Collect(), km2$labels$Collect()$CLUSTER_ID, color=TRUE, shade=TRUE, 
   	labels=2, lines=0)
 Cluster_number2<- select(km2$labels$Collect(),2) %>% distinct()
@@ -92,7 +120,7 @@ In the model 3, the data set full_WithoutSpecies will be used. This will show up
 
 # K-means with 3 clusters without SPECIES variable
 ```{r Model creation with 3 clusters without SPECIES variable}
-km3 <- hanaml.Kmeans(conn.context ,full_WithoutSpecies.set, n.clusters = 3)
+km3 <- hanaml.Kmeans(conn ,full_WithoutSpecies.set, n.clusters = 3)
 kplot3<- clusplot(full_WithoutSpecies.set$Collect(), km3$labels$Collect()$CLUSTER_ID, color=TRUE, shade=TRUE, 
   	labels=2, lines=0)
 Cluster_number3<- select(km3$labels$Collect(),2) %>% distinct()

@@ -1,0 +1,103 @@
+---
+title: "ModelStorageDemo"
+author: "PAL team"
+date: "10/17/2019"
+output: html_document
+---
+
+#Model Storage example
+Model Storage help manage the version of the fitted models.
+
+## HANA connection
+
+Create your own HANA instance, get a copy of BOSTON dataset and create a DSN to access HANA instance.
+Parameters for the connection string (DSN,user,password):
+*HANA3 : DSN to target HANA instance 
+*DEVUSER: user
+*Trextrex1: password
+```{r Creating connection , warning= FALSE , message=FALSE}
+library(hana.ml.r)
+conn.context <- hanaml.ConnectionContext(dsn = 'xxx.xxx.xxx.xxx:30315',
+                                 user = 'xxx',
+                                 password = 'xxx',
+                                 odbc = FALSE,
+                                 jdbcDriver = "/home/machine/sap/hdbclient/ngdbc.jar")
+```
+
+#Load data
+**The data is loaded into 2 tables, one for the training set and the other one for the validation set:**
+
+*BOSTON_HOUSING_PRICES_TRAINING
+
+*BOSTON_HOUSING_PRICES_TEST
+
+## Defining datasets
+```{r}
+boston_train <- read.csv("../Datasets/boston-house-prices-train.csv",
+                  header = FALSE,
+                  col.names = c("CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE", "DIS", "RAD", "TAX", "PTRATIO", "BLACK", "LSTAT", "MEDV", "ID"))
+boston_test <- read.csv("../Datasets/boston-house-prices-test.csv",
+                  header = FALSE,
+                  col.names = c("CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE", "DIS", "RAD", "TAX", "PTRATIO", "BLACK", "LSTAT", "MEDV", "ID"))
+```
+
+```{r DataFrame creation}
+train.set <- ConvertToHANADataFrame(conn.context, boston_train, "BOSTON_HOUSING_PRICES_TRAINING", force = TRUE, native = TRUE)
+test.set <- ConvertToHANADataFrame(conn.context, boston_test, "BOSTON_HOUSING_PRICES_TEST", force = TRUE, native = TRUE)
+
+ # casting to double and integer to work with PAL.
+trainDF <- train.set$cast(list("CRIM", "ZN","INDUS","NOX","RM","AGE","DIS","PTRATIO","BLACK","LSTAT","MEDV"), "DOUBLE")
+trainDF <- trainDF$cast(list("CHAS","RAD","TAX"),"INTEGER")
+
+testDF <- test.set$cast(list("CRIM", "ZN","INDUS","NOX","RM","AGE","DIS","PTRATIO","BLACK","LSTAT","MEDV"), "DOUBLE")
+testDF <- testDF$cast(list("CHAS","RAD","TAX"),"INTEGER")
+
+```
+
+```{r}
+trainDF$Head(10)$Collect()
+```
+
+
+## Create a HGBT model with default parameters
+Calling HGBT algorithm
+```{r Calling HGBT algorithm}
+featurelist = list("CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE", "DIS", "RAD", "TAX", "PTRATIO", "BLACK", "LSTAT")
+p.range <- list(n.estimators = c(4, 3, 10),
+                learning.rate = c(0.1, 0.3, 1),
+                split.threshold = c(0.1, 0.3, 1))
+hgbtc <- hanaml.HGBTClassifier(conn.context = conn.context, data = trainDF, label = "RAD", key = "ID",
+                                fold.num = 5,
+                                evaluation.metric = 'error_rate',
+                                reference.metric = 'auc', max.depth = 6,
+                                parameter.range = p.range,
+                                random.state = 1,
+                                categorical.variable = "RAD")
+
+```
+## Save model by Model Storage API
+```{r}
+model.storage <- hanaml.ModelStorage(conn.context)
+
+model.storage$SaveModel(hgbtc, "TEST", 1)
+```
+
+## List Models
+```{r}
+model.storage$ListModels()$Collect()
+```
+
+## Load Model
+```{r}
+hgbtc <- model.storage$LoadModel("TEST", 1)
+```
+
+
+## Prediction
+The second model has a better accuracy. this one will be used for the prediction.
+```{r}
+
+predict.hgbtc <-predict(hgbtc, key = "ID", data = testDF, verbose = FALSE, missing.replacement = 'instance_marginalized')
+
+
+```

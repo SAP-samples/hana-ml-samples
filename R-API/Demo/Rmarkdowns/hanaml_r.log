@@ -1,0 +1,6 @@
+ERROR [2019-10-31 11:38:09] key is mandatory, Please provide a concrete value.
+ERROR [2019-10-31 11:38:49] key is mandatory, Please provide a concrete value.
+ERROR [2019-10-31 11:40:06] Error: $ operator not defined for this S4 class
+ERROR [2019-10-31 11:49:18] Error: $ operator not defined for this S4 class
+ERROR [2019-10-31 11:51:43] Error: $ operator not defined for this S4 class
+ERROR [2019-10-31 11:54:51] Error: $ operator not defined for this S4 class

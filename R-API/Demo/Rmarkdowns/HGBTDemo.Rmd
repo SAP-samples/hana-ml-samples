@@ -1,14 +1,13 @@
 ---
-title: "RandomForestDemo"
-author: "R ML library team"
+title: "HGBTDemo"
+author: "PAL team"
+date: "10/17/2019"
 output: html_document
-fig_width: 10
-fig_height: 8
 ---
 
-#Random Forest example
-Random Forest in SAP HANA is a classification model based on decision trees. Multiple decision trees are created, and the output generated are combining for a final result.
-Illustration of Random Forest (random decision trees)in SAP HANA by using Boston housing market dataset.
+#Hybrid Gradient Boosting Tree example
+Hybrid Gradient Boosting Tree in SAP HANA is a classification model based on decision trees. Gradient boosting tree (GBT) is an ensemble machine learning technique for regression and classification problems. 
+Illustration of HGBT in SAP HANA by using Boston housing market dataset.
 
 
 ```{r setup, include=FALSE}
@@ -105,71 +104,35 @@ print(toString(test.set$columns))
 * MEDV - Median value of owner-occupied homes in $1000's
 
 
-## Create a Random forest model with default parameters
-Calling Random forest algorithm
-```{r Calling Random forest algorithm}
+## Create a HGBT model with default parameters
+Calling HGBT algorithm
+```{r Calling HGBT algorithm}
 featurelist = list("CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE", "DIS", "RAD", "TAX", "PTRATIO", "BLACK", "LSTAT")
-
-random.forest<- hanaml.RandomForestClassifier(conn.context,  features = featurelist, label = "MEDV", data = trainDF, n.estimators=300, max.features=3,  random.state=2, split.threshold=0.00001,  calculate.oob=TRUE, min.samples.leaf=1, thread.ratio=1.0)
-
-oob<- random.forest$oob.error$Collect()
-sprintf("The average out of bag error, of all trees fitted, is: %s", mean(oob[[2]]))
-plot(random.forest$oob.error$Collect())
+p.range <- list(n.estimators = c(4, 10, 3),
+                learning.rate = c(0.1, 1.0, 3),
+                split.threshold = c(0.1, 1.0, 3))
+hgbtc <- hanaml.HGBTClassifier(conn.context = conn.context, data = trainDF,
+                               features = featurelist,
+                               label = "MEDV",
+                               key = "ID",
+                               learning.rate = 0.5, split.threshold = 0,
+                               fold.num = 5, n.estimators = 4,
+                               evaluation.metric = 'error_rate',
+                               reference.metric = 'auc', max.depth = 6,
+                               parameter.range = p.range,
+                               random.state = 2019)
+hgbtc$feature.importances$Collect()$IMPORTANCE
+hgbtc$confusion.matrix$Collect()$COUNT
 ```
-
-## Create a Random forest model with the 6 random variables as candidates at each split
-
-```{r}
-random.forest2<- hanaml.RandomForestClassifier(conn.context, features = featurelist, label = "MEDV",
-                                    data = trainDF,n.estimators=300, max.features=6,
-                              random.state=2, split.threshold=0.00001, 
-                              calculate.oob=TRUE,
-                              min.samples.leaf=1, thread.ratio=1.0)
-
-oob2<- random.forest2$oob.error$Collect()
-sprintf("The average out of bag error, of all trees fitted, is: %s", mean(oob2[[2]]))
-random.forest2$feature_importances_$Collect()
-plot(random.forest2$oob.error$Collect())
-```
-
-The out of bag error has been reduced from **16.72** to **13.60**, when increasing the number of random variables.
-The most important variables of our study is __LSTAT__ (% lower status of the population) and the second one is __RM__ (average number of rooms per dwelling).
-
 
 ## Prediction
 The second model has a better accuracy. this one will be used for the prediction.
 ```{r}
 
-predict.forest2 <-predict(random.forest2,key = "ID", data = testDF, features = featurelist, verbose = FALSE, block.size = 2, missing.replacement = 'instance_marginalized')
+predict.hgbtc <-predict(hgbtc, key = "ID", data = testDF, features = featurelist, verbose = FALSE, missing.replacement = 'instance_marginalized')
 
 
-sprintf("The average confidence is: %s", mean(predict.forest2$CONFIDENCE))
-sprintf("The average score is: %s", mean(predict.forest2$SCORE))
+sprintf("The average confidence is: %s", mean(predict.hgbtc$CONFIDENCE))
+sprintf("The average score is: %s", mean(predict.hgbtc$SCORE))
 
 ```
-
-## What is the correct max.features(number of variables that should be randomly used for each split) for our model 
-
-```{r}
-# Using For loop to identify the right maxi.features for model
-confidence=c()
-score = c()
-
-i=5
-
-for (i in 3:13) {
-random.forest3 <-  hanaml.RandomForestClassifier(conn.context, features = featurelist, label = "MEDV",
-                                    data = trainDF,n.estimators=500, max.features= as.numeric(i),
-                              random.state=2, split.threshold=0.00001, 
-                              calculate.oob=TRUE,
-                              min.samples.leaf=1, thread.ratio=1.0)
-  
-predict.forest3 <- predict(random.forest3 ,key = "ID", data = testDF, features = featurelist, verbose = FALSE, block.size = 2, missing.replacement = 'instance_marginalized')
-
- confidence[i-2] <- mean(predict.forest3[[3]])
-}
- 
-plot(3:13,confidence)
-```
-
-After 6 randomly choosen variables, the confidence on the model is not hugely changed. It helps to understand here that 6 variables are suitables for the tree split. 
