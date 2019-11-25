@@ -1,0 +1,440 @@
+---
+title: "hana.ml.r library - Time Series Demo"
+author: "SAP HANA PAL team"
+date: "11/21/2019"
+output: html_document
+---
+
+## Time Series Algorithms
+
+Financial market data or economic data usually comes with time stamps. Predicting the future values, such as stock value for tomorrow, is of great interest in many business scenarios. Quantity over time is called time series, and predicting the future value based on existing time series is also known as forecasting. The time series algorithms in PAL include three smoothing based time series models: single, double, and triple exponential smoothing. These models can be used to smooth the existing time series and forecast. In these algorithms, let xt be the observed values for the t-th time period, and T be the total number of time periods.
+
+## Shampoo Sale Example
+
+This markdown uses the shampoo sales dataset to demonstrate the time series algorithms below provided by the hana.ml.r libaray.
+
+## Dataset
+
+Shampoo sales dataset describes the monthly number of sales of shampoo over a 3 year period.
+The units are a sales count and there are 36 observations. 
+The original dataset is credited to Makridakis, Wheelwright and Hyndman (1998). 
+Dataset source: https://raw.githubusercontent.com/jbrownlee/Datasets/master/shampoo.csv for tutorials use only.
+
+## HANA Connection
+
+Create your own HANA instance, get a copy of shampoo dataset and create a DSN to access HANA instance.
+Parameters for the connection string (DSN,user,password):
+*HANA3 : DSN to target HANA instance 
+*DEVUSER: user
+*Trextrex1: password
+```{r Creating connection , warning= FALSE , message=FALSE}
+library(hana.ml.r)
+library(data.table)
+conn.context <- hanaml.ConnectionContext(dsn = 'xxx.xxx.xxx.xxx:30315',
+                                 user = 'xxx',
+                                 password = 'xxx',
+                                 odbc = FALSE,
+                                 jdbcDriver = "/home/machine/sap/hdbclient/ngdbc.jar")
+
+```
+
+Connection to SAP HANA status:
+```{r}
+conn.context
+```
+
+## Data Loading
+
+**The data is loaded into a table:**
+
+SHAMPOO_TBL
+
+Read csv file and create a R data frame from it:
+```{r}
+shampoo.sale <- read.csv("../Datasets/shampoo.csv", header = FALSE, col.names = c("ID", "SALES"))
+```
+
+Have a look at the first 10 rows of r data frame shampoo.sale:
+```{r}
+head(shampoo.sale,10)
+```
+Draw the figure, We can see that the dataset shows an increasing trend and possibly has a seasonal component:
+```{r}
+ID <- shampoo.sale$ID
+SALES <- shampoo.sale$SALES
+plot(x = ID, y = SALES, main = "Shampoo sales", type = "o", col = "blue")
+
+```
+
+Convert the r data frame into a HANA DataFrame: 
+```{r DataFrame creation}
+shampoo <- ConvertToHANADataFrame(conn.context, shampoo.sale, "TEST", force = TRUE, native = FALSE)
+```
+Have a look at the first 10 rows of HANA DataFrame shampoo:
+```{r}
+shampoo$Head(10)$Collect()
+```
+## Time Series Functions
+In this section, we apply time series functions on shampoo dataset.
+
+### SeasonalDecompose 
+Because the dataset shows an increasing trend and possibly some seasonal component, we first use seasonal decompose function to decompose the data.
+```{r}
+result.sd <- hanaml.SeasonalDecompose(conn.context, shampoo)
+```
+SeasonalDecompose function returns a list of two DataFrame - stats and decompose. We could see the data has a seasonality and its period is 2. The corresponding multiplicative seasonality model is identified. The decompose table shows the components.
+result[[1]] - Statistics for time series:
+```{r}
+result.sd[[1]]$Collect()
+```
+result[[2]] - Seasonal decomposition table:
+```{r}
+result.sd[[2]]$Head(10)$Collect()
+```
+
+Draw the results:
+```{r}
+seasonal <- result.sd[[2]]$Collect()$SEASONAL
+trend <- result.sd[[2]]$Collect()$TREND
+random <- result.sd[[2]]$Collect()$RANDOM
+plot(x = ID, y = SALES, main = "Shampoo Sales - seasoal decompose", type = "b", col = "blue", ylim = range(0, 800))
+lines(ID, seasonal, type = "o", col = "red")
+lines(ID, trend, type = "o", col = "black")
+lines(ID, random, type = "o", col = "yellow")
+legend(1, 750, legend=c("Shampoo sales forecast", "seasonal component", "trend component", "random component"),    
+      col=c("blue", "red", "black", "yellow"), lty=1:2, cex=0.8)
+```
+
+
+### White Noise Test
+This algorithm is used to identify whether a time series is a white noise series. If white noise exists in the raw time series, the algorithm returns the value of 1. If not, the value of 0 will be returned.
+```{r}
+result.wn <- hanaml.WhiteNoiseTest(conn.context, shampoo)
+```
+
+Result, WN = 0 shows that no white noise exists in the time series: 
+```{r}
+result.wn
+```
+
+### Trend Test
+Trend Test is to identify whether a time series has an upward or downward trend or not, and calculate the de-trended time series.
+```{r}
+result.tt1 <- hanaml.TrendTest(conn.context, shampoo, method = "MK")
+```
+
+Result - stats:
+TREND = 1 means that shampoo has a upward trend. 
+```{r}
+result.tt1[[1]]
+```
+
+
+As there is no trend in the trend test with difference-sign method, the detrended table is same as shampoo dataset. 
+Result - detrended series:
+```{r}
+result.tt1[[2]]$Head(10)
+```
+Use another method "different-sign" to test the trend in shampoo:
+```{r}
+result.tt2 <- hanaml.TrendTest(conn.context, shampoo, method = "difference-sign")
+```
+
+Result - stats:
+TREND = 0 means that shampoo dataset has no trend. 
+```{r}
+result.tt2[[1]]
+```
+
+Result - detrended series:
+```{r}
+result.tt2[[2]]$Head(10)
+```
+
+### ARIMA
+Calling ARIMA algorithm
+```{r Calling ARIMA algorithm}
+arima <- hanaml.Arima(conn.context,
+                      data = shampoo,
+                      order.p = 1,
+                      order.d = 1,
+                      order.q = 1,
+                      seasonal.order.p = 1,
+                      seasonal.order.s = 4,
+                      method = "mle",
+                      thread.ratio = 1.0,
+                      output.fitted = TRUE)
+
+```
+Result - Model
+The model contains AIC (Akaike Information Criterion) and BIC (Bayes Information Criterion) that can be minimized to select the best fitting model.
+```{r}
+arima$model$Head(10)$Collect()
+```
+
+Result - fitted values: 
+```{r}
+arima$fitted$Head(10)$Collect()
+```
+
+Draw the result:
+```{r}
+ID <- shampoo.sale$ID
+SALES <- shampoo.sale$SALES
+plot(x = ID, y = SALES, main = "Shampoo sales", type = "o", col = "blue")
+lines(arima$fitted$Collect()$ID, arima$fitted$Collect()$FITTED, type = "o", col = "red")
+legend(1, 650, legend=c("Shampoo sales", "ARIMA fitted"),
+       col=c("blue", "red"), lty=1:2, cex=0.8)
+```
+
+Predict with arima object:
+```{r}
+result.arima <- predict(arima, forecast.length = 5)
+```
+
+Predict result:
+```{r}
+result.arima$Collect()
+```
+
+Draw the result:
+```{r}
+sales.id <- c(shampoo.sale$ID, 37:41)
+id <- c(37:41)
+sales <- c(arima$fitted$Collect()$FITTED, result.arima$Collect()$FORECAST)
+sales.upper.80 <- c(result.arima$Collect()$HI80)
+sales.upper.95 <- c(result.arima$Collect()$HI95)
+sales.lower.80 <- c(result.arima$Collect()$LO80)
+sales.lower.95 <- c(result.arima$Collect()$LO95)
+plot(x = ID, y = SALES, main = "Shampoo Sales - ARIMA", type = "b", col = "blue", ylim = range(0, 1000), xlim = range(0,45))
+lines(sales.id, sales, type = "l", col = "purple")
+lines(id, sales.upper.80, type = "l", col = "red")
+lines(id, sales.upper.95, type = "l", col = "black")
+lines(id, sales.lower.80, type = "l", col = "yellow")
+lines(id, sales.lower.95, type = "l", col = "green")
+legend(1, 950, legend=c("Shampoo sales", "Shampoo sales forecast", "High 80% value", "High 95% value", "Low 80% value", "Low 95% value"),  
+      col=c("blue", "purple", "red", "black", "yellow", "green"), lty=1:2, cex=0.8)
+```
+
+### Auto ARIMA
+Calling Auto.Arima function:
+```{r}
+autoarima <- hanaml.AutoArima(conn.context, data = shampoo)
+```
+
+Result- model:
+```{r}
+autoarima$model$Head(10)$Collect()
+```
+
+Result - fitted values:
+```{r}
+autoarima$fitted$Head(10)$Collect()
+```
+
+Draw the result
+```{r}
+ID <- shampoo.sale$ID
+SALES <- shampoo.sale$SALES
+plot(x = ID, y = SALES, main = "Shampoo sales", type = "o", col = "blue")
+lines(autoarima$fitted$Collect()$ID, arima$fitted$Collect()$FITTED, type = "o", col = "red")
+legend(1, 650, legend=c("Shampoo sales", "Auto ARIMA fitted"),
+       col=c("blue", "red"), lty=1:2, cex=0.8)
+```
+
+predict result:
+```{r}
+result.autoarima <- predict(autoarima, forecast.length = 5)
+```
+
+result:
+```{r}
+result.autoarima$Collect()
+```
+Draw the result:
+```{r}
+sales.id <- c(shampoo.sale$ID, 37:41)
+id <- c(37:41)
+sales <- c(autoarima$fitted$Collect()$FITTED, result.autoarima$Collect()$FORECAST)
+sales.upper.80 <- c(result.autoarima$Collect()$HI80)
+sales.upper.95 <- c(result.autoarima$Collect()$HI95)
+sales.lower.80 <- c(result.autoarima$Collect()$LO80)
+sales.lower.95 <- c(result.autoarima$Collect()$LO95)
+plot(x = ID, y = SALES, main = "Shampoo Sales - Auto ARIMA", type = "b", col = "blue", ylim = range(0, 1000), xlim = range(0,45))
+lines(sales.id, sales, type = "l", col = "purple")
+lines(id, sales.upper.80, type = "l", col = "red")
+lines(id, sales.upper.95, type = "l", col = "black")
+lines(id, sales.lower.80, type = "l", col = "yellow")
+lines(id, sales.lower.95, type = "l", col = "green")
+legend(1, 950, legend=c("Shampoo sales","Shampoo sales forecast", "High 80% value", "High 95% value", "Low 80% value", "Low 95% value"),  col=c("blue", "red", "black", "yellow", "green"), lty=1:2, cex=0.8)
+```
+
+### Single Exponential Smoothing
+Single Exponential Smoothing model is suitable to model the time series without trend and seasonality.
+
+```{r}
+sesm <- hanaml.SingleExponentialSmoothing(conn.context, shampoo,
+                                          forecast.num = 6,
+                                          accuracy.measure = list('mse','mpe'),
+                                          prediction.confidence.1 = 0.8,
+                                          prediction.confidence.2 = 0.95)
+```
+
+Return a list of two DataFrame. Result 1 - forecast values:
+```{r}
+sesm[[1]]$Head(10)$Collect()
+```
+
+Result 2 - stats:
+```{r}
+sesm[[2]]$Collect()
+```
+
+Draw the result:
+```{r}
+id <- c(2:42)
+sales <- sesm[[1]]$Collect()$VALUE
+sales.upper.80 <- c(sesm[[1]]$Collect()$PI1_UPPER)
+sales.upper.95 <- c(sesm[[1]]$Collect()$PI2_UPPER)
+sales.lower.80 <- c(sesm[[1]]$Collect()$PI1_LOWER)
+sales.lower.95 <- c(sesm[[1]]$Collect()$PI2_LOWER)
+plot(x = ID, y = SALES, main = "Shampoo Sales - single exponential smoothing", type = "b", col = "blue", ylim = range(0, 800), xlim = range(0, 45))
+lines(id, sales, type = "l", col = "purple" )
+lines(id, sales.upper.80, type = "l", col = "red")
+lines(id, sales.upper.95, type = "l", col = "black")
+lines(id, sales.lower.80, type = "l", col = "yellow")
+lines(id, sales.lower.95, type = "l", col = "green")
+legend(1, 700, legend=c("Shampoo sales", "Forecast values", "High 80% value", "High 95% value", "Low 80% value", "Low 95% value"),  col=c("blue", "purple", "red", "black", "yellow", "green"), lty=1:2, cex=0.8)
+```
+
+### Double Exponential Smoothing
+Double Exponential Smoothing model is suitable to model the time series with trend but without seasonality. 
+```{r}
+desm <- hanaml.DoubleExponentialSmoothing(conn.context, 
+                                          shampoo,
+                                          forecast.num = 6,
+                                          damped = TRUE,
+                                          accuracy.measure = list('mse','mpe'),
+                                          prediction.confidence.1 = 0.8,
+                                          prediction.confidence.2 = 0.95)
+```
+
+Return a list of two DataFrame. Result 1 - forecast values:
+```{r}
+desm[[1]]$Head(10)$Collect()
+```
+
+Result 2 - stats:
+```{r}
+desm[[2]]$Collect()
+```
+
+Draw the result:
+```{r}
+id <- c(2:42)
+sales <- desm[[1]]$Collect()$VALUE
+sales.upper.80 <- c(desm[[1]]$Collect()$PI1_UPPER)
+sales.upper.95 <- c(desm[[1]]$Collect()$PI2_UPPER)
+sales.lower.80 <- c(desm[[1]]$Collect()$PI1_LOWER)
+sales.lower.95 <- c(desm[[1]]$Collect()$PI2_LOWER)
+plot(x = ID, y = SALES, main = "Shampoo Sales - double exponential smoothing", type = "b", col = "blue", ylim = range(0, 800), xlim = range(0, 45))
+lines(id, sales, type = "l", col = "purple" )
+lines(id, sales.upper.80, type = "l", col = "red")
+lines(id, sales.upper.95, type = "l", col = "black")
+lines(id, sales.lower.80, type = "l", col = "yellow")
+lines(id, sales.lower.95, type = "l", col = "green")
+legend(1, 700, legend=c("Shampoo sales", "Forecast values", "High 80% value", "High 95% value", "Low 80% value", "Low 95% value"),  col=c("blue", "purple", "red", "black", "yellow", "green"), lty=1:2, cex=0.8)
+```
+
+
+### Triple Exponential Smoothing
+Triple exponential smoothing is used to handle the time series data containing a seasonal component.
+```{r}
+tesm <- hanaml.TripleExponentialSmoothing(conn.context, 
+                                          shampoo,
+                                          forecast.num = 6,
+                                          damped = TRUE,
+                                          seasonal.period = 2,
+                                          accuracy.measure = list('mse','mpe'),
+                                          prediction.confidence.1 = 0.8,
+                                          prediction.confidence.2 = 0.95)
+```
+
+Return a list of two DataFrame. Result 1 - forecast values:
+```{r}
+tesm[[1]]$Head(10)$Collect()
+```
+
+Result 2 - stats:
+```{r}
+tesm[[2]]$Collect()
+```
+
+Draw the result:
+```{r}
+id <- c(3:42)
+sales <- tesm[[1]]$Collect()$VALUE
+length(sales)
+sales.upper.80 <- c(tesm[[1]]$Collect()$PI1_UPPER)
+sales.upper.95 <- c(tesm[[1]]$Collect()$PI2_UPPER)
+sales.lower.80 <- c(tesm[[1]]$Collect()$PI1_LOWER)
+sales.lower.95 <- c(tesm[[1]]$Collect()$PI2_LOWER)
+plot(x = ID, y = SALES, main = "Shampoo Sales - triple exponential smoothing", type = "b", col = "blue", ylim = range(0, 800), xlim = range(0, 45))
+lines(id, sales, type = "l", col = "purple" )
+lines(id, sales.upper.80, type = "l", col = "red")
+lines(id, sales.upper.95, type = "l", col = "black")
+lines(id, sales.lower.80, type = "l", col = "yellow")
+lines(id, sales.lower.95, type = "l", col = "green")
+legend(1, 700, legend=c("Shampoo sales", "Forecast values", "High 80% value", "High 95% value", "Low 80% value", "Low 95% value"),  col=c("blue", "purple", "red", "black", "yellow", "green"), lty=1:2, cex=0.8)
+```
+
+
+### Auto Exponential Smoothing
+```{r}
+aesm <- hanaml.AutoExponentialSmoothing(conn.context, 
+                                        shampoo,
+                                        forecast.num = 6,
+                                        model.selection = TRUE,
+                                        accuracy.measure = list('mse','mape'),
+                                        prediction.confidence.1 = 0.8,
+                                        prediction.confidence.2 = 0.95)
+```
+
+Return a list of two DataFrame. Result 1 - forecast values:
+```{r}
+aesm[[1]]$Head(10)$Collect()
+```
+
+Result 2 - stats, we can see Triple exponetial smoothing is selected:
+```{r}
+aesm[[2]]$Collect()
+```
+
+Draw the result:
+```{r}
+id <- c(3:42)
+sales <- aesm[[1]]$Collect()$VALUE
+sales.upper.80 <- c(aesm[[1]]$Collect()$PI1_UPPER)
+sales.upper.95 <- c(aesm[[1]]$Collect()$PI2_UPPER)
+sales.lower.80 <- c(aesm[[1]]$Collect()$PI1_LOWER)
+sales.lower.95 <- c(aesm[[1]]$Collect()$PI2_LOWER)
+plot(x = ID, y = SALES, main = "Shampoo Sales - auto exponential smoothing", type = "b", col = "blue", ylim = range(0, 1200), xlim = range(0, 45))
+lines(id, sales, type = "l", col = "purple" )
+lines(id, sales.upper.80, type = "l", col = "red")
+lines(id, sales.upper.95, type = "l", col = "black")
+lines(id, sales.lower.80, type = "l", col = "yellow")
+lines(id, sales.lower.95, type = "l", col = "green")
+legend(1, 1100, legend=c("Shampoo sales", "Forecast values", "High 80% value", "High 95% value", "Low 80% value", "Low 95% value"),  
+       col=c("blue", "purple", "red", "black", "yellow", "green"), lty=1:2, cex=0.8)
+```
+
+
+## Close the HANA connection
+we close the HANA connection when the analysis finishes.
+```{r}
+conn.context$close()
+```
+
+
+
+
