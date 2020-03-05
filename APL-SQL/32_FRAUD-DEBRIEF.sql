@@ -37,16 +37,6 @@ from
  INDICATORS 
 where variable = 'IS_FRAUD' and key = 'CategoryFrequency';
 
-select 
-OID as "Model Id", TARGET as "Target", 
-VARIABLE as "1st Variable", to_char(detail) as "2nd Variable", 
-round(to_double(to_char(VALUE)),3) as "Coefficient"
-from 
- INDICATORS 
-where 
-  KEY = 'CorrelatedVariable'
-  order by 5 desc;
-  
 -- Descriptive Stats
 With TB as (
 select 
