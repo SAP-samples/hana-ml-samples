@@ -1,7 +1,7 @@
 # Description
 This repository is part of a tutorial that explains how to train Machine Learning (ML) models in SAP HANA through Python code. Trigger predictive algorithms either from local Jupyter Notebooks or, even better, from Jupyter Notebooks within SAP Data Intelligence.
 A blog on the SAP Community gives the full description for the reader to follow. The purpose of this GitHub repository is primarily to provide the files which are required by that tutorial.
-https://blogs.sap.com/2019/11/05/hands-on-tutoria…hana-with-python/
+https://blogs.sap.com/2019/11/05/hands-on-tutorial-machine-learning-push-down-to-sap-hana-with-python/
 
 # Requirements
 Detailed requirements can be found on the tutorial mentioned above. However, most prominent are
