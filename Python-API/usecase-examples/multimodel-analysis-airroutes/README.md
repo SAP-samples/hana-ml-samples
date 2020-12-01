@@ -1,1 +1,1 @@
-Code samples from https://blogs.sap.com/tag/sapteched2020-dat108/ blog post series
+Code samples from https://blogs.sap.com/tag/sapteched2020-dat108/ blog post series. They demonstrate an example of using spatial and graph processing extensions in SAP HANA ML Client for Python, aka `hana-ml`.
