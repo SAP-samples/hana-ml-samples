@@ -100,8 +100,8 @@ class DataSets:
             sql = 'CREATE COLUMN TABLE ' + table_name + cols
             with connection.connection.cursor() as cur:
                 print('Creating table {}'.format(table_name))
-                #print(sql)
                 cur.execute(sql)
+                
 
     @staticmethod
     def _load_data(connection, table_descriptions, cols, inlist, batch_size=10000):
@@ -334,19 +334,19 @@ class DataSets:
         tables = [full_tbl, training_tbl, validation_tbl, test_tbl]
         fq_tables = [schema + '.' + tbl for tbl in tables]
         cols = '( \
-        "CRIM" DECIMAL(12,5) CS_FIXED,\
-        "ZN" DECIMAL(7,3) CS_FIXED,\
-        "INDUS" DECIMAL(7,2) CS_FIXED,\
-        "CHAS" SMALLINT CS_INT, "NOX" DECIMAL(10,4) CS_FIXED,\
-        "RM" DECIMAL(8,3) CS_FIXED,\
-        "AGE" DECIMAL(7,3) CS_FIXED,\
-        "DIS" DECIMAL(11,4) CS_FIXED,\
-        "RAD" TINYINT CS_INT,\
-        "TAX" SMALLINT CS_INT,\
-        "PTRATIO" DECIMAL(6,2) CS_FIXED,\
-        "BLACK" DECIMAL(9,3) CS_FIXED,\
-        "LSTAT" DECIMAL(7,2) CS_FIXED,\
-        "MEDV" DECIMAL(6,2) CS_FIXED,\
+        "CRIM" DECIMAL(12,5),\
+        "ZN" DECIMAL(7,3),\
+        "INDUS" DECIMAL(7,2),\
+        "CHAS" SMALLINT, "NOX" DECIMAL(10,4),\
+        "RM" DECIMAL(8,3),\
+        "AGE" DECIMAL(7,3),\
+        "DIS" DECIMAL(11,4),\
+        "RAD" TINYINT,\
+        "TAX" SMALLINT,\
+        "PTRATIO" DECIMAL(6,2),\
+        "BLACK" DECIMAL(9,3),\
+        "LSTAT" DECIMAL(7,2),\
+        "MEDV" DECIMAL(6,2),\
         "ID" INTEGER\
         )'
         inlist = '("CRIM", "ZN", "INDUS", "CHAS",\

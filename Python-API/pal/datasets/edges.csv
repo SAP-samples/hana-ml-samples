@@ -1,0 +1,5 @@
+﻿edge_id,from,to,label,rating
+1,1,2,Related,3.2
+2,1,3,Supports,4.1
+3,3,4,Related,1.5
+4,4,1,Requires,3.1
