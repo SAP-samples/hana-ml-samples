@@ -3,3 +3,5 @@
 2,1,3,Supports,4.1
 3,3,4,Related,1.5
 4,4,1,Requires,3.1
+5,1,4,Related,1.1
+6,4,3,Related,1.2
