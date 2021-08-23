@@ -1,0 +1,11 @@
+urllib3
+jinja2>=3.0.0
+ipython>=6
+ipywidgets
+graphviz
+pydotplus
+requests
+beautifulsoup4
+cryptography
+plotly>=4.14.3
+wordcloud
