@@ -11,6 +11,7 @@ CLASS zcl_islm_pal_ucl_sflight DEFINITION
       " Data structure contains the training and prediction data
       ts_data TYPE z_sflight_train. " <<<<<< TODO: adjust the type to use the application specific fields. The fields can be casted to the appropriate data elements inside the CDS view.
     TYPES:
+      " the training and prediction table types
       tt_training_data TYPE STANDARD TABLE OF ts_data WITH DEFAULT KEY,
       tt_predict_data  TYPE STANDARD TABLE OF ts_data WITH DEFAULT KEY.
     TYPES:
