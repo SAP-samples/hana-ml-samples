@@ -22,6 +22,8 @@ TRY.
         ev_name = DATA(lv_amdp_class_name).
     WRITE: 'AMDP class name:', lv_amdp_class_name.
     SKIP.
+    " the AMDP class name and the class name reference of variable lr_self in if_hemi_model_management~get_amdp_class_name() must be the same
+    ASSERT cl_abap_classdescr=>get_class_name( lr_rdt_template ) = lv_amdp_class_name.
 
     " getting metadata of class via get_meta_data
     CALL METHOD lr_template_object->if_hemi_model_management~get_meta_data
