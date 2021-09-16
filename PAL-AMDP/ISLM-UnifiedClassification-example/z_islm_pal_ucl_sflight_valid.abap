@@ -23,7 +23,7 @@ TRY.
     WRITE: 'AMDP class name:', lv_amdp_class_name.
     SKIP.
     " the AMDP class name and the class name of reference lr_self in if_hemi_model_management~get_amdp_class_name() must be the same
-    ASSERT cl_abap_classdescr=>get_class_name( lr_rdt_template ) = lv_amdp_class_name.
+    ASSERT cl_abap_classdescr=>get_class_name( lr_template_object ) = lv_amdp_class_name.
 
     " getting metadata of class via get_meta_data
     CALL METHOD lr_template_object->if_hemi_model_management~get_meta_data
@@ -103,7 +103,13 @@ TRY.
     SELECT * INTO TABLE @lt_training_data FROM (lv_training_cds_view_name).
     SELECT * INTO TABLE @lt_predict_data  FROM (lv_predict_cds_view_name).
 
+    DATA: lv_time_start   TYPE i,
+          lv_time_finish  TYPE i,
+          lv_time_elapsed TYPE i.
+
     " calling training method
+
+    GET RUN TIME FIELD lv_time_start.
     CALL METHOD lr_template_object->training
       EXPORTING
         it_data                = lt_training_data
@@ -111,12 +117,20 @@ TRY.
       IMPORTING
         et_model               = DATA(lt_model)
         et_variable_importance = DATA(lt_variable_importance).
+    GET RUN TIME FIELD lv_time_finish.
+
+    lv_time_elapsed = lv_time_finish - lv_time_start.
+    WRITE:/ 'Training Runtime =', lv_time_elapsed, 'microseconds'.
+    SKIP.
+
     LOOP AT lt_variable_importance ASSIGNING FIELD-SYMBOL(<fs_variable_importance>).
       WRITE: 'Variable importance:', <fs_variable_importance>-variable_name, <fs_variable_importance>-importance.
       SKIP.
     ENDLOOP.
 
     " calling prediction method
+
+    GET RUN TIME FIELD lv_time_start.
     CALL METHOD lr_template_object->predict_with_model_version
       EXPORTING
         it_data   = lt_predict_data
@@ -124,6 +138,12 @@ TRY.
         it_param  = lt_predict_param
       IMPORTING
         et_result = DATA(lt_result).
+    GET RUN TIME FIELD lv_time_finish.
+
+    lv_time_elapsed = lv_time_finish - lv_time_start.
+    WRITE:/ 'Prediction Runtime =', lv_time_elapsed, 'microseconds'.
+    SKIP.
+
     LOOP AT lt_result ASSIGNING FIELD-SYMBOL(<fs_result>).
       WRITE: 'Prediction result:', <fs_result>-carrid, <fs_result>-connid, <fs_result>-fldate, <fs_result>-predict_planetype, <fs_result>-predict_confidence.
       SKIP.
