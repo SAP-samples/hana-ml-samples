@@ -31,32 +31,17 @@ TRY.
         es_meta_data = DATA(ls_meta_data).
     WRITE: 'Training and apply datasets:', ls_meta_data-training_data_set, ls_meta_data-apply_data_set.
     SKIP.
-    LOOP AT ls_meta_data-model_parameters ASSIGNING FIELD-SYMBOL(<fs_model_parameter>).
-      WRITE: 'Parameter:', <fs_model_parameter>-name, <fs_model_parameter>-type, <fs_model_parameter>-role, <fs_model_parameter>-configurable, <fs_model_parameter>-has_context, <fs_model_parameter>-obligatory.
-      SKIP.
-    ENDLOOP.
-    LOOP AT ls_meta_data-model_parameter_defaults ASSIGNING FIELD-SYMBOL(<fs_model_parameter_default>).
-      WRITE: 'Parameter default value:', <fs_model_parameter_default>-name, <fs_model_parameter_default>-context, <fs_model_parameter_default>-value.
-      SKIP.
-    ENDLOOP.
-    LOOP AT ls_meta_data-field_descriptions ASSIGNING FIELD-SYMBOL(<fs_field_description>).
-      WRITE: 'Field description:', <fs_field_description>-name, <fs_field_description>-role.
-      SKIP.
-    ENDLOOP.
+    PERFORM print_table USING 'Parameter:' ls_meta_data-model_parameters.
+    PERFORM print_table USING 'Parameter default value:' ls_meta_data-model_parameter_defaults.
+    PERFORM print_table USING 'Field description:' ls_meta_data-field_descriptions.
 
     " obtaining training and apply procedure parameters
     CALL METHOD lr_template_object->if_hemi_procedure~get_procedure_parameters
       IMPORTING
         et_training = DATA(lt_training)
         et_apply    = DATA(lt_apply).
-    LOOP AT lt_training ASSIGNING FIELD-SYMBOL(<fs_training>).
-      WRITE: 'Training procedure parameter:', <fs_training>-name, <fs_training>-role, <fs_training>-add_info.
-      SKIP.
-    ENDLOOP.
-    LOOP AT lt_apply ASSIGNING FIELD-SYMBOL(<fs_apply>).
-      WRITE: 'Apply procedure parameter:', <fs_apply>-name, <fs_apply>-role, <fs_apply>-add_info.
-      SKIP.
-    ENDLOOP.
+    PERFORM print_table USING 'Training procedure parameter:' lt_training.
+    PERFORM print_table USING 'Apply procedure parameter:' lt_apply.
 
     " constructing training parameters from AMDP class
     LOOP AT ls_meta_data-model_parameters ASSIGNING FIELD-SYMBOL(<ls_model_parameter>).
@@ -122,11 +107,7 @@ TRY.
     lv_time_elapsed = lv_time_finish - lv_time_start.
     WRITE:/ 'Training Runtime =', lv_time_elapsed, 'microseconds'.
     SKIP.
-
-    LOOP AT lt_variable_importance ASSIGNING FIELD-SYMBOL(<fs_variable_importance>).
-      WRITE: 'Variable importance:', <fs_variable_importance>-variable_name, <fs_variable_importance>-importance.
-      SKIP.
-    ENDLOOP.
+    PERFORM print_table USING 'Variable importance:' lt_variable_importance.
 
     " calling prediction method
 
@@ -143,13 +124,29 @@ TRY.
     lv_time_elapsed = lv_time_finish - lv_time_start.
     WRITE:/ 'Prediction Runtime =', lv_time_elapsed, 'microseconds'.
     SKIP.
-
-    LOOP AT lt_result ASSIGNING FIELD-SYMBOL(<fs_result>).
-      WRITE: 'Prediction result:', <fs_result>-carrid, <fs_result>-connid, <fs_result>-fldate, <fs_result>-predict_planetype, <fs_result>-predict_confidence.
-      SKIP.
-    ENDLOOP.
+    PERFORM print_table USING 'Prediction result:' lt_result.
 
   CATCH cx_amdp_execution_failed INTO lr_amdp_exp.
     BREAK-POINT ##NO_BREAK.
     WRITE: lr_amdp_exp->get_text( ).
 ENDTRY.
+
+FORM print_table
+  USING
+    iv_label TYPE string
+    iv_table TYPE ANY TABLE.
+  WRITE: iv_label.
+  SKIP.
+  LOOP AT iv_table ASSIGNING FIELD-SYMBOL(<ls_table>).
+    DO.
+      ASSIGN COMPONENT sy-index OF STRUCTURE <ls_table> TO FIELD-SYMBOL(<ls_field>).
+      IF sy-subrc EQ 0.
+        WRITE <ls_field>.
+      ELSE.
+        EXIT.
+      ENDIF.
+    ENDDO.
+    SKIP.
+  ENDLOOP.
+  SKIP.
+ENDFORM.
