@@ -143,7 +143,7 @@ class DataSets:
     @staticmethod
     def load_bank_data(connection, schema=None, batch_size=10000, force=False, train_percentage=.50,valid_percentage=.40,test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "DBM2_RFULL_TBL"
         training_tbl = "DBM2_RTRAINING_TBL"
         validation_tbl = "DBM2_RVALIDATION_TBL"
@@ -189,7 +189,7 @@ class DataSets:
     @staticmethod
     def load_titanic_data(connection, schema=None, batch_size=10000, force=False, train_percentage=.50,valid_percentage=.40,test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "TITANIC_FULL_TBL"
         training_tbl = "TITANIC_TRAIN_TBL"
         validation_tbl = "TITANIC_VALIDATION_TBL"
@@ -235,7 +235,7 @@ class DataSets:
     @staticmethod
     def load_walmart_data(connection, schema=None, batch_size=10000, force=False, train_percentage=.50,valid_percentage=.40,test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         training_tbl = "WALMART_TRAIN_TBL"
         #test_tbl = "WALMART_TEST_TBL"
         tables = [training_tbl]
@@ -269,7 +269,7 @@ class DataSets:
     @staticmethod
     def load_black_friday_sales_data(connection, schema=None, batch_size=10000, force=False, train_percentage=.50,valid_percentage=.40,test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "BLACK_FRIDAY_SALES_TBL"
         tables = [full_tbl]
         fq_tables = [schema + '.' + tbl for tbl in tables]
@@ -301,7 +301,7 @@ class DataSets:
     @staticmethod
     def load_iris_data(connection, schema=None, batch_size=10000, force=False, train_percentage=.50,valid_percentage=.40,test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "IRIS_DATA_FULL_TBL"
         training_tbl = "IRIS_DATA_TRAIN_TBL"
         validation_tbl = "IRIS_DATA_VALIDATION_TBL"
@@ -326,7 +326,7 @@ class DataSets:
     @staticmethod
     def load_boston_housing_data(connection, schema=None, batch_size=10000, force=False, train_percentage=.50,valid_percentage=.40,test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "BOSTON_HOUSING_PRICES"
         training_tbl = "BOSTON_HOUSING_PRICES_TRAINING"
         validation_tbl = "BOSTON_HOUSING_PRICES_VALIDATION"
@@ -361,7 +361,7 @@ class DataSets:
     @staticmethod
     def load_flight_delays_1m(connection, schema=None, batch_size=10000, force=False, train_percentage=.50,valid_percentage=.40,test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "FLIGHT_DELAYS_1M"
         tables = [full_tbl]
         fq_tables = [schema + '.' + tbl for tbl in tables]
@@ -407,7 +407,7 @@ class DataSets:
     @staticmethod
     def load_flight_data(connection, schema=None, batch_size=10000, force=False, train_percentage=.50,valid_percentage=.40,test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "FLIGHT_DATA_FULL_TBL"
         training_tbl = "FLIGHT_DATA_TRAIN_TBL"
         validation_tbl = "FLIGHT_DATA_VALIDATION_TBL"
@@ -461,7 +461,7 @@ class DataSets:
     @staticmethod
     def load_adult_data(connection, schema=None, batch_size=10000, force=False,train_percentage=.50,valid_percentage=.40,test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "ADULT_DATA_FULL_TBL"
         training_tbl = "ADULT_DATA_TRAIN_TBL"
         validation_tbl = "ADULT_DATA_VALIDATION_TBL"
@@ -548,7 +548,7 @@ class DataSets:
     @staticmethod
     def drop_table(connection,tablename,schema=None,):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         table = schema + '.' + tablename
         sql = "DROP TABLE " + tablename
         try:
@@ -596,7 +596,7 @@ class DataSets:
                            valid_percentage=.10,
                            test_percentage=.10):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "PIMA_INDIANS_DIABETES_TBL"
         training_valid_tbl = "PIMA_INDIANS_DIABETES_TRAIN_VALID_TBL"
         test_tbl = "PIMA_INDIANS_DIABETES_TEST_TBL"
@@ -627,7 +627,7 @@ class DataSets:
     @staticmethod
     def load_shampoo_data(connection, schema=None, batch_size=10000, force=False,train_percentage=1.0,valid_percentage=0.0,test_percentage=0.0):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "SHAMPOO_SALES_DATA_TBL"
         tables = [full_tbl]
         fq_tables = [schema + '.' + tbl for tbl in tables]
@@ -644,7 +644,7 @@ class DataSets:
     @staticmethod
     def load_apriori_data(connection, schema=None, batch_size=10000, force=False,train_percentage=1.0,valid_percentage=0.0,test_percentage=0.0):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "PAL_APRIORI_TRANS_TBL"
         tables = [full_tbl]
         fq_tables = [schema + '.' + tbl for tbl in tables]
@@ -661,7 +661,7 @@ class DataSets:
     @staticmethod
     def load_spm_data(connection, schema=None, batch_size=10000, force=False,train_percentage=1.0,valid_percentage=0.0,test_percentage=0.0):
         if schema is None:
-            schema = Settings.user
+            schema = connection.get_current_schema()
         full_tbl = "PAL_SPM_DATA_TBL"
         tables = [full_tbl]
         fq_tables = [schema + '.' + tbl for tbl in tables]
