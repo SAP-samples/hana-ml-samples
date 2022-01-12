@@ -1,0 +1,97 @@
+TYPES:
+      BEGIN OF ty_train_input,
+        id TYPE int4,
+        gender TYPE c length 100,
+        education TYPE c length 50,
+        region TYPE c length 100,
+        start_year TYPE c length 100,
+        zipcode TYPE c length 10,
+        salary TYPE f,
+        t_level TYPE c length 5,
+      END OF ty_train_input,
+
+      BEGIN OF ty_pal_param,
+        param_name      TYPE c length 100,
+        int_value       TYPE int4,
+        double_value    TYPE f,
+        string_value    TYPE c length 100,
+      END OF ty_pal_param.
+
+DATA: ls_data   TYPE ty_train_input,
+      lt_data   TYPE STANDARD TABLE OF ty_train_input WITH DEFAULT KEY,
+      lt_param  TYPE STANDARD TABLE OF ty_pal_param WITH DEFAULT KEY.
+
+
+* get training data into the same format as in AMDP (ty_train_input)
+Loop at source_package assigning <source_fields>.
+
+    ls_data-id         = <source_fields>-id.
+    ls_data-gender     = <source_fields>-gender.
+    ls_data-education  = <source_fields>-education.
+    ls_data-region     = <source_fields>-region.
+    ls_data-start_year = <source_fields>-start_year.
+    ls_data-zipcode    = <source_fields>-ZIPCODE.
+    ls_data-salary     = <source_fields>-salary.
+    ls_data-t_level    = <source_fields>-/bic/t_level.
+
+append ls_data to lt_data.
+
+endloop.
+
+* fill parameter table, which is needed for model training
+lt_param = VALUE #(  ( param_name =  'FUNCTION' int_value = ''  double_value = '' string_value = 'HGBT' )
+                     ( param_name =  'KEY'      int_value = '1' double_value = '' string_value = ''     )
+                     ).
+* train model via created class/method
+TRY.
+
+    Z_CL_CLASSIFICATION_TRAINING=>training(
+     EXPORTING
+        it_data    = lt_data
+        it_param   = lt_param
+     IMPORTING
+        et_model      = DATA(model)
+        ex_message_tr = DATA(script_message_tr)
+    ).
+
+  CATCH cx_amdp_execution_failed INTO DATA(lx_amdp_error)."Exceptions
+    DATA(error_text_tr) = lx_amdp_error->get_text( ).
+    CONCATENATE 'SQLScript: ' script_message_tr ' |Report: ' error_text_tr INTO DATA(ex_message) SEPARATED BY space.
+    MESSAGE ex_message TYPE 'E'.
+
+ENDTRY.
+
+* get timestamp
+get time stamp field DATA(timestamp).
+*get max ID
+select single MAX( ID )
+into @DATA(lv_ID)
+from /BIC/AML_MODEL2.
+
+IF sy-subrc = 0.
+    lv_ID = lv_ID + 1.
+else.
+    lv_ID = 1.
+endif.
+
+* convert results from AMDP into target format of aDSO
+Loop at model assigning field-symbol(<model>).
+
+    result_fields-ID            = lv_ID.
+    result_fields-TIMESTAMP     = timestamp.
+    result_fields-ROW_INDEX     = <model>-ROW_INDEX.
+    result_fields-PART_INDEX    = <model>-PART_INDEX.
+    result_fields-MODEL_CONTENT = <model>-MODEL_CONTENT.
+
+    CALL METHOD new_record__expert_routine
+        EXPORTING
+            log = log
+            source_segid = '1'
+            source_record = <source_fields>-record
+            target_segid = '1'
+        IMPORTING
+            record_new = result_fields-record.
+
+    append result_fields to result_package.
+
+endloop.

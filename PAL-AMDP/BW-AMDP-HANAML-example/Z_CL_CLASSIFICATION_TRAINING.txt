@@ -1,0 +1,236 @@
+CLASS Z_CL_CLASSIFICATION_TRAINING DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC.
+
+PUBLIC SECTION.
+
+    INTERFACES if_amdp_marker_hdb.
+
+    TYPES:
+      BEGIN OF ty_train_input,
+        id TYPE int4,
+        gender TYPE c length 100,
+        education TYPE c length 50,
+        region TYPE c length 100,
+        start_year TYPE c length 100,
+        zipcode TYPE c length 10,
+        salary TYPE f,
+        t_level TYPE c length 5,
+      END OF ty_train_input,
+      tt_training_data TYPE STANDARD TABLE OF ty_train_input WITH DEFAULT KEY,
+      tt_predict_data  TYPE STANDARD TABLE OF ty_train_input WITH DEFAULT KEY,
+
+      BEGIN OF ty_predict_result,
+        id TYPE int4,
+        score TYPE string,
+        confidence TYPE f,
+        reason_code_feature_1    TYPE string,
+            reason_code_percentage_1 TYPE f,
+        reason_code_feature_2    TYPE string,
+            reason_code_percentage_2 TYPE f,
+        reason_code_feature_3    TYPE string,
+            reason_code_percentage_3 TYPE f,
+      END OF ty_predict_result,
+      tt_predict_result TYPE STANDARD TABLE OF ty_predict_result WITH DEFAULT KEY.
+
+    TYPES:
+      BEGIN OF ty_pal_param,
+        param_name      TYPE c length 100,
+        int_value       TYPE int4,
+        double_value    TYPE f,
+        string_value    TYPE c length 100,
+      END OF ty_pal_param,
+      tt_pal_param_train TYPE STANDARD TABLE OF ty_pal_param WITH DEFAULT KEY,
+      tt_pal_param_predict TYPE STANDARD TABLE OF ty_pal_param WITH DEFAULT KEY,
+      BEGIN OF ty_metrics,
+        key   TYPE string,
+        value TYPE string,
+      END OF ty_metrics,
+      tt_metrics TYPE STANDARD TABLE OF ty_metrics WITH DEFAULT KEY,
+      BEGIN OF ty_model,
+        row_index     TYPE int4,
+        part_index    TYPE int4,
+        model_content TYPE string,
+      END OF ty_model,
+      tt_model TYPE STANDARD TABLE OF ty_model WITH DEFAULT KEY,
+      BEGIN OF ty_confusion_matrix,
+        actual_class    TYPE n length 1000,
+        predicted_class TYPE n length 1000,
+        count     TYPE int4,
+      END OF ty_confusion_matrix,
+      tt_confusion_matrix TYPE STANDARD TABLE OF ty_confusion_matrix WITH DEFAULT KEY,
+      BEGIN OF ty_variable_importance,
+        variable_name   TYPE n length 256,
+        importance      TYPE f,
+      END OF ty_variable_importance,
+      tt_variable_importance TYPE STANDARD TABLE OF ty_variable_importance WITH DEFAULT KEY.
+
+    CLASS-METHODS training
+
+      IMPORTING
+        VALUE(it_data)                TYPE tt_training_data
+        VALUE(it_param)               TYPE tt_pal_param_train
+      EXPORTING
+        VALUE(et_model)               TYPE tt_model
+        VALUE(et_confusion_matrix)    TYPE tt_confusion_matrix
+        VALUE(et_variable_importance) TYPE tt_variable_importance
+        VALUE(et_metrics)             TYPE tt_metrics
+        VALUE(et_gen_info)            TYPE tt_metrics
+        VALUE(ex_message_tr)          TYPE string
+      RAISING
+        cx_amdp_execution_failed.
+
+    CLASS-METHODS predict_with_model_version
+
+      IMPORTING
+        VALUE(it_data)   TYPE tt_predict_data
+        VALUE(it_model)  TYPE tt_model
+        VALUE(it_param)  TYPE tt_pal_param_predict
+      EXPORTING
+        VALUE(et_result)      TYPE tt_predict_result
+        VALUE(ex_message_pr)  TYPE string
+      RAISING
+        cx_amdp_execution_failed.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+CLASS Z_CL_CLASSIFICATION_TRAINING IMPLEMENTATION.
+
+METHOD training BY DATABASE PROCEDURE FOR HDB LANGUAGE SQLSCRIPT USING ZHANA_EXCEPTION.
+    declare complete_statistics table (stat_name nvarchar(256), stat_value nvarchar(1000), class_name nvarchar(256));
+    declare complete_metrics    table (metric_name nvarchar(256), x double, y double);
+    declare validation_ki double;
+    declare train_ki      double;
+    declare ex_message_tr string;
+    declare e_guid_tr string;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN AUTONOMOUS TRANSACTION
+            SELECT NEWUID() INTO e_guid_tr FROM dummy;
+             INSERT INTO "ZHANA_EXCEPTION" VALUES (:e_guid_tr, '0000', ::SQL_ERROR_CODE, ::SQL_ERROR_MESSAGE);
+            COMMIT;
+            ex_message_tr = :e_guid_tr || '||' || '0000' || '||' ||::SQL_ERROR_CODE || '||' || ::SQL_ERROR_MESSAGE;
+        END;
+
+
+    /* Step 1. Input data preprocessing (missing values, rescaling, encoding, etc)
+               Based on the scenario, add ids, select fields relevant for the training, cast to the appropriate data type, convert nulls into meaningful values.
+               Note: decimal must be converted into double.*/
+
+    call _sys_afl.pal_missing_value_handling(:it_data, :it_param, it_data, _);
+
+    /* Step 2. Sampling for training and model quality debriefing;
+               Imbalanced up/downsampling + Train/Test/Validation random or stratified partition sampling */
+
+    call _sys_afl.pal_partition(:it_data, :it_param, part_id);
+
+    lt_train = select lt.* from :it_data as lt, :part_id as part_id where lt.id = part_id.id and part_id.partition_type = 1;
+    lt_test  = select lt.* from :it_data as lt, :part_id as part_id where lt.id = part_id.id and part_id.partition_type = 2;
+    lt_val   = select lt.* from :it_data as lt, :part_id as part_id where lt.id = part_id.id and part_id.partition_type = 3;
+
+    /* Step 3. Unified classification training */
+
+    call _sys_afl.pal_unified_classification(:lt_train, :it_param, :et_model, :et_variable_importance, lt_stat, lt_opt, lt_cm, lt_metrics, lt_ph1, lt_ph2);
+
+    /* Step 4. Unified classification scoring + debriefing additional metrics and gain charts */
+
+    call _sys_afl.pal_unified_classification_score(:lt_train, :et_model, :it_param, result_train, stats_train, cm_train,  metrics_train);
+    call _sys_afl.pal_unified_classification_score(:lt_test,  :et_model, :it_param, result_test,  stats_test,  cm_test,   metrics_test);
+    call _sys_afl.pal_unified_classification_score(:lt_val,   :et_model, :it_param, result_val,   stats_val,   cm_val,    metrics_val);
+
+    -- output confusion matrix is derived from the validation dataset
+    et_confusion_matrix = select * from :cm_val;
+
+    complete_statistics = select concat('VALIDATION_', stat_name) as stat_name, stat_value, class_name from :stats_val
+                union all select concat('TEST_',       stat_name) as stat_name, stat_value, class_name from :stats_test
+                union all select concat('TRAIN_',      stat_name) as stat_name, stat_value, class_name from :stats_train;
+
+    complete_metrics = select concat('VALIDATION_', "NAME") as metric_name, x, y from :metrics_val
+             union all select concat('TEST_',       "NAME") as metric_name, x, y from :metrics_test
+             union all select concat('TRAIN_',      "NAME") as metric_name, x, y from :metrics_train;
+
+    -- Calculate KI and KR and other key metrics
+    select to_double(stat_value) * 2 - 1 into validation_ki from :complete_statistics where stat_name = 'VALIDATION_AUC';
+    select to_double(stat_value) * 2 - 1 into train_ki      from :complete_statistics where stat_name = 'TRAIN_AUC';
+
+    et_metrics = select 'PredictivePower'      as key, to_nvarchar(:validation_ki)                        as value from dummy
+       union all select 'PredictionConfidence' as key, to_nvarchar(1.0 - abs(:validation_ki - :train_ki)) as value from dummy
+    -- Provide metrics that are displayed in the quality information section of a model version in the ISLM Intelligent Scenario Management app
+    /* <<<<<< TODO: Starting point of adaptation */
+       union all select 'AUC'                  as key, stat_value                                         as value from :complete_statistics
+                    where stat_name = 'VALIDATION_AUC';
+    /* <<<<<< TODO: End point of adaptation */
+
+    gain_chart = select gerneral.X,
+                        (select min(y) from :complete_metrics as train_col      where metric_name = 'TRAIN_CUMGAINS'      and gerneral.x = train_col.x     ) as train,
+                        (select min(y) from :complete_metrics as validation_col where metric_name = 'VALIDATION_CUMGAINS' and gerneral.x = validation_col.x) as validation,
+                        (select min(y) from :complete_metrics as test_col       where metric_name = 'TEST_CUMGAINS'       and gerneral.x = test_col.x      ) as test,
+                        (select min(y) from :complete_metrics as wizard_col     where metric_name = 'TRAIN_PERF_CUMGAINS' and gerneral.x = wizard_col.x    ) as wizard
+                 from :complete_metrics as gerneral where gerneral.metric_name like_regexpr '(TRAIN|VALIDATION|TEST)_CUMGAINS' group by gerneral.x order by gerneral.x asc;
+
+    gain_chart = select t1.x, t1.train, t1.validation, t1.test, coalesce(t1.wizard, t2.wizard) as wizard from :gain_chart as t1
+        left outer join :gain_chart as t2 on t2.x = ( select max(t3.x) from :gain_chart as t3 where t3.x < t1.x and t3.wizard is not null);
+    gain_chart = select t1.x, coalesce(t1.train, t2.train) as train, t1.validation, t1.test, t1.wizard from :gain_chart as t1
+        left outer join :gain_chart as t2 on t2.x = ( select max(t3.x) from :gain_chart as t3 where t3.x < t1.x and t3.train is not null);
+    gain_chart = select t1.x, t1.train, coalesce(t1.validation, t2.validation) as validation, t1.test, t1.wizard from :gain_chart as t1
+        left outer join :gain_chart as t2 on t2.x = ( select max(t3.x) from :gain_chart as t3 where t3.x < t1.x and t3.validation is not null);
+    gain_chart = select t1.x, t1.train, t1.validation, coalesce(t1.test, t2.test) as test, t1.wizard from :gain_chart as t1
+        left outer join :gain_chart as t2 on t2.x = ( select max(t3.x) from :gain_chart as t3 where t3.x < t1.x and t3.TEST is not null) order by x;
+
+    et_gen_info = select 'HEMI_Profitcurve' as key,
+                         '{ "Type": "detected", "Frequency" : "' || x || '", "Random" : "' || x || '", "Wizard": "' || wizard || '", "Estimation": "' || train || '", "Validation": "' || validation || '", "Test": "' || test || '"}' as value
+                         from :gain_chart
+    -- Provide metrics that are displayed in the general additional info section of a model version in the ISLM Intelligent Scenario Management app
+    /* <<<<<< TODO: Starting point of adaptation */
+        union all select stat_name as key, stat_value as value from :complete_statistics where class_name is null;
+    /* <<<<<< TODO: End point of adaptation */
+  ENDMETHOD.
+
+  METHOD predict_with_model_version BY DATABASE PROCEDURE FOR HDB LANGUAGE SQLSCRIPT USING ZHANA_EXCEPTION.
+    /* Step 1. Input data preprocessing (missing values, rescaling, encoding, etc).
+               Note: the input data preprocessing must correspond with the one in the training method.
+               Based on the scenario, add ids, select fields relevant for the training, cast to the appropriate data type, convert nulls into meaningful values.
+               Note: decimal must be converted into double. */
+     declare ex_message_pr string;
+     declare e_guid_pr string;
+
+     DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN AUTONOMOUS TRANSACTION
+            SELECT NEWUID() INTO e_guid_pr FROM dummy;
+             INSERT INTO "ZHANA_EXCEPTION" VALUES (:e_guid_pr, '0000', ::SQL_ERROR_CODE, ::SQL_ERROR_MESSAGE);
+            COMMIT;
+            ex_message_pr = :e_guid_pr || '||' || '0000' || '||' ||::SQL_ERROR_CODE || '||' || ::SQL_ERROR_MESSAGE;
+        END;
+
+    lt_data = select
+                  id,
+                  gender,
+                  education,
+                  region,
+                  start_year,
+                  zipcode,
+                  salary
+              from :it_data;
+
+    call _sys_afl.pal_missing_value_handling(:lt_data, :it_param, lt_data_predict, lt_placeholder1);
+
+    /* Step 2. Execute prediction */
+
+    call _sys_afl.pal_unified_classification_predict(:lt_data_predict, :it_model, :it_param, lt_result, lt_placeholder2);
+
+    /* Step 3. Map prediction results back to the composite key, changed et_result-score from f to string */
+
+    et_result = select cast(result.ID as "$ABAP.type( INT4 )") as ID
+                       , cast(result.SCORE as "$ABAP.type( string )") as SCORE
+                       , cast(result.CONFIDENCE as "$ABAP.type( FLOAT )") as CONFIDENCE,
+                       trim(both '"' from json_query(result.reason_code, '$[0].attr')) as reason_code_feature_1,
+                        json_query(result.reason_code, '$[0].pct' ) as reason_code_percentage_1,
+                       trim(both '"' from json_query(result.reason_code, '$[1].attr')) as reason_code_feature_2,
+                        json_query(result.reason_code, '$[1].pct' ) as reason_code_percentage_2,
+                       trim(both '"' from json_query(result.reason_code, '$[2].attr')) as reason_code_feature_3,
+                        json_query(result.reason_code, '$[2].pct' ) as reason_code_percentage_3
+                from :lt_result as result;
+  ENDMETHOD.
+ENDCLASS.

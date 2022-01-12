@@ -1,0 +1,114 @@
+
+TYPES:
+      BEGIN OF ty_train_input,
+        id TYPE int4,
+        gender TYPE c length 100,
+        education TYPE c length 50,
+        region TYPE c length 100,
+        start_year TYPE c length 100,
+        zipcode TYPE c length 10,
+        salary TYPE f,
+        t_level TYPE c length 5,
+      END OF ty_train_input,
+
+      BEGIN OF ty_pal_param,
+        param_name      TYPE c length 100,
+        int_value       TYPE int4,
+        double_value    TYPE f,
+        string_value    TYPE c length 100,
+      END OF ty_pal_param,
+
+      BEGIN OF ty_predict_result,
+        id TYPE int4,
+        score TYPE string,
+        confidence TYPE f,
+        reason_code_feature_1    TYPE string,
+            reason_code_percentage_1 TYPE f,
+        reason_code_feature_2    TYPE string,
+            reason_code_percentage_2 TYPE f,
+        reason_code_feature_3    TYPE string,
+            reason_code_percentage_3 TYPE f,
+      END OF ty_predict_result,
+
+      BEGIN OF ty_model,
+        row_index     TYPE int4,
+        part_index    TYPE int4,
+        model_content TYPE string,
+      END OF ty_model.
+
+DATA: ls_data   TYPE ty_train_input,
+      lt_data   TYPE STANDARD TABLE OF ty_train_input WITH DEFAULT KEY,
+      lt_param  TYPE STANDARD TABLE OF ty_pal_param WITH DEFAULT KEY,
+      lt_result TYPE STANDARD TABLE OF ty_predict_result WITH DEFAULT KEY,
+      lt_model TYPE STANDARD TABLE OF ty_model WITH DEFAULT KEY.
+
+* get training data into the same format as in AMDP (ty_train_input)
+Loop at source_package assigning <source_fields>.
+
+    ls_data-id         = <source_fields>-id.
+    ls_data-gender     = <source_fields>-gender.
+    ls_data-education  = <source_fields>-education.
+    ls_data-region     = <source_fields>-region.
+    ls_data-start_year = <source_fields>-start_year.
+    ls_data-zipcode    = <source_fields>-ZIPCODE.
+    ls_data-salary     = <source_fields>-salary.
+    ls_data-t_level    = <source_fields>-/bic/t_level.
+
+append ls_data to lt_data.
+
+endloop.
+
+* fill parameter table, which is needed for model training
+lt_param = VALUE #(  ( param_name =  'FUNCTION' int_value = ''  double_value = '' string_value = 'HGBT' )
+                     ( param_name =  'KEY'      int_value = '1' double_value = '' string_value = ''     ) ).
+
+* get the most current version of our ML-Model
+select ROW_INDEX, PART_INDEX, MODEL_CONTENT
+ into table @lt_model
+ from /BIC/AML_MODEL2
+ where ID = ( Select MAX( ID ) from /BIC/AML_MODEL2 ).
+
+TRY.
+* run prediction
+    Z_CL_CLASSIFICATION_TRAINING=>predict_with_model_version(
+     EXPORTING
+        it_data    = lt_data
+        it_param   = lt_param
+        it_model   = lt_model
+     IMPORTING
+        et_result = lt_result
+        ex_message_pr = DATA(script_message_pr)
+    ).
+
+  CATCH cx_amdp_execution_failed INTO DATA(lx_amdp_error)."Exceptions
+    DATA(lw_text_pr) = lx_amdp_error->get_text( ).
+    CONCATENATE 'SQLScript: ' script_message_pr '|Report: ' lw_text_pr INTO DATA(ex_message) SEPARATED BY space.
+    MESSAGE ex_message TYPE 'E'.
+
+ENDTRY.
+
+* get ML-result into result_package
+Loop at lt_result assigning field-symbol(<lt_result_fields>).
+
+result_fields-ID = <lt_result_fields>-id.
+result_fields-SCORE = <lt_result_fields>-score.
+result_fields-CONFIDENCE = <lt_result_fields>-confidence.
+result_fields-REASON_CODE_FEATURE_1 = <lt_result_fields>-reason_code_feature_1.
+result_fields-REASON_CODE_PERCENTAGE_1 = <lt_result_fields>-reason_code_percentage_1.
+result_fields-REASON_CODE_FEATURE_2 = <lt_result_fields>-reason_code_feature_2.
+result_fields-REASON_CODE_PERCENTAGE_2 = <lt_result_fields>-reason_code_percentage_2.
+result_fields-REASON_CODE_FEATURE_3 = <lt_result_fields>-reason_code_feature_3.
+result_fields-REASON_CODE_PERCENTAGE_3 = <lt_result_fields>-reason_code_percentage_3.
+
+    CALL METHOD new_record__expert_routine
+        EXPORTING
+            log = log
+            source_segid = '1'
+            source_record = <source_fields>-record
+            target_segid = '1'
+        IMPORTING
+            record_new = result_fields-record.
+
+append result_fields to result_package.
+
+endloop.
