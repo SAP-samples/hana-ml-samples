@@ -1,0 +1,14 @@
+{
+  "SYSAFL::PALMASSIVEADDITIVEMODELANALYSIS": {
+    "target": {
+      "object": "PAL_MASSIVE_ADDITIVE_MODEL_ANALYSIS",
+      "schema": "_SYS_AFL"
+    }
+  },
+  "SYSAFL::PALMASSIVEADDITIVEMODELPREDICT": {
+    "target": {
+      "object": "PAL_MASSIVE_ADDITIVE_MODEL_PREDICT",
+      "schema": "_SYS_AFL"
+    }
+  }
+}

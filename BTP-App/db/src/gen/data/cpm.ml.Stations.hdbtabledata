@@ -1,0 +1,41 @@
+{
+  "format_version": 1,
+  "imports": [
+    {
+      "target_table": "CPM_ML_STATIONS",
+      "source_data": {
+        "data_type": "CSV",
+        "file_name": "cpm.ml.Stations.csv",
+        "has_header": true,
+        "type_config": {
+          "delimiter": ","
+        }
+      },
+      "import_settings": {
+        "import_columns": [
+          "UUID",
+          "NAME",
+          "BRAND",
+          "STREET",
+          "HOUSE_NUMBER",
+          "POST_CODE",
+          "CITY",
+          "LATITUDE",
+          "LONGITUDE"
+        ],
+        "include_filter": []
+      },
+      "column_mappings": {
+        "UUID": "uuid",
+        "NAME": "name",
+        "BRAND": "brand",
+        "STREET": "street",
+        "HOUSE_NUMBER": "house_number",
+        "POST_CODE": "post_code",
+        "CITY": "city",
+        "LATITUDE": "latitude",
+        "LONGITUDE": "longitude"
+      }
+    }
+  ]
+}

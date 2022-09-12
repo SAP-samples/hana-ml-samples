@@ -1,0 +1,6 @@
+[
+    "src/gen/**/*.hdbview",
+    "src/gen/**/*.hdbindex",
+    "src/gen/**/*.hdbconstraint",
+    "db/data/cpm.ML..csv"
+]
