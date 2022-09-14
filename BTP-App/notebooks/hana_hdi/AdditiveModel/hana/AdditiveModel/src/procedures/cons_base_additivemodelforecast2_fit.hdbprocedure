@@ -1,0 +1,13 @@
+PROCEDURE cons_base_additivemodelforecast2_fit(out lt_model_out_0_additivemodelforecast2_fit table ("GROUP_ID" NVARCHAR(100),"ROW_INDEX" INT,"MODEL_CONTENT" NCLOB), out lt_model_out_1_additivemodelforecast2_fit table ("GROUP_ID" NVARCHAR(100),"ERROR_TIMESTAMP" NVARCHAR(100),"ERRORCODE" INT,"MESSAGE" NVARCHAR(200)))
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER
+    AS
+BEGIN
+lt_in_0_additivemodelforecast2_fit = select * from "TRAINRNK";
+lt_model_in_1_additivemodelforecast2_fit = select * from "DEMOGASSTATIONDATA::PALADDITIVEMODELANALYSISHOLIDAY";
+CALL base_additivemodelforecast2_fit(lt_in_0_additivemodelforecast2_fit => :lt_in_0_additivemodelforecast2_fit, lt_model_in_1_additivemodelforecast2_fit => :lt_model_in_1_additivemodelforecast2_fit, lt_model_out_0_additivemodelforecast2_fit => lt_model_out_0_additivemodelforecast2_fit, lt_model_out_1_additivemodelforecast2_fit => lt_model_out_1_additivemodelforecast2_fit);
+TRUNCATE TABLE "output.additivemodelforecast2_fit_ltmodelout0additivemodelforecast2fit"; 
+INSERT INTO "output.additivemodelforecast2_fit_ltmodelout0additivemodelforecast2fit" SELECT * FROM :lt_model_out_0_additivemodelforecast2_fit;
+TRUNCATE TABLE "output.additivemodelforecast2_fit_ltmodelout1additivemodelforecast2fit"; 
+INSERT INTO "output.additivemodelforecast2_fit_ltmodelout1additivemodelforecast2fit" SELECT * FROM :lt_model_out_1_additivemodelforecast2_fit;
+END

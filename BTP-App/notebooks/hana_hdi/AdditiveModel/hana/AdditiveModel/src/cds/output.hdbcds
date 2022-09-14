@@ -1,0 +1,39 @@
+context output {
+  entity additivemodelforecast2_fit_ltmodelout0additivemodelforecast2fit {
+      GROUP_ID : String(100);
+      ROW_INDEX : Integer;
+      MODEL_CONTENT : LargeString;
+  };
+
+  entity additivemodelforecast2_fit_ltmodelout1additivemodelforecast2fit {
+      GROUP_ID : String(100);
+      ERROR_TIMESTAMP : String(100);
+      ERRORCODE : Integer;
+      MESSAGE : String(200);
+  };
+
+  entity additivemodelforecast2_predict_ltmodelout0additivemodelforecast2predict {
+      GROUP_ID : String(100);
+      date : UTCTimestamp;
+      YHAT : BinaryFloat;
+      YHAT_LOWER : BinaryFloat;
+      YHAT_UPPER : BinaryFloat;
+  };
+
+  entity additivemodelforecast2_predict_ltmodelout1additivemodelforecast2predict {
+      GROUP_ID : String(100);
+      date : UTCTimestamp;
+      TREND : BinaryFloat;
+      SEASONAL : LargeString;
+      HOLIDAY : LargeString;
+      EXOGENOUS : LargeString;
+  };
+
+  entity additivemodelforecast2_predict_ltmodelout2additivemodelforecast2predict {
+      GROUP_ID : String(100);
+      ERROR_TIMESTAMP : String(100);
+      ERRORCODE : Integer;
+      MESSAGE : String(200);
+  };
+
+};

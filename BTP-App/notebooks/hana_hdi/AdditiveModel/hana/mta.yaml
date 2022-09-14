@@ -1,0 +1,33 @@
+ID: AdditiveModel
+_schema-version: '2.0'
+version: 1
+
+modules:
+ - name: AdditiveModel
+   type: hdb
+   path: AdditiveModel
+   requires:                          # db module needs:
+    - name: AdditiveModel_HDI      # RESOURCENAME within YMAL
+      properties:
+        TARGET_CONTAINER: ~{hdi-container-name}   # determination of the name by parameter: hdi-container-name
+    - group: SERVICE_REPLACEMENTS
+      name: cross-container-service-RESOURCENAME
+      properties:
+          key: LOGICAL_GRANTACCESS_SERVICE
+          service: ~{the-service-name}
+          
+resources:
+ - name: AdditiveModel_HDI
+   parameters:
+      config:
+         schema: "ADDITIVEMODEL_SCHEMA"
+   properties:
+      hdi-container-name: ${service-name}         # get hdi service-name into the variable: hdi-container-name
+   type: com.sap.xs.hdi-container
+
+ - name: cross-container-service-RESOURCENAME
+   parameters:
+      service-name: 
+   properties:
+      the-service-name: ${service-name}
+   type: org.cloudfoundry.existing-service
