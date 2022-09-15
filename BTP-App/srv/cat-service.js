@@ -8,7 +8,7 @@ module.exports = cds.service.impl(function () {
         const output = await dbConn.callProcedurePromisified(autoarima, [])
         console.log(output.results)*/
         let db = new dbClass(await dbClass.createConnectionFromEnv())
-        let dbProcQuery = "CALL PREDICT_WRAPPER()"        
+        let dbProcQuery = "CALL CONS_PREDICT()"        
         // @ts-ignore - CDS Types aren't updated for this new Stored Procedure option yet 
         console.log("------Before running db procedure--------")
         let result = await db.execSQL(dbProcQuery)
@@ -30,7 +30,7 @@ module.exports = cds.service.impl(function () {
             const output = await dbConn.callProcedurePromisified(autoarima, [])
             console.log(output.results)*/
             let db = new dbClass(await dbClass.createConnectionFromEnv())
-            let dbProcQuery = "CALL TRAIN_WRAPPER()"        
+            let dbProcQuery = "CALL CONS_TRAIN()"        
             // @ts-ignore - CDS Types aren't updated for this new Stored Procedure option yet 
             console.log("------Before running db procedure--------")
             let result = await db.execSQL(dbProcQuery)
