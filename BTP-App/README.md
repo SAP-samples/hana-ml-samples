@@ -97,7 +97,7 @@ Prediction procedure: base_additivemodelforecast1_predict
 
 What important: **Training procedure needs to be called before prediction procedure. Table structures used in both the prodecures shall be created under CAP cds and available when both the procedures are deployed.**
 
-- Tables in CAP cds file (.cds): **need to be defined before deloyment of your DB module** Please refer to the data-model.cds (https://github.tools.sap/D064237/ml_hana_bas/blob/main/db/data-model.cds) file in this repository. 
+- Tables in CAP cds file (.cds): **need to be defined before deloyment of your DB module** Please refer to the data-model.cds (https://github.com/SAP-samples/hana-ml-samples/blob/main/BTP-App/db/data-model.cds) file in this repository. 
 
 Traning data for ML model:
 ```
@@ -139,7 +139,7 @@ entity FUEL_PRICES_RNK_TEST {
 ```
 5. Add the Javascript class under the Node.js module to call the prediction procedure
 
-First, add the library "sap-hdb-promisfied" in the package.json file (https://github.tools.sap/D064237/ml_hana_bas/blob/main/package.json), which is required to call database procedures in Javascript.
+First, add the library "sap-hdb-promisfied" in the package.json file (https://github.com/SAP-samples/hana-ml-samples/blob/main/BTP-App/package.json), which is required to call database procedures in Javascript.
 ```
 "dependencies": {
         "@sap/cds": "^5",
@@ -159,7 +159,7 @@ service CatalogService {
 }
 ```
 Finally, implement the logic using Javascript to generate prediction results. Example of codes are available in this JS script
-(https://github.tools.sap/D064237/ml_hana_bas/blob/main/srv/cat-service.js).
+(https://github.com/SAP-samples/hana-ml-samples/blob/main/BTP-App/srv/cat-service.js).
 
 6. Call functions to generate ML model and make predictions
 First, you can call the function Model_Train_Wrapper from your oData service to generate the ML model. Then, you can call the function Prices_Prediction to give you all prediction results back. 
