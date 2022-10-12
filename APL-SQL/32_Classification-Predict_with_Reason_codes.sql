@@ -28,7 +28,7 @@ DO BEGIN
     :config.insert(('APL/ApplyPredictedValue', 'true',null));
     :config.insert(('APL/ApplyProbability', 'true',null));
     :config.insert(('APL/ApplyDecision', 'true',null));
-    :config.insert(('APL/ApplyReasonCode/TopCount', '10',null));
+    :config.insert(('APL/ApplyReasonCode/TopCount', '5',null));
 	:config.insert(('APL/ApplyReasonCode/ShowStrengthValue', 'true',null));
     :config.insert(('APL/ApplyReasonCode/ShowStrengthIndicator', 'false',null));
     :config.insert(('APL/ApplyReasonCode/ShowOtherStrength', 'true',null));	

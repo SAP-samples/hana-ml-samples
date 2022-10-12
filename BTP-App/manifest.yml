@@ -1,0 +1,15 @@
+# Generated manifest.yml based on template version 0.1.0
+# appName = ml_hana_demo
+# language=nodejs
+# multitenancy=false
+---
+applications:
+# -----------------------------------------------------------------------------------
+# Backend Service
+# -----------------------------------------------------------------------------------
+- name: ml_hana_demo-srv
+  random-route: true  # for development only
+  path: gen/srv
+  memory: 256M
+  buildpack: nodejs_buildpack
+

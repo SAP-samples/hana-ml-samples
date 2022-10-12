@@ -134,6 +134,7 @@ CLASS zcl_islm_pal_ucl_sflight IMPLEMENTATION.
     declare complete_metrics    table (metric_name nvarchar(256), x double, y double);
     declare validation_ki double;
     declare train_ki      double;
+    declare gain_chart_point_count integer;
 
     /* Step 1. Input data preprocessing (missing values, rescaling, encoding, etc)
                Based on the scenario, add ids, select fields relevant for the training, cast to the appropriate data type, convert nulls into meaningful values.
@@ -211,8 +212,11 @@ CLASS zcl_islm_pal_ucl_sflight IMPLEMENTATION.
     gain_chart = select t1.x, t1.train, t1.validation, coalesce(t1.test, t2.test) as test, t1.wizard from :gain_chart as t1
         left outer join :gain_chart as t2 on t2.x = ( select max(t3.x) from :gain_chart as t3 where t3.x < t1.x and t3.TEST is not null) order by x;
 
+    select count(x) into gain_chart_point_count from :gain_chart;
+
     et_gen_info = select 'HEMI_Profitcurve' as key,
-                         '{ "Type": "detected", "Frequency" : "' || x || '", "Random" : "' || x || '", "Wizard": "' || wizard || '", "Estimation": "' || train || '", "Validation": "' || validation || '", "Test": "' || test || '"}' as value
+                         '{ "Type": "detected", "Frequency" : "' || round(x * :gain_chart_point_count, 0, round_down) / :gain_chart_point_count || '", "Random" : "' || round(x * :gain_chart_point_count, 0, round_down) / :gain_chart_point_count
+                         || '", "Wizard": "' || wizard || '", "Estimation": "' || train || '", "Validation": "' || validation || '", "Test": "' || test || '"}' as value
                          from :gain_chart
     -- Provide metrics that are displayed in the general additional info section of a model version in the ISLM Intelligent Scenario Management app
     /* <<<<<< TODO: Starting point of adaptation */

@@ -1,0 +1,14 @@
+{
+    "ml_hana_bas_ups": {
+        "object_owner": {
+            "roles": [
+                "data::external_access_g"
+            ]
+        },
+        "application_user": {
+            "roles": [
+                "data::external_access"
+            ]
+        }
+    }
+}

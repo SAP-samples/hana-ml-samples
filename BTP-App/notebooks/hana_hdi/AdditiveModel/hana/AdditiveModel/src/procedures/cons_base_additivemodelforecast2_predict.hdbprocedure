@@ -1,0 +1,19 @@
+PROCEDURE cons_base_additivemodelforecast2_predict(out lt_model_out_0_additivemodelforecast2_predict table ("GROUP_ID" NVARCHAR(100),"date" TIMESTAMP,"YHAT" DOUBLE,"YHAT_LOWER" DOUBLE,"YHAT_UPPER" DOUBLE), out lt_model_out_1_additivemodelforecast2_predict table ("GROUP_ID" NVARCHAR(100),"date" TIMESTAMP,"TREND" DOUBLE,"SEASONAL" NCLOB,"HOLIDAY" NCLOB,"EXOGENOUS" NCLOB), out lt_model_out_1_additivemodelforecast2_predict table ("GROUP_ID" NVARCHAR(100),"date" TIMESTAMP,"TREND" DOUBLE,"SEASONAL" NCLOB,"HOLIDAY" NCLOB,"EXOGENOUS" NCLOB), out lt_model_out_2_additivemodelforecast2_predict table ("GROUP_ID" NVARCHAR(100),"ERROR_TIMESTAMP" NVARCHAR(100),"ERRORCODE" INT,"MESSAGE" NVARCHAR(200)), out lt_model_out_2_additivemodelforecast2_predict table ("GROUP_ID" NVARCHAR(100),"ERROR_TIMESTAMP" NVARCHAR(100),"ERRORCODE" INT,"MESSAGE" NVARCHAR(200)))
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER
+    AS
+BEGIN
+lt_in_0_additivemodelforecast2_predict = select * from "DEMOGASSTATIONDATA::TESTRNK";
+lt_model_in_1_additivemodelforecast2_predict = select * from "output.additivemodelforecast2_fit_ltmodelout0additivemodelforecast2fit";
+CALL base_additivemodelforecast2_predict(lt_in_0_additivemodelforecast2_predict => :lt_in_0_additivemodelforecast2_predict, lt_model_in_1_additivemodelforecast2_predict => :lt_model_in_1_additivemodelforecast2_predict, lt_model_out_0_additivemodelforecast2_predict => lt_model_out_0_additivemodelforecast2_predict, lt_model_out_1_additivemodelforecast2_predict => lt_model_out_1_additivemodelforecast2_predict, lt_model_out_1_additivemodelforecast2_predict => lt_model_out_1_additivemodelforecast2_predict, lt_model_out_2_additivemodelforecast2_predict => lt_model_out_2_additivemodelforecast2_predict, lt_model_out_2_additivemodelforecast2_predict => lt_model_out_2_additivemodelforecast2_predict);
+TRUNCATE TABLE "output.additivemodelforecast2_predict_ltmodelout0additivemodelforecast2predict"; 
+INSERT INTO "output.additivemodelforecast2_predict_ltmodelout0additivemodelforecast2predict" SELECT * FROM :lt_model_out_0_additivemodelforecast2_predict;
+TRUNCATE TABLE "output.additivemodelforecast2_predict_ltmodelout1additivemodelforecast2predict"; 
+INSERT INTO "output.additivemodelforecast2_predict_ltmodelout1additivemodelforecast2predict" SELECT * FROM :lt_model_out_1_additivemodelforecast2_predict;
+TRUNCATE TABLE "output.additivemodelforecast2_predict_ltmodelout1additivemodelforecast2predict"; 
+INSERT INTO "output.additivemodelforecast2_predict_ltmodelout1additivemodelforecast2predict" SELECT * FROM :lt_model_out_1_additivemodelforecast2_predict;
+TRUNCATE TABLE "output.additivemodelforecast2_predict_ltmodelout2additivemodelforecast2predict"; 
+INSERT INTO "output.additivemodelforecast2_predict_ltmodelout2additivemodelforecast2predict" SELECT * FROM :lt_model_out_2_additivemodelforecast2_predict;
+TRUNCATE TABLE "output.additivemodelforecast2_predict_ltmodelout2additivemodelforecast2predict"; 
+INSERT INTO "output.additivemodelforecast2_predict_ltmodelout2additivemodelforecast2predict" SELECT * FROM :lt_model_out_2_additivemodelforecast2_predict;
+END

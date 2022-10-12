@@ -1,0 +1,27 @@
+PROCEDURE base_additivemodelforecast1_predict(in lt_in_0_additivemodelforecast1_predict table ("station_uuid" NVARCHAR(50),"date" TIMESTAMP,"e5" DOUBLE), 
+                                                         in lt_model_in_1_additivemodelforecast1_predict table ("GROUP_ID" NVARCHAR(100),"ROW_INDEX" INT,"MODEL_CONTENT" NVARCHAR(5000)),
+                                                         out lt_model_out_0_additivemodelforecast1_predict table ("GROUP_ID" NVARCHAR(100),"date" TIMESTAMP,"YHAT" DOUBLE,"YHAT_LOWER" DOUBLE,"YHAT_UPPER" DOUBLE), 
+                                                         out lt_model_out_1_additivemodelforecast1_predict table ("GROUP_ID" NVARCHAR(100),"date" TIMESTAMP,"TREND" DOUBLE,"SEASONAL" NCLOB,"HOLIDAY" NCLOB,"EXOGENOUS" NCLOB), 
+                                                         out lt_model_out_2_additivemodelforecast1_predict table ("GROUP_ID" NVARCHAR(100),"ERROR_TIMESTAMP" NVARCHAR(100),"ERRORCODE" INT,"MESSAGE" NVARCHAR(200)))
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER
+    AS
+BEGIN
+DECLARE group_id NVARCHAR(100) ARRAY;
+DECLARE param_name VARCHAR(5000) ARRAY;
+DECLARE int_value INTEGER ARRAY;
+DECLARE double_value DOUBLE ARRAY;
+DECLARE string_value VARCHAR(5000) ARRAY;
+in_1 = SELECT * FROM :lt_model_in_1_additivemodelforecast1_predict;
+in_0 = SELECT * FROM :lt_in_0_additivemodelforecast1_predict;
+group_id[1] := N'1';
+param_name[1] := N'PLACE_HOLDER';
+int_value[1] := NULL;
+double_value[1] := NULL;
+string_value[1] := N'place_holder';
+params = UNNEST(:group_id, :param_name, :int_value, :double_value, :string_value);
+CALL "SYSAFL::PALMASSIVEADDITIVEMODELPREDICT"(:in_0, :in_1, :params, out_0, out_1, out_2);
+lt_model_out_0_additivemodelforecast1_predict = SELECT * FROM :out_0;
+lt_model_out_1_additivemodelforecast1_predict = SELECT * FROM :out_1;
+lt_model_out_2_additivemodelforecast1_predict = SELECT * FROM :out_2;
+END

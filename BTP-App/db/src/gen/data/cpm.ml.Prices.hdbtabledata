@@ -1,0 +1,39 @@
+{
+  "format_version": 1,
+  "imports": [
+    {
+      "target_table": "CPM_ML_PRICES",
+      "source_data": {
+        "data_type": "CSV",
+        "file_name": "cpm.ml.Prices.csv",
+        "has_header": true,
+        "type_config": {
+          "delimiter": ","
+        }
+      },
+      "import_settings": {
+        "import_columns": [
+          "DATE",
+          "STATION_UUID",
+          "DIESEL",
+          "E5",
+          "E10",
+          "DIESELCHANGE",
+          "E5CHANGE",
+          "E10CHANGE"
+        ],
+        "include_filter": []
+      },
+      "column_mappings": {
+        "DATE": "date",
+        "STATION_UUID": "station_uuid",
+        "DIESEL": "diesel",
+        "E5": "e5",
+        "E10": "e10",
+        "DIESELCHANGE": "dieselchange",
+        "E5CHANGE": "e5change",
+        "E10CHANGE": "e10change"
+      }
+    }
+  ]
+}

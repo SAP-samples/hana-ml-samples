@@ -1,0 +1,8 @@
+PROCEDURE cons_base_additivemodelforecast1_fit()
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER
+    AS
+BEGIN
+lt_in_0_additivemodelforecast1_fit = select * from "TRAINRNK";
+CALL base_additivemodelforecast1_fit(lt_in_0_additivemodelforecast1_fit => :lt_in_0_additivemodelforecast1_fit);
+END

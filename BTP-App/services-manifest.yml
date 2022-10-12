@@ -1,0 +1,4 @@
+# Generated services-manifest.yml based on template version 0.1.0
+# appName = ml_hana_demo
+---
+create-services:

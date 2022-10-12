@@ -1,0 +1,10 @@
+{
+    "role":{
+        "name": "hanaml::AdditiveModel",
+        "schema_privileges":[
+                {
+                    "privileges": ["SELECT", "CREATE ANY", "EXECUTE", "INSERT", "DELETE"]
+                }
+        ]
+    }
+}
