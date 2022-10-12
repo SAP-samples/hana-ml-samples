@@ -1,0 +1,11 @@
+PROCEDURE cons_base_unifiedclassification1_predict(out lt_result_out_0_unifiedclassification1_predict table ("ID" INT,"SCORE" NVARCHAR(256),"CONFIDENCE" DOUBLE,"REASON_CODE" NCLOB))
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER
+    AS
+BEGIN
+lt_in_0_unifiedclassification1_predict = select * from "DIABETESTEST";
+lt_model_in_1_unifiedclassification1_predict = select * from "output.unifiedclassification1_fit_ltmodelout0unifiedclassification1fit";
+CALL base_unifiedclassification1_predict(lt_in_0_unifiedclassification1_predict => :lt_in_0_unifiedclassification1_predict, lt_model_in_1_unifiedclassification1_predict => :lt_model_in_1_unifiedclassification1_predict, lt_result_out_0_unifiedclassification1_predict => lt_result_out_0_unifiedclassification1_predict);
+TRUNCATE TABLE "output.unifiedclassification1_predict_ltresultout0unifiedclassification1predict"; 
+INSERT INTO "output.unifiedclassification1_predict_ltresultout0unifiedclassification1predict" SELECT * FROM :lt_result_out_0_unifiedclassification1_predict;
+END

@@ -1,0 +1,22 @@
+PROCEDURE cons_base_unifiedclassification1_fit(out lt_model_out_0_unifiedclassification1_fit table ("ROW_INDEX" INT,"PART_INDEX" INT,"MODEL_CONTENT" NCLOB), out lt_out_1_unifiedclassification1_fit table ("VARIABLE_NAME" NVARCHAR(256),"IMPORTANCE" DOUBLE), out lt_stats_out_2_unifiedclassification1_fit table ("STAT_NAME" NVARCHAR(256),"STAT_VALUE" NVARCHAR(1000),"CLASS_NAME" NVARCHAR(256)), out lt_param_out_3_unifiedclassification1_fit table ("PARAM_NAME" NVARCHAR(256),"INT_VALUE" INT,"DOUBLE_VALUE" DOUBLE,"STRING_VALUE" NVARCHAR(1000)), out lt_out_4_unifiedclassification1_fit table ("ACTUAL_CLASS" NVARCHAR(1000),"PREDICTED_CLASS" NVARCHAR(1000),"COUNT" INT), out lt_metric_out_5_unifiedclassification1_fit table ("NAME" NVARCHAR(256),"X" DOUBLE,"Y" DOUBLE), out lt_out_6_unifiedclassification1_fit table ("ID" INT,"TYPE" INT))
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER
+    AS
+BEGIN
+lt_in_0_unifiedclassification1_fit = select * from "DIABETESTRAINVALID";
+CALL base_unifiedclassification1_fit(lt_in_0_unifiedclassification1_fit => :lt_in_0_unifiedclassification1_fit, lt_model_out_0_unifiedclassification1_fit => lt_model_out_0_unifiedclassification1_fit, lt_out_1_unifiedclassification1_fit => lt_out_1_unifiedclassification1_fit, lt_stats_out_2_unifiedclassification1_fit => lt_stats_out_2_unifiedclassification1_fit, lt_param_out_3_unifiedclassification1_fit => lt_param_out_3_unifiedclassification1_fit, lt_out_4_unifiedclassification1_fit => lt_out_4_unifiedclassification1_fit, lt_metric_out_5_unifiedclassification1_fit => lt_metric_out_5_unifiedclassification1_fit, lt_out_6_unifiedclassification1_fit => lt_out_6_unifiedclassification1_fit);
+TRUNCATE TABLE "output.unifiedclassification1_fit_ltmodelout0unifiedclassification1fit"; 
+INSERT INTO "output.unifiedclassification1_fit_ltmodelout0unifiedclassification1fit" SELECT * FROM :lt_model_out_0_unifiedclassification1_fit;
+TRUNCATE TABLE "output.unifiedclassification1_fit_ltout1unifiedclassification1fit"; 
+INSERT INTO "output.unifiedclassification1_fit_ltout1unifiedclassification1fit" SELECT * FROM :lt_out_1_unifiedclassification1_fit;
+TRUNCATE TABLE "output.unifiedclassification1_fit_ltstatsout2unifiedclassification1fit"; 
+INSERT INTO "output.unifiedclassification1_fit_ltstatsout2unifiedclassification1fit" SELECT * FROM :lt_stats_out_2_unifiedclassification1_fit;
+TRUNCATE TABLE "output.unifiedclassification1_fit_ltparamout3unifiedclassification1fit"; 
+INSERT INTO "output.unifiedclassification1_fit_ltparamout3unifiedclassification1fit" SELECT * FROM :lt_param_out_3_unifiedclassification1_fit;
+TRUNCATE TABLE "output.unifiedclassification1_fit_ltout4unifiedclassification1fit"; 
+INSERT INTO "output.unifiedclassification1_fit_ltout4unifiedclassification1fit" SELECT * FROM :lt_out_4_unifiedclassification1_fit;
+TRUNCATE TABLE "output.unifiedclassification1_fit_ltmetricout5unifiedclassification1fit"; 
+INSERT INTO "output.unifiedclassification1_fit_ltmetricout5unifiedclassification1fit" SELECT * FROM :lt_metric_out_5_unifiedclassification1_fit;
+TRUNCATE TABLE "output.unifiedclassification1_fit_ltout6unifiedclassification1fit"; 
+INSERT INTO "output.unifiedclassification1_fit_ltout6unifiedclassification1fit" SELECT * FROM :lt_out_6_unifiedclassification1_fit;
+END

@@ -1,0 +1,24 @@
+PROCEDURE base_unifiedclassification1_predict(in lt_in_0_unifiedclassification1_predict table ("ID" INT,"PREGNANCIES" INT,"GLUCOSE" INT,"SKINTHICKNESS" INT,"INSULIN" DOUBLE,"BMI" DOUBLE,"AGE" INT), in lt_model_in_1_unifiedclassification1_predict table ("ROW_INDEX" INT,"PART_INDEX" INT,"MODEL_CONTENT" NCLOB), out lt_result_out_0_unifiedclassification1_predict table ("ID" INT,"SCORE" NVARCHAR(256),"CONFIDENCE" DOUBLE,"REASON_CODE" NCLOB))
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER
+    AS
+BEGIN
+DECLARE PAL_UNIFIED_CLASSIF_PREDICT_PH_TBL_0_5DF0523B_451B_11ED_BC75_F47B099F40D8" AS (SELECT * FROM :out_1);
+DECLARE param_name VARCHAR(5000) ARRAY;
+DECLARE int_value INTEGER ARRAY;
+DECLARE double_value DOUBLE ARRAY;
+DECLARE string_value VARCHAR(5000) ARRAY;
+in_1 = SELECT * FROM :lt_model_in_1_unifiedclassification1_predict;
+in_0 = SELECT * FROM :lt_in_0_unifiedclassification1_predict;
+param_name[1] := N'FUNCTION';
+int_value[1] := NULL;
+double_value[1] := NULL;
+string_value[1] := N'RDT';
+param_name[2] := N'HANDLE_MISSING_VALUE';
+int_value[2] := 0;
+double_value[2] := NULL;
+string_value[2] := NULL;
+params = UNNEST(:param_name, :int_value, :double_value, :string_value);
+CALL "SYSAFL::PALUNIFIEDCLASSIFICATIONPREDICT"(:in_0, :in_1, :params, out_0, out_1);
+lt_result_out_0_unifiedclassification1_predict = SELECT * FROM :out_0;
+END

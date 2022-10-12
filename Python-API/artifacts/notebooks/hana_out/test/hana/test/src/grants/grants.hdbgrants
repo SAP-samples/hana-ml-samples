@@ -1,0 +1,20 @@
+{
+  "LOGICAL_GRANTACCESS_SERVICE":{
+    "object_owner":{
+      "global_roles" : [
+        {
+          "roles" : [ "AFL__SYS_AFL_AFLPAL_EXECUTE"]
+        }
+      ],
+      "schema_privileges": [{"reference": null, "privileges_with_grant_option": ["SELECT"]}, {"reference": null, "privileges_with_grant_option": ["SELECT"]}]
+    },
+    "application_user":{
+      "global_roles" : [
+        {
+          "roles" : [ "AFL__SYS_AFL_AFLPAL_EXECUTE"]
+        }
+      ],
+      "schema_privileges": [{"reference": null, "privileges": ["SELECT"]}, {"reference": null, "privileges": ["SELECT"]}]
+    }
+  }
+}

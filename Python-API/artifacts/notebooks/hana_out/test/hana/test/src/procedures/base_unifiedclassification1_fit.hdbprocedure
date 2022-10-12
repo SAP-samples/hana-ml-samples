@@ -1,0 +1,57 @@
+PROCEDURE base_unifiedclassification1_fit(in lt_in_0_unifiedclassification1_fit table ("ID" INT,"PREGNANCIES" INT,"GLUCOSE" INT,"SKINTHICKNESS" INT,"INSULIN" DOUBLE,"BMI" DOUBLE,"AGE" INT,"CLASS" INT), out lt_model_out_0_unifiedclassification1_fit table ("ROW_INDEX" INT,"PART_INDEX" INT,"MODEL_CONTENT" NCLOB), out lt_out_1_unifiedclassification1_fit table ("VARIABLE_NAME" NVARCHAR(256),"IMPORTANCE" DOUBLE), out lt_stats_out_2_unifiedclassification1_fit table ("STAT_NAME" NVARCHAR(256),"STAT_VALUE" NVARCHAR(1000),"CLASS_NAME" NVARCHAR(256)), out lt_param_out_3_unifiedclassification1_fit table ("PARAM_NAME" NVARCHAR(256),"INT_VALUE" INT,"DOUBLE_VALUE" DOUBLE,"STRING_VALUE" NVARCHAR(1000)), out lt_out_4_unifiedclassification1_fit table ("ACTUAL_CLASS" NVARCHAR(1000),"PREDICTED_CLASS" NVARCHAR(1000),"COUNT" INT), out lt_metric_out_5_unifiedclassification1_fit table ("NAME" NVARCHAR(256),"X" DOUBLE,"Y" DOUBLE), out lt_out_6_unifiedclassification1_fit table ("ID" INT,"TYPE" INT))
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER
+    AS
+BEGIN
+DECLARE PAL_UNIFIED_CLASSIFICATION_PLACE_HOLDER1_0_59205937_451B_11ED_AE14_F47B099F40D8" AS (SELECT * FROM :out_7);
+DECLARE param_name VARCHAR(5000) ARRAY;
+DECLARE int_value INTEGER ARRAY;
+DECLARE double_value DOUBLE ARRAY;
+DECLARE string_value VARCHAR(5000) ARRAY;
+in_0 = SELECT * FROM :lt_in_0_unifiedclassification1_fit;
+param_name[1] := N'FUNCTION';
+int_value[1] := NULL;
+double_value[1] := NULL;
+string_value[1] := N'RDT';
+param_name[2] := N'KEY';
+int_value[2] := 1;
+double_value[2] := NULL;
+string_value[2] := NULL;
+param_name[3] := N'N_ESTIMATORS';
+int_value[3] := 5;
+double_value[3] := NULL;
+string_value[3] := NULL;
+param_name[4] := N'SPLIT_THRESHOLD';
+int_value[4] := NULL;
+double_value[4] := 0;
+string_value[4] := NULL;
+param_name[5] := N'MAX_DEPTH';
+int_value[5] := 10;
+double_value[5] := NULL;
+string_value[5] := NULL;
+param_name[6] := N'PARTITION_METHOD';
+int_value[6] := 2;
+double_value[6] := NULL;
+string_value[6] := NULL;
+param_name[7] := N'PARTITION_STRATIFIED_VARIABLE';
+int_value[7] := NULL;
+double_value[7] := NULL;
+string_value[7] := N'CLASS';
+param_name[8] := N'HANDLE_MISSING_VALUE';
+int_value[8] := 0;
+double_value[8] := NULL;
+string_value[8] := NULL;
+param_name[9] := N'CATEGORICAL_VARIABLE';
+int_value[9] := NULL;
+double_value[9] := NULL;
+string_value[9] := N'CLASS';
+params = UNNEST(:param_name, :int_value, :double_value, :string_value);
+CALL "SYSAFL::PALUNIFIEDCLASSIFICATION"(:in_0, :params, out_0, out_1, out_2, out_3, out_4, out_5, out_6, out_7);
+lt_model_out_0_unifiedclassification1_fit = SELECT * FROM :out_0;
+lt_out_1_unifiedclassification1_fit = SELECT * FROM :out_1;
+lt_stats_out_2_unifiedclassification1_fit = SELECT * FROM :out_2;
+lt_param_out_3_unifiedclassification1_fit = SELECT * FROM :out_3;
+lt_out_4_unifiedclassification1_fit = SELECT * FROM :out_4;
+lt_metric_out_5_unifiedclassification1_fit = SELECT * FROM :out_5;
+lt_out_6_unifiedclassification1_fit = SELECT * FROM :out_6;
+END
