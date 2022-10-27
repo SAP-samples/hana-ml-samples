@@ -1,0 +1,50 @@
+context output {
+  entity unifiedclassification1_fit_ltmodelout0unifiedclassification1fit {
+      ROW_INDEX : Integer;
+      PART_INDEX : Integer;
+      MODEL_CONTENT : LargeString;
+  };
+
+  entity unifiedclassification1_fit_ltout1unifiedclassification1fit {
+      VARIABLE_NAME : String(256);
+      IMPORTANCE : BinaryFloat;
+  };
+
+  entity unifiedclassification1_fit_ltstatsout2unifiedclassification1fit {
+      STAT_NAME : String(256);
+      STAT_VALUE : String(1000);
+      CLASS_NAME : String(256);
+  };
+
+  entity unifiedclassification1_fit_ltparamout3unifiedclassification1fit {
+      PARAM_NAME : String(256);
+      INT_VALUE : Integer;
+      DOUBLE_VALUE : BinaryFloat;
+      STRING_VALUE : String(1000);
+  };
+
+  entity unifiedclassification1_fit_ltout4unifiedclassification1fit {
+      ACTUAL_CLASS : String(1000);
+      PREDICTED_CLASS : String(1000);
+      COUNT : Integer;
+  };
+
+  entity unifiedclassification1_fit_ltmetricout5unifiedclassification1fit {
+      NAME : String(256);
+      X : BinaryFloat;
+      Y : BinaryFloat;
+  };
+
+  entity unifiedclassification1_fit_ltout6unifiedclassification1fit {
+      ID : Integer;
+      TYPE : Integer;
+  };
+
+  entity unifiedclassification1_predict_ltresultout0unifiedclassification1predict {
+      ID : Integer;
+      SCORE : String(256);
+      CONFIDENCE : BinaryFloat;
+      REASON_CODE : LargeString;
+  };
+
+};

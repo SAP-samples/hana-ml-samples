@@ -1,4 +1,4 @@
-PROCEDURE train_wrapper()
+PROCEDURE cons_train()
     LANGUAGE SQLSCRIPT
     SQL SECURITY INVOKER
     AS

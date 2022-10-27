@@ -1,4 +1,4 @@
-PROCEDURE predict_wrapper()
+PROCEDURE cons_predict()
     LANGUAGE SQLSCRIPT
     SQL SECURITY INVOKER
     AS
