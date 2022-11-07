@@ -1,0 +1,1 @@
+This folder contains  examples for the SAP HANA CLoud Machine Learning SAP Community Challenge 2022 using the Python machine learning client for SAP HANA and the Predictive Analysis Library as well as the Automated Predictive Library (APL).
