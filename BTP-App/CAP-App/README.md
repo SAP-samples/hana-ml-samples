@@ -22,20 +22,20 @@ For help with setting up user with right privileges refer to [Setup](https://git
 For data loading refer [Data Load](https://github.com/SAP-samples/hana-ml-samples/blob/main/BTP-App/FuelPriceForecast/notebooks/FuelPricesForecast_DataPreparation.ipynb) from above project
 
 For each folder here are is the list of files with custom code
-app
-    fiori
-        webapp
-            controller
-                PoS_Detail.controller.js
-                PoS_Main.controller.js
-            view
-                PoS_Detail.view.xml
-                PoS_Main.view-xml
+- app
+    - fiori
+        - webapp
+            - controller
+                - PoS_Detail.controller.js
+                - PoS_Main.controller.js
+            - view
+                - PoS_Detail.view.xml
+                - PoS_Main.view-xml
 
-db
-    src 
-        hana-ml-cds-hana-ml-base-pal-massive-additive-model-analysis.cds (Additions for Entities required by UI)
-srv
-    hana-ml-cat-service.js
-    server.js
+- db
+    - src 
+        - hana-ml-cds-hana-ml-base-pal-massive-additive-model-analysis.cds (Additions for Entities required by UI)
+- srv
+    - hana-ml-cat-service.js
+    - server.js
     
