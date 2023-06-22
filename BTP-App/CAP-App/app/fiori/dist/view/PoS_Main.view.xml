@@ -1,0 +1,52 @@
+<mvc:View controllerName="cap.ui.fiori.controller.PoS_Main" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" height="100%" xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:smartTable="sap.ui.comp.smarttable"  xmlns:f="sap.f" xmlns:core="sap.ui.core" >
+	<f:DynamicPage showFooter="true" preserveHeaderStateOnScroll="true">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>title}"/>
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <f:content>
+					<smartFilterBar:SmartFilterBar id="idMySmartFilter" entitySet="POINTS_OF_SALES" useToolbar="true" persistencyKey="persistencyKey_pos" >
+						<smartFilterBar:controlConfiguration>
+                            <smartFilterBar:ControlConfiguration key="name" label="Points of Sale" visibleInAdvancedArea="true"/>
+						</smartFilterBar:controlConfiguration>
+					</smartFilterBar:SmartFilterBar>
+				 </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+			<smartTable:SmartTable id="idMySmartTable" entitySet="POINTS_OF_SALES" tableType="ResponsiveTable" demandPopin="true" header="Points of Sales" class="sapUiResponsiveContentPadding" enableAutoColumnWidth="false" showRowCount="true"
+				enableAutoBinding="true" enableExport="true" useTablePersonalisation="true" useVariantManagement="true" persistencyKey="persistencyKey_post" smartFilterId="idMySmartFilter" requestAtLeastFields="uuid,name,city" >
+				<smartTable:customToolbar>
+						<Toolbar>
+							<ToolbarSpacer/>
+							<Button type="Transparent" icon="sap-icon://business-objects-experience" text="Price Predict" press="onPredict" enabled="{= ${global>/layout} === 'OneColumn' }"/>
+							<Button type="Transparent" icon="sap-icon://e-learning" text="Model Train" press="onTrain" enabled="{= ${global>/layout} === 'OneColumn' }"/>
+						</Toolbar>
+					</smartTable:customToolbar>
+				<Table id="idMyTable" growing="true" growingScrollToLoad="true" growingThreshold="30" mode="SingleSelectMaster" itemPress="onListItemPress">
+					<columns>
+						<Column hAlign="End"> 
+							<customData>
+								<core:CustomData key="p13nData" value='\{"columnKey": "city", "columnIndex":"1","leadingProperty": "city"}' />
+							</customData> 
+							<Text text="{annotations>/propertyAnnotations/CatalogService.POINTS_OF_SALES/city/com.sap.vocabularies.Common.v1.Label/String}" />
+						</Column>
+					</columns>
+					<items> 
+						<ColumnListItem vAlign="Middle" type="Navigation"> 
+							<cells>
+								<Text text="{city}" />
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</smartTable:SmartTable>
+		</f:content>
+    </f:DynamicPage>
+</mvc:View>

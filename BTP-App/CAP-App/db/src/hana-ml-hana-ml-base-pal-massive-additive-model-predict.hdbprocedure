@@ -1,0 +1,28 @@
+PROCEDURE hana_ml_base_pal_massive_additive_model_predict(
+in in_0_hana_ml_base_pal_massive_additive_model_predict TABLE("STATION_UUID" NVARCHAR(50), "PRICE_AT_TIMESTAMP" TIMESTAMP, "E5" DOUBLE),
+in in_1_hana_ml_base_pal_massive_additive_model_predict TABLE("GROUP_ID" NVARCHAR(100), "ROW_INDEX" INT, "MODEL_CONTENT" NCLOB),
+out out_0_hana_ml_base_pal_massive_additive_model_predict TABLE("GROUP_ID" NVARCHAR(100), "PRICE_AT_TIMESTAMP" TIMESTAMP, "YHAT" DOUBLE, "YHAT_LOWER" DOUBLE, "YHAT_UPPER" DOUBLE),
+out out_1_hana_ml_base_pal_massive_additive_model_predict TABLE("GROUP_ID" NVARCHAR(100), "PRICE_AT_TIMESTAMP" TIMESTAMP, "TREND" DOUBLE, "SEASONAL" NCLOB, "HOLIDAY" NCLOB, "EXOGENOUS" NCLOB),
+out out_2_hana_ml_base_pal_massive_additive_model_predict TABLE("GROUP_ID" NVARCHAR(100), "ERROR_TIMESTAMP" NVARCHAR(100), "ERRORCODE" INT, "MESSAGE" NVARCHAR(200)))
+LANGUAGE SQLSCRIPT
+SQL SECURITY INVOKER
+AS
+BEGIN
+DECLARE group_id NVARCHAR(5000) ARRAY;
+DECLARE param_name VARCHAR(5000) ARRAY;
+DECLARE int_value INTEGER ARRAY;
+DECLARE double_value DOUBLE ARRAY;
+DECLARE string_value VARCHAR(5000) ARRAY;
+group_id[1] := N'1';
+param_name[1] := N'PLACE_HOLDER';
+int_value[1] := NULL;
+double_value[1] := NULL;
+string_value[1] := N'place_holder';
+params = UNNEST(:group_id, :param_name, :int_value, :double_value, :string_value);
+in_0 = SELECT * FROM :in_0_hana_ml_base_pal_massive_additive_model_predict;
+in_1 = SELECT * FROM :in_1_hana_ml_base_pal_massive_additive_model_predict;
+CALL "SYSAFL::PALMASSIVEADDITIVEMODELPREDICT"(:in_0, :in_1, :params, out_0, out_1, out_2);
+out_0_hana_ml_base_pal_massive_additive_model_predict = SELECT * FROM :out_0;
+out_1_hana_ml_base_pal_massive_additive_model_predict = SELECT * FROM :out_1;
+out_2_hana_ml_base_pal_massive_additive_model_predict = SELECT * FROM :out_2;
+END

@@ -1,0 +1,111 @@
+<mvc:View controllerName="cap.ui.fiori.controller.PoS_Detail" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:smartForm="sap.ui.comp.smartform" xmlns:smartField="sap.ui.comp.smartfield"
+    xmlns:viz="sap.viz.ui5.controls" xmlns:viz.data="sap.viz.ui5.data" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:chart="sap.suite.ui.commons" xmlns:layout="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<uxap:ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false" >
+		<uxap:headerTitle>
+			<uxap:ObjectPageHeader objectTitle="{name}">
+                <uxap:actions>
+					<uxap:ObjectPageHeaderActionButton icon="sap-icon://decline" text="Close" importance="Low" tooltip="close" press="onCloseFlexibleColumn"/>
+                </uxap:actions>
+            </uxap:ObjectPageHeader>
+		</uxap:headerTitle>
+		<uxap:sections>
+			<uxap:ObjectPageSection titleUppercase="false" title="{i18n>generalInfo}">
+            	<uxap:subSections>
+					<uxap:ObjectPageSubSection titleUppercase="false">
+						<uxap:blocks>
+                            <smartForm:SmartForm editTogglable="false" editable="false">
+                                <smartForm:Group title="{i18n>generalInfo}">
+                                    <smartForm:GroupElement>
+                                        <smartField:SmartField value="{name}" editable="false" />
+                                    </smartForm:GroupElement>
+                                    <smartForm:GroupElement>
+                                        <smartField:SmartField value="{brand}" editable="false" />
+                                    </smartForm:GroupElement>
+                                </smartForm:Group>
+                                <smartForm:Group title="{i18n>addressDetails}">
+                                   <smartForm:GroupElement>
+                                        <smartField:SmartField value="{street}" editable="false" />
+                                    </smartForm:GroupElement>
+                                    <smartForm:GroupElement>
+                                        <smartField:SmartField value="{house_number}" editable="false" />
+                                    </smartForm:GroupElement>
+                                    <smartForm:GroupElement>
+                                        <smartField:SmartField value="{post_code}" editable="false" />
+                                    </smartForm:GroupElement>
+                                    <smartForm:GroupElement>
+                                        <smartField:SmartField value="{city}" editable="false" />
+                                    </smartForm:GroupElement>
+                                </smartForm:Group>
+                            </smartForm:SmartForm>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+			</uxap:ObjectPageSection>
+            <uxap:ObjectPageSection titleUppercase="false" title="{i18n>priceDev}">
+                <uxap:subSections>
+					<uxap:ObjectPageSubSection titleUppercase="false">
+						<uxap:blocks>
+                            <chart:ChartContainer autoAdjustHeight="false" showFullScreen="true" >
+                                <chart:toolbar>
+                                    <OverflowToolbar width="100%">
+                                            <ToolbarSpacer/>
+                                            <Label text="{i18n>incpredict}" />
+                                            <Switch state="false" change=".displayPredictedData" customTextOn=" " customTextOff=" " />
+                                            <chart:ChartContainerToolbarPlaceholder/>
+                                    </OverflowToolbar>
+                                </chart:toolbar>
+                                <chart:ChartContainerContent>
+                                    <chart:content>
+                                        <VBox>
+                                            <viz:Popover id="idPopOver"></viz:Popover>
+                                            <viz:VizFrame id="priceOverTimeVizFrame" uiConfig="{applicationSet:'fiori'}" width="100%" vizType="timeseries_line">
+                                                <viz:dataset>
+                                                    <viz.data:FlattenedDataset data="{oChartModel>/}">
+                                                        <viz.data:dimensions>
+                                                            <viz.data:DimensionDefinition name="Date" value="{oChartModel>date}" dataType="date" />
+                                                        </viz.data:dimensions>
+                                                        <viz.data:measures>
+                                                            <viz.data:MeasureDefinition name="Past Price" value="{oChartModel>price_hist}" />
+                                                            <viz.data:MeasureDefinition name="Predicted Price" value="{oChartModel>price_fcst}" />
+                                                        </viz.data:measures>
+                                                    </viz.data:FlattenedDataset>
+                                                </viz:dataset>
+                                                <viz:feeds>
+                                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Past Price" />
+                                                    <viz.feeds:FeedItem uid="timeAxis" type="Dimension" values="Date" />
+                                                </viz:feeds>
+                                            </viz:VizFrame>
+                                        </VBox>
+                                    </chart:content>
+                                </chart:ChartContainerContent>
+                            </chart:ChartContainer>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+			</uxap:ObjectPageSection> 
+            <uxap:ObjectPageSection titleUppercase="false" title="{i18n>modelInfo}">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="{i18n>predInfo}" titleUppercase="false" class="sapUiSmallMarginTop">
+						<uxap:blocks>
+                            <f:SimpleForm editable="false" layout="ResponsiveGridLayout" title="">
+                                <f:content>
+                                    <Label text="{i18n>sigmaObs}" />
+                                    <Text text="{oPredictModel>/sigma_obs}" />
+                                    <Label text="{i18n>tScale}" />
+                                    <Text text="{oPredictModel>/t_scale}" />
+                                    <Label text="{i18n>yScale}" />
+                                    <Text text="{oPredictModel>/y_scale}" />
+                                </f:content>
+                            </f:SimpleForm>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                     <uxap:ObjectPageSubSection title="{i18n>trainInfo}" titleUppercase="false">
+						<uxap:blocks>
+                            <Text text="Train Model Content Goes Here" />
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+		</uxap:sections>
+	</uxap:ObjectPageLayout>
+</mvc:View>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="CatalogService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="ModelHanaMlConsPalMassiveAdditiveModelAnalysis" EntityType="CatalogService.ModelHanaMlConsPalMassiveAdditiveModelAnalysis"/>
+                <EntitySet Name="Output1PalMassiveAdditiveModelAnalysis" EntityType="CatalogService.Output1PalMassiveAdditiveModelAnalysis"/>
+                <EntitySet Name="Output0PalMassiveAdditiveModelPredict" EntityType="CatalogService.Output0PalMassiveAdditiveModelPredict"/>
+                <EntitySet Name="Output1PalMassiveAdditiveModelPredict" EntityType="CatalogService.Output1PalMassiveAdditiveModelPredict"/>
+                <EntitySet Name="Output2PalMassiveAdditiveModelPredict" EntityType="CatalogService.Output2PalMassiveAdditiveModelPredict"/>
+                <EntitySet Name="TEST_RNK_2209" EntityType="CatalogService.TEST_RNK_2209"/>
+                <EntitySet Name="History_Forecast" EntityType="CatalogService.History_Forecast"/>
+                <EntitySet Name="POINTS_OF_SALES" EntityType="CatalogService.POINTS_OF_SALES"/>
+            </EntityContainer>
+            <EntityType Name="ModelHanaMlConsPalMassiveAdditiveModelAnalysis">
+                <Property Name="group_id" Type="Edm.String" MaxLength="100"/>
+                <Property Name="row_index" Type="Edm.Int32"/>
+                <Property Name="model_content" Type="Edm.String"/>
+            </EntityType>
+            <EntityType Name="Output1PalMassiveAdditiveModelAnalysis">
+                <Property Name="group_id" Type="Edm.String" MaxLength="100"/>
+                <Property Name="error_timestamp" Type="Edm.String" MaxLength="100"/>
+                <Property Name="errorcode" Type="Edm.Int32"/>
+                <Property Name="message" Type="Edm.String" MaxLength="200"/>
+            </EntityType>
+            <EntityType Name="Output0PalMassiveAdditiveModelPredict">
+                <Property Name="group_id" Type="Edm.String" MaxLength="100"/>
+                <Property Name="price_at_timestamp" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="yhat" Type="Edm.Double"/>
+                <Property Name="yhat_lower" Type="Edm.Double"/>
+                <Property Name="yhat_upper" Type="Edm.Double"/>
+            </EntityType>
+            <EntityType Name="Output1PalMassiveAdditiveModelPredict">
+                <Property Name="group_id" Type="Edm.String" MaxLength="100"/>
+                <Property Name="price_at_timestamp" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="trend" Type="Edm.Double"/>
+                <Property Name="seasonal" Type="Edm.String"/>
+                <Property Name="holiday" Type="Edm.String"/>
+                <Property Name="exogenous" Type="Edm.String"/>
+            </EntityType>
+            <EntityType Name="Output2PalMassiveAdditiveModelPredict">
+                <Property Name="group_id" Type="Edm.String" MaxLength="100"/>
+                <Property Name="error_timestamp" Type="Edm.String" MaxLength="100"/>
+                <Property Name="errorcode" Type="Edm.Int32"/>
+                <Property Name="message" Type="Edm.String" MaxLength="200"/>
+            </EntityType>
+            <EntityType Name="TEST_RNK_2209">
+                <Property Name="PRICE_AT_TIMESTAMP" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="STATION_UUID" Type="Edm.String" MaxLength="50"/>
+                <Property Name="E5" Type="Edm.Double"/>
+            </EntityType>
+            <EntityType Name="History_Forecast">
+                <Property Name="uuid" Type="Edm.String" MaxLength="50"/>
+                <Property Name="date" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="price_hist" Type="Edm.Decimal" Scale="3" Precision="10"/>
+                <Property Name="price_fcst" Type="Edm.Decimal" Scale="3" Precision="10"/>
+                <Property Name="price_fcst_lower" Type="Edm.Decimal" Scale="3" Precision="10"/>
+                <Property Name="price_fcst_upper" Type="Edm.Decimal" Scale="3" Precision="10"/>
+            </EntityType>
+            <EntityType Name="POINTS_OF_SALES">
+                <Property Name="uuid" Type="Edm.String"/>
+                <Property Name="name" Type="Edm.String"/>
+                <Property Name="brand" Type="Edm.String"/>
+                <Property Name="street" Type="Edm.String"/>
+                <Property Name="house_number" Type="Edm.String"/>
+                <Property Name="post_code" Type="Edm.String"/>
+                <Property Name="city" Type="Edm.String"/>
+                <Property Name="latitude" Type="Edm.Double"/>
+                <Property Name="longitude" Type="Edm.Double"/>
+            </EntityType>
+            <Annotations Target="CatalogService.EntityContainer/ModelHanaMlConsPalMassiveAdditiveModelAnalysis">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.EntityContainer/Output1PalMassiveAdditiveModelAnalysis">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.EntityContainer/Output0PalMassiveAdditiveModelPredict">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.EntityContainer/Output1PalMassiveAdditiveModelPredict">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.EntityContainer/Output2PalMassiveAdditiveModelPredict">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.History_Forecast/price_hist">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.History_Forecast/price_fcst">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.History_Forecast/price_fcst_lower">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.History_Forecast/price_fcst_upper">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

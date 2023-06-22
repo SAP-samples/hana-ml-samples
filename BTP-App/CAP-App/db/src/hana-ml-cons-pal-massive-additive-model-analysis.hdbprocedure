@@ -1,0 +1,15 @@
+PROCEDURE hana_ml_cons_pal_massive_additive_model_analysis(
+out out_0_hana_ml_cons_pal_massive_additive_model_analysis TABLE("GROUP_ID" NVARCHAR(100), "ROW_INDEX" INT, "MODEL_CONTENT" NCLOB),
+out out_1_hana_ml_cons_pal_massive_additive_model_analysis TABLE("GROUP_ID" NVARCHAR(100), "ERROR_TIMESTAMP" NVARCHAR(100), "ERRORCODE" INT, "MESSAGE" NVARCHAR(200)))
+LANGUAGE SQLSCRIPT
+SQL SECURITY INVOKER
+AS
+BEGIN
+in_0_hana_ml_cons_pal_massive_additive_model_analysis = SELECT "STATION_UUID", "PRICE_AT_TIMESTAMP", "E5" FROM (SELECT * FROM HANA_ML_TRAIN_RNK_2209) AS "DT_3";
+in_1_hana_ml_cons_pal_massive_additive_model_analysis = select * from PAL_ADDITIVE_MODEL_ANALYSIS_HOLIDAY;
+CALL hana_ml_base_pal_massive_additive_model_analysis(:in_0_hana_ml_cons_pal_massive_additive_model_analysis, :in_1_hana_ml_cons_pal_massive_additive_model_analysis, out_0_hana_ml_cons_pal_massive_additive_model_analysis, out_1_hana_ml_cons_pal_massive_additive_model_analysis);
+TRUNCATE TABLE HANA_ML_FIT_MODELHANAMLCONSPALMASSIVEADDITIVEMODELANALYSIS;
+INSERT INTO HANA_ML_FIT_MODELHANAMLCONSPALMASSIVEADDITIVEMODELANALYSIS SELECT * FROM :out_0_hana_ml_cons_pal_massive_additive_model_analysis;
+TRUNCATE TABLE HANA_ML_FIT_OUTPUT1PALMASSIVEADDITIVEMODELANALYSIS;
+INSERT INTO HANA_ML_FIT_OUTPUT1PALMASSIVEADDITIVEMODELANALYSIS SELECT * FROM :out_1_hana_ml_cons_pal_massive_additive_model_analysis;
+END

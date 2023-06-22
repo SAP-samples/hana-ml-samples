@@ -1,0 +1,38 @@
+{
+    "HANA_ML_TRAIN_RNK_2209": {
+        "target": {
+            "object": "TRAIN_RNK_2209",
+            "schema": "TECHED22"
+        }
+    },
+    "PAL_ADDITIVE_MODEL_ANALYSIS_HOLIDAY": {
+        "target": {
+            "object": "PAL_ADDITIVE_MODEL_ANALYSIS_HOLIDAY",
+            "schema": "TECHED22"
+        }
+    },
+    "SYSAFL::PALMASSIVEADDITIVEMODELANALYSIS": {
+        "target": {
+            "object": "PAL_MASSIVE_ADDITIVE_MODEL_ANALYSIS",
+            "schema": "_SYS_AFL"
+        }
+    },
+    "HANA_ML_TEST_RNK_2209": {
+        "target": {
+            "object": "TEST_RNK_2209",
+            "schema": "TECHED22"
+        }
+    },
+    "HANA_ML_POINTS_OF_SALES": {
+        "target": {
+            "object": "POINTS_OF_SALES",
+            "schema": "TECHED22"
+        }
+    },
+    "SYSAFL::PALMASSIVEADDITIVEMODELPREDICT": {
+        "target": {
+            "object": "PAL_MASSIVE_ADDITIVE_MODEL_PREDICT",
+            "schema": "_SYS_AFL"
+        }
+    }
+}

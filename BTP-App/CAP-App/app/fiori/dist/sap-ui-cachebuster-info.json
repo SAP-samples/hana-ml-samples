@@ -1,0 +1,22 @@
+{
+  "model/formatter.js": 1685638897866,
+  "Component.js": 1685624847580,
+  "model/models.js": 1685624870536,
+  "i18n/i18n.properties": 1686753707991,
+  "controller/PoS_Main.controller.js": 1686751681059,
+  "controller/PoS_Detail.controller.js": 1686753818015,
+  "controller/App.controller.js": 1685622081458,
+  "manifest.json": 1686816309546,
+  "Component-preload.js": 1686816309980,
+  "controller/PoS_Main-dbg.controller.js": 1686751681059,
+  "model/formatter-dbg.js": 1685638897866,
+  "model/models-dbg.js": 1685624870536,
+  "controller/PoS_Detail-dbg.controller.js": 1686753818015,
+  "controller/App-dbg.controller.js": 1685622081458,
+  "Component-dbg.js": 1685624847580,
+  "view/PoS_Main.view.xml": 1686751857744,
+  "view/PoS_Detail.view.xml": 1686816093937,
+  "view/App.view.xml": 1685621390849,
+  "css/style.css": 1685549783736,
+  "index.html": 1685549783724
+}

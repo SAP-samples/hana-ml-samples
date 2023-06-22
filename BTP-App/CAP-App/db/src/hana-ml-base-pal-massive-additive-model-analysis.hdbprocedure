@@ -1,0 +1,41 @@
+PROCEDURE hana_ml_base_pal_massive_additive_model_analysis(
+in in_0_hana_ml_base_pal_massive_additive_model_analysis TABLE("STATION_UUID" NVARCHAR(5000), "PRICE_AT_TIMESTAMP" TIMESTAMP, "E5" DOUBLE),
+in in_1_hana_ml_base_pal_massive_additive_model_analysis TABLE("GROUP_IDXXX" INT, "ts" TIMESTAMP, "NAME" NVARCHAR(255), "LOWER_WINDOW" INT, "UPPER_WINDOW" INT),
+out out_0_hana_ml_base_pal_massive_additive_model_analysis TABLE("GROUP_ID" NVARCHAR(100), "ROW_INDEX" INT, "MODEL_CONTENT" NCLOB),
+out out_1_hana_ml_base_pal_massive_additive_model_analysis TABLE("GROUP_ID" NVARCHAR(100), "ERROR_TIMESTAMP" NVARCHAR(100), "ERRORCODE" INT, "MESSAGE" NVARCHAR(200)))
+LANGUAGE SQLSCRIPT
+SQL SECURITY INVOKER
+AS
+BEGIN
+DECLARE group_id NVARCHAR(5000) ARRAY;
+DECLARE param_name VARCHAR(5000) ARRAY;
+DECLARE int_value INTEGER ARRAY;
+DECLARE double_value DOUBLE ARRAY;
+DECLARE string_value VARCHAR(5000) ARRAY;
+group_id[1] := N'PAL_MASSIVE_PROCESSING_SPECIAL_GROUP_ID';
+param_name[1] := N'GROWTH';
+int_value[1] := NULL;
+double_value[1] := NULL;
+string_value[1] := N'linear';
+group_id[2] := N'PAL_MASSIVE_PROCESSING_SPECIAL_GROUP_ID';
+param_name[2] := N'WEEKLY_SEASONALITY';
+int_value[2] := 1;
+double_value[2] := NULL;
+string_value[2] := NULL;
+group_id[3] := N'PAL_MASSIVE_PROCESSING_SPECIAL_GROUP_ID';
+param_name[3] := N'DAILY_SEASONALITY';
+int_value[3] := 1;
+double_value[3] := NULL;
+string_value[3] := NULL;
+group_id[4] := N'PAL_MASSIVE_PROCESSING_SPECIAL_GROUP_ID';
+param_name[4] := N'CHANGEPOINT_PRIOR_SCALE';
+int_value[4] := NULL;
+double_value[4] := 0.06;
+string_value[4] := NULL;
+params = UNNEST(:group_id, :param_name, :int_value, :double_value, :string_value);
+in_0 = SELECT * FROM :in_0_hana_ml_base_pal_massive_additive_model_analysis;
+in_1 = SELECT * FROM :in_1_hana_ml_base_pal_massive_additive_model_analysis;
+CALL "SYSAFL::PALMASSIVEADDITIVEMODELANALYSIS"(:in_0, :in_1, :params, out_0, out_1);
+out_0_hana_ml_base_pal_massive_additive_model_analysis = SELECT * FROM :out_0;
+out_1_hana_ml_base_pal_massive_additive_model_analysis = SELECT * FROM :out_1;
+END

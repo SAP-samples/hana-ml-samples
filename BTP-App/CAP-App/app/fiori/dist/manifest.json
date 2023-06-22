@@ -1,0 +1,157 @@
+{
+    "_version": "1.49.0",
+    "sap.app": {
+        "id": "cap.ui.fiori",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:basic",
+            "version": "1.9.7",
+            "toolsId": "b479c832-122f-4856-bc0f-f1a941f0ac8b"
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "v2/catalog/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "2.0"
+                }
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "cap-ui-fiori-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "hanamlui",
+                    "action": "display",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
+                }
+            }
+        }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "cap_ml_mvp"
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": false,
+        "dependencies": {
+            "minUI5Version": "1.114.0",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "cap.ui.fiori.i18n.i18n"
+                }
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "cap.ui.fiori.view",
+                "controlAggregation": "beginColumnPages",
+                "controlId": "fcl",
+                "clearControlAggregation": false,
+                "transition": "slide"
+            },
+            "routes": [
+                {
+                    "name": "RoutePoS_Main",
+                    "pattern": "",
+                    "target": [
+                        "TargetPoS_Main"
+                    ]
+                },
+                {
+                    "name": "RoutePoS_Detail",
+                    "pattern": "PoS_Detail/{pointofsale}",
+                    "target": [
+                        "TargetPoS_Main",
+                        "TargetPoS_Detail"
+                    ]
+                }
+            ],
+            "targets": {
+                "TargetPoS_Main": {
+                    "viewName": "PoS_Main",
+                    "viewLevel": 1,
+                    "controlAggregation": "beginColumnPages"
+                },
+                "TargetPoS_Detail": {
+                    "viewName": "PoS_Detail",
+                    "viewLevel": 2,
+                    "controlAggregation": "midColumnPages"
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "cap.ui.fiori.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        }
+    }
+}

@@ -1,0 +1,18 @@
+PROCEDURE hana_ml_cons_pal_massive_additive_model_predict(
+out out_0_hana_ml_cons_pal_massive_additive_model_predict TABLE("GROUP_ID" NVARCHAR(100), "PRICE_AT_TIMESTAMP" TIMESTAMP, "YHAT" DOUBLE, "YHAT_LOWER" DOUBLE, "YHAT_UPPER" DOUBLE),
+out out_1_hana_ml_cons_pal_massive_additive_model_predict TABLE("GROUP_ID" NVARCHAR(100), "PRICE_AT_TIMESTAMP" TIMESTAMP, "TREND" DOUBLE, "SEASONAL" NCLOB, "HOLIDAY" NCLOB, "EXOGENOUS" NCLOB),
+out out_2_hana_ml_cons_pal_massive_additive_model_predict TABLE("GROUP_ID" NVARCHAR(100), "ERROR_TIMESTAMP" NVARCHAR(100), "ERRORCODE" INT, "MESSAGE" NVARCHAR(200)))
+LANGUAGE SQLSCRIPT
+SQL SECURITY INVOKER
+AS
+BEGIN
+in_0_hana_ml_cons_pal_massive_additive_model_predict = SELECT "STATION_UUID", "PRICE_AT_TIMESTAMP", "E5" FROM (SELECT * FROM HANA_ML_TEST_RNK_2209) AS "DT_2";
+in_1_hana_ml_cons_pal_massive_additive_model_predict = SELECT * FROM HANA_ML_FIT_MODELHANAMLCONSPALMASSIVEADDITIVEMODELANALYSIS;
+CALL hana_ml_base_pal_massive_additive_model_predict(:in_0_hana_ml_cons_pal_massive_additive_model_predict, :in_1_hana_ml_cons_pal_massive_additive_model_predict, out_0_hana_ml_cons_pal_massive_additive_model_predict, out_1_hana_ml_cons_pal_massive_additive_model_predict, out_2_hana_ml_cons_pal_massive_additive_model_predict);
+TRUNCATE TABLE HANA_ML_PREDICT_OUTPUT0PALMASSIVEADDITIVEMODELPREDICT;
+INSERT INTO HANA_ML_PREDICT_OUTPUT0PALMASSIVEADDITIVEMODELPREDICT SELECT * FROM :out_0_hana_ml_cons_pal_massive_additive_model_predict;
+TRUNCATE TABLE HANA_ML_PREDICT_OUTPUT1PALMASSIVEADDITIVEMODELPREDICT;
+INSERT INTO HANA_ML_PREDICT_OUTPUT1PALMASSIVEADDITIVEMODELPREDICT SELECT * FROM :out_1_hana_ml_cons_pal_massive_additive_model_predict;
+TRUNCATE TABLE HANA_ML_PREDICT_OUTPUT2PALMASSIVEADDITIVEMODELPREDICT;
+INSERT INTO HANA_ML_PREDICT_OUTPUT2PALMASSIVEADDITIVEMODELPREDICT SELECT * FROM :out_2_hana_ml_cons_pal_massive_additive_model_predict;
+END
