@@ -19,7 +19,7 @@ The usecase and datasets used here are the same as described in the [FuelPriceFo
 
 For help with setting up user with right privileges refer to [Setup](https://github.com/SAP-samples/hana-ml-samples/tree/main/BTP-App/FuelPriceForecast#readme) from above project
 
-For data loading refer [Data Load](https://github.com/SAP-samples/hana-ml-samples/blob/main/BTP-App/FuelPriceForecast/notebooks/FuelPricesForecast_DataPreparation.ipynb) from above project
+For data loading refer to [Data Load](https://github.com/SAP-samples/hana-ml-samples/blob/main/BTP-App/FuelPriceForecast/notebooks/FuelPricesForecast_DataPreparation.ipynb) from above project
 
 For each folder here are is the list of files with custom code
 - app
