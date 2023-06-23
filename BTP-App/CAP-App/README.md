@@ -29,11 +29,22 @@ For each folder here are is the list of files with custom code
     - fiori
         - webapp
             - controller
+                - App.controller.js – creation of “global” events to manage the layout that can be used anywhere else on the app
                 - PoS_Detail.controller.js
                 - PoS_Main.controller.js
+            - i18n
+                - i18n.properties – Contains internationalization resources for translations
+            - models
+                - models.js – Create annotation JSON Model to fetch translations from i18n db cds level (not mandatory and can be omitted)
             - view
+                - App.view.xml – Add Flexible Column Layout control to wrapper of application
                 - PoS_Detail.view.xml
                 - PoS_Main.view-xml
+            - Component.js – Creation of global and annotations JSON Models (not mandatory and can be omitted)
+            - manifest.json – Change the OData service version from 4.0 to 2.0
+        - annotations.cds – Creation of UI annotations to define columns to be used by the Smart Controls on the app (Smart Table)
+        
+
 
 - db
     - src 
