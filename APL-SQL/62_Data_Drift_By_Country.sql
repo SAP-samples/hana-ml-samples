@@ -2,14 +2,14 @@
 create local temporary column table "#DATASET_1" as (
  select "age", "occupation", "workclass", "education", "relationship", "native-country" 
  from APL_SAMPLES.CENSUS 
- where "native-country" in ('United-States','Mexico') and "sex" = 'Male' 
+ where "native-country" in ('United-States','Mexico','Holand-Netherlands') and "sex" = 'Male' 
  order by "native-country", "id" 
 );
 
 create local temporary column table "#DATASET_2" as (
  select "age", "occupation", "workclass", "education", "relationship", "native-country" 
  from APL_SAMPLES.CENSUS 
- where "native-country" in ('United-States','Mexico') and "sex" = 'Female' 
+ where "native-country" in ('United-States','Mexico','Holand-Netherlands') and "sex" = 'Female' 
  order by "native-country", "id" 
 );
 
@@ -31,6 +31,9 @@ DO BEGIN
 	:header, :config, :var_desc, :var_role,'USER_APL','#DATASET_1', 'USER_APL','#DATASET_2', 
 	out_log, out_summary, out_metric, out_property );
  
+	select OID as "Segment", ORIGIN as "Cause", MESSAGE as "Error" from :out_log where LEVEL=0;
+	select * from :out_summary where key in ('AplTaskStatus','AplTotalElapsedTime') order by 1,2;
+
     select * from SAP_PA_APL."sap.pa.apl.debrief.report::Deviation_ByVariable"(:out_property,:out_metric);
     select * from SAP_PA_APL."sap.pa.apl.debrief.report::Deviation_ByCategory"(:out_property,:out_metric, Deviation_Threshold => 0.9); 
     select * from SAP_PA_APL."sap.pa.apl.debrief.report::Deviation_CategoryFrequencies"(:out_property,:out_metric); 
