@@ -1,12 +1,12 @@
 --- Comparing 2 populations
-create local temporary column table "#DATASET_1" as (
+create view DATASET_1 as (
  select "age", "occupation", "workclass", "education", "relationship" 
  from APL_SAMPLES.CENSUS 
  where "sex" = 'Male' 
  order by "id" 
 );
 
-create local temporary column table "#DATASET_2" as (
+create view DATASET_2  as (
  select "age", "occupation", "workclass", "education", "relationship" 
  from APL_SAMPLES.CENSUS 
  where "sex" = 'Female' 
@@ -26,7 +26,7 @@ DO BEGIN
     :header.insert(('Oid', 'Male Vs Female'));
 	
 	"SAP_PA_APL"."sap.pa.apl.base::COMPARE_DATA" (
-	:header, :config, :var_desc, :var_role,'USER_APL','#DATASET_1', 'USER_APL','#DATASET_2', 
+	:header, :config, :var_desc, :var_role,'USER_APL','DATASET_1', 'USER_APL','DATASET_2', 
 	out_log, out_summary, out_metric, out_property );
  
     select * from SAP_PA_APL."sap.pa.apl.debrief.report::Deviation_ByVariable"(:out_property,:out_metric);

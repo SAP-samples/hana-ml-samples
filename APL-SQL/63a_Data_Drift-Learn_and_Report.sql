@@ -1,5 +1,5 @@
 --- Input
-create local temporary column table "#DATASET_1" as (
+create view DATASET_1 as (
  select "age", "occupation", "workclass", "education", "relationship" 
  from APL_SAMPLES.CENSUS 
  where "sex" = 'Male' order by "id" 
@@ -25,7 +25,7 @@ DO BEGIN
     :config.insert(('APL/ModelType', 'statbuilder',null));
 
     "SAP_PA_APL"."sap.pa.apl.base::CREATE_MODEL_AND_TRAIN_DEBRIEF" (
-	:header, :config, :var_desc, :var_role, 'USER_APL','#DATASET_1', 
+	:header, :config, :var_desc, :var_role, 'USER_APL','DATASET_1', 
 	out_model, out_log, out_summary, out_metric, out_property );
 
     insert into APL_MODEL select * from :out_model;
