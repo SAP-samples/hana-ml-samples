@@ -4,7 +4,7 @@ Jupyter Notebooks for the **Automated Predictive Library (APL)** module of the S
 
 APL builds predictive models automatically inside SAP HANA — no data science expertise required. It is the same engine powering predictive features in SAP Analytics Cloud (Smart Predict and Predictive Planning).
 
-Sample data is provided with the APL component under the database schema `APL_SAMPLES`.
+Sample data is provided with the APL component under the database schema `APL_SAMPLES` ([how to import the sample data](https://help.sap.com/docs/apl/419fd47c26b345239fdbb5e476a6bc54/d862105e100e4ca5aadca341dd6720eb.html)). Some of these datasets are used in parts of the notebooks below.
 
 ## Notebooks
 
